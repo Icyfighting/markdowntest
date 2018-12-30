@@ -34,64 +34,14 @@ Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为
 >
 >运行时常量池：是方法区的一部分，它用于存放编译期生成的各种字面量和符号引用。
 
-
-
-
-
-
-当我们（企业、用户）需要 web 平台承载包括视频、游戏在内的各种富交互内容而 web 平台本身还不具备这样的能力时，我们通过给予这个平台一种新的格式，以满足大家的需求，这就是 Flash Player，作为一种私有平台与浏览器插件，却能一度成为 web 事实标准的客观原因。
-
-而时至今日，这些 web 平台所欠缺的能力，在得到市场与社区的认可之后，逐渐被从 Flash 中吸收与扬弃，成为了诸如 HTML5 Video/Audio/Canvas、WebGL 这些真正的 Open Web 标准。这时候，这些在诞生之初颇为创新的，作为了一种「过渡手段」、「Shim」的私有平台，便自然而然的，慢慢的不再被需要了。
-
-**这并不应该理解为一种失败，而应该说，它们「功成身退」了。**
-
-<br/>
-
-ActionScript 3.0，Flash 中的御用编程语言，作为 ES4 的唯一实现，[推动了 ECMAScript 标准的发展，深远得影响着现代 JavaScript](https://www.zhihu.com/question/49170215/answer/114640341)；
-
-Adobe Flex，Flash 平台的企业开发框架，在今年和 [@徐飞](https://www.zhihu.com/people/sharpmaster) 老师聊到时，还一起怀念并认可其相比现代 web 前端/客户端开发在工具链、协作、兼容性、UI 组件等方面的先进与成熟；
-Adobe AIR，作为最早借鉴 JRT 将 web 相关技术的 Runtime 植入操作系统或捆绑在可执行文件内的跨平台开发方案，或许可以视作 Cordova、Electron、NodeWebkit、ReactNative 这些方案的一个前身与成功先例；
-
-Microsoft IE 私有技术 ActiveX 中的 XMLHTTP，作为 XMLHTTPRequest 的前身，促进了 Ajax 的诞生与 Web 2.0 时代的来临；
-
-Google Gears 作为 2008 年时为了增强 web 应用的浏览器插件，其私有 API 分别是 App Cache、Web Worker、WebSQL 等标准或标准未遂的前身；
-
-Cordova/Phonegap 作为第一个面向移动端的 Hybrid 方案，成为了 web 开发与移动设备的 polyfill 与桥梁，加速了 Web 平台 Device APIs 的发展，并与 WebOS、FirefoxOS、Chrome Apps、Windows Runtime Apps 等一同影响了 Progressive Web App 的出现；
-
-Google Extension 中 Background Page 与 Event Page 多年对 web 平台后台持续计算的尝试，直接帮助了 Service Worker 的 API 设计；
-
-Google 的 NativeClient、Mozilla 的 asm.js 对于 web 追逐 native 性能的极致追求，则奠定了 Web Assembly 的诞生……
-
-你看，在这条道路上，Flash 与它的朋友们，其实并不孤单。
-
-**「看到你长大了，我也就可以心满意足的离开了。」**
-
-**就像是， web 技术发展的必然规律一样，**
-
-**而 Open Web 则因此不朽。**
-
-<br/>
-
-我很高兴，Google Chrome、Mozilla Firefox、Microsoft Edge 都能这么写到：
-
-> Flash helped make the web a rich, dynamic experience, and **shaped the modern set of web standards.**  
->   
-> --- "[So long, and thanks for all the Flash](https://blog.chromium.org/2017/07/so-long-and-thanks-for-all-flash.html)" Chromium Blog
-
-  
-
-> Over the years, Flash has helped bring the Web to greatness with innovations in media and animation, **which ultimately have been added to the core web platform.**  
->   
-> --- "[Firefox Roadmap for Flash End-of-Life](https://blog.mozilla.org/futurereleases/2017/07/25/firefox-roadmap-flash-end-life/)" Mozilla Blog
-
-  
-
-> Flash led the way on the web for rich content, gaming, animations, and media of all kinds, and **inspired many of the current web standards powering HTML5.**  
->   
-> --- "[The End of an Era – Next Steps for Adobe Flash](https://blogs.windows.com/msedgedev/2017/07/25/flash-on-windows-timeline/)" Windows Blog
-
-  
-
-感谢你，Flash。
-
-感谢你们，那些「功成身退」的你们。
+**Stack和Heap的联系和区别:**
+区别:
+>1.各司其职:
+>最主要的区别就是栈内存用来存储局部变量和方法调用。而堆内存用来存储Java中的对象。无论是成员变量，局部变量，还是类变量，它们指向的对象都存储在堆内中。
+>
+>2.独有还是共享:
+>栈内存归属于单个线程，每个线程都会有一个栈内存，其存储的变量只能在其所属线程中可见，即栈内存可以理解成线程的私有内存。而堆内存中的对象对所有线程可见。堆内存中的对象可以被所有线程访问。
+>3.异常错误:
+>如果栈内存没有可用的空间存储方法调用和局部变量，JVM会抛出java.lang.StackOverFlowError。而如果是堆内存没有可用的空间存储生成的对象，JVM会抛出java.lang.OutOfMemoryError。
+>4.空间大小:
+>栈的内存要远远小于堆内存，如果你使用递归的话，那么你的栈很快就会充满。如果递归没有及时跳出，很可能发生StackOverFlowError问题。你可以通过-Xss选项设置栈内存的大小。-Xms选项可以设置堆的开始时的大小，-Xmx选项可以设置堆的最大值。
