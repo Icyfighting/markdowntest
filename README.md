@@ -55,12 +55,14 @@ tags:
 
 Java提供多种类型的垃圾回收器。JVM中的垃圾收集一般都采用“分代收集”，不同的堆内存区域采用不同的收集算法，主要目的就是为了增加吞吐量或降低停顿时间。
 *   Serial收集器：新生代收集器，使用复制算法，使用一个线程进行GC，串行，其它工作线程暂停。
+![](/img/java-mem-2/Serial-collector.jpg)
 *   ParNew收集器：新生代收集器，使用复制算法，Serial收集器的多线程版，用多个线程进行GC，并行，其它工作线程暂停。使用-XX:+UseParNewGC开关来控制使用ParNew+Serial Old收集器组合收集内存；使用-XX:ParallelGCThreads来设置执行内存回收的线程数。
+![](/img/java-mem-2/parnew-collector.jpg)
 *   Parallel Scavenge 收集器：吞吐量优先的垃圾回收器，作用在新生代，使用复制算法，关注CPU吞吐量，即运行用户代码的时间/总时间。使用-XX:+UseParallelGC开关控制使用Parallel Scavenge+Serial Old收集器组合回收垃圾。
 *   Serial Old收集器：老年代收集器，单线程收集器，串行，使用标记整理算法，使用单线程进行GC，其它工作线程暂停。
 *   Parallel Old收集器：吞吐量优先的垃圾回收器，作用在老年代，多线程，并行，多线程机制与Parallel Scavenge差不错，使用标记整理算法，在Parallel Old执行时，仍然需要暂停其它线程。
-*   CMS（Concurrent Mark Sweep）收集器：老年代收集器，致力于获取最短回收停顿时间（即缩短垃圾回收的时间），使用标记清除算法，多线程，优点是并发收集（用户线程可以和GC线程同时工作），停顿小。使用-XX:+UseConcMarkSweepGC进行ParNew+CMS+Serial Old进行内存回收，优先使用ParNew+CMS（原因见Full GC和并发垃圾回收一节），当用户线程内存不足时，采用备用方案Serial Old收集。
-
+*   CMS（Concurrent Mark Sweep）收集器：老年代收集器，致力于获取最短回收停顿时间（即缩短垃圾回收的时间），使用标记清除算法，多线程，优点是并发收集（用户线程可以和GC线程同时工作），停顿小。使用-XX:+UseConcMarkSweepGC进行ParNew+CMS+Serial Old进行内存回收，优先使用ParNew+CMS，当用户线程内存不足时，采用备用方案Serial Old收集。
+![](/img/java-mem-2/CMS-collector.jpg)
 
 ## 总结
  1. 为了分代垃圾回收，Java堆内存分为3代：新生代，老年代和永久代。
