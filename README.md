@@ -12,7 +12,8 @@ tags:
   - Learning
 ---
 ## 前言
-Java 语言通过 synchronized 关键字来保证原子性，这是因为每一个 Object 都有一个隐含的锁，这个也称作监视器对象。在进入 synchronized 之前自动获取此内部锁，而一旦离开此方式，无论是完成或者中断都会自动释放锁。显然这是一个独占锁，每个锁请求之间是互斥的。相对于众多高级锁 (Lock/ReadWriteLock 等)，synchronized 的代价都比后者要高。但是 synchronzied 的语法比较简单，而且也比较容易使用和理解。 synchronzied 都不可能避免死锁产生，死锁情况会是经常容易出现的错误，所以需要对死锁产生的原因和避免方法进行学习。
+Java 语言通过 synchronized 关键字来保证原子性，这是因为每一个 Object 都有一个隐含的锁，这个也称作监视器对象。在进入 synchronized 之前自动获取此内部锁，而一旦离开此方式，无论是完成或者中断都会自动释放锁。显然这是一个独占锁，每个锁请求之间是互斥的。相对于众多高级锁 (Lock/ReadWriteLock 等)，synchronized 的代价都比后者要高。但是 synchronzied 的语法比较简单，而且也比较容易使用和理解。 <br/>
+synchronzied 都不可能避免死锁产生，死锁情况会是经常容易出现的错误，所以需要对死锁产生的原因和避免方法进行学习。
 
 ## 正文
 ### 死锁(Deadlock)的定义
