@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Design Patterns (4)"
-subtitle: "Design patterns -- Adapter "
+title: "Design Patterns (5)"
+subtitle: "Design patterns -- Proxy "
 author: "Bing Yan"
-header-img: "img/dp-adapter/post-bg-java.jpg"
+header-img: "img/dp-proxy/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
@@ -16,226 +16,143 @@ tags:
 经过上几次的设计模式基础的学习，已经了解了设计模式的意义和基本原则。<br/>
 从这次学习开始，主要针对20多种具体的设计模式的意义，场景，和具体实现来深入学习。<br/>
 这些学习的内容，都是根据网络上对于设计模式的书籍、博客等内容进行整理。<br/>
-本次学习适配器(Adapter)模式。
+本次学习代理(Proxy)模式。
 
 ## 正文
-### 什么是适配器(Adapter)模式
+### 什么是代理(Proxy)模式
 
-在现实生活中，经常出现两个对象因接口不兼容而不能在一起工作的实例，这时需要第三者进行适配。例如，讲中文的人同讲英文的人对话时需要一个翻译，用直流电的笔记本电脑接交流电源时需要一个电源适配器，用计算机访问照相机的 SD 内存卡时需要一个读卡器等。<br/>
-在软件设计中也可能出现：需要开发的具有某种业务功能的组件在现有的组件库中已经存在，但它们与当前系统的接口规范不兼容，如果重新开发这些组件成本又很高，这时用适配器模式能很好地解决这些问题。<br/>
-将一个类的接口转换成客户希望的另外一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作。适配器模式分为类结构型模式和对象结构型模式两种，前者类之间的耦合度比后者高，且要求程序员了解现有组件库中的相关组件的内部结构，所以应用相对较少些。<br/>
+&ensp;&ensp;&ensp;&ensp;在有些情况下，一个客户不能或者不想直接访问另一个对象，这时需要找一个中介帮忙完成某项任务，这个中介就是代理对象。例如，购买火车票不一定要去火车站买，可以通过 12306 网站或者去火车票代售点买。又如找女朋友、找保姆、找工作等都可以通过找中介完成。<br/>
 
-### 适配器模式特点
+&ensp;&ensp;&ensp;&ensp;在软件设计中，使用代理模式的例子也很多，例如，要访问的远程对象比较大（如视频或大图像等），其下载要花很多时间。还有因为安全原因需要屏蔽客户端直接访问真实对象，如某单位的内部数据库等。<br/>
+&ensp;&ensp;&ensp;&ensp;由于某些原因需要给某对象提供一个代理以控制对该对象的访问。这时，访问对象不适合或者不能直接引用目标对象，代理对象作为访问对象和目标对象之间的中介。<br/>
+
+### 代理模式特点
 <br/>
 优点： <br/>
 
-*   客户端通过适配器可以透明地调用目标接口。
-*   复用了现存的类，程序员不需要修改原有代码而重用现有的适配者类。
-*   将目标类和适配者类解耦，解决了目标类和适配者类接口不一致的问题。
+*   代理模式在客户端与目标对象之间起到一个中介作用和保护目标对象的作用；
+*   代理对象可以扩展目标对象的功能；
+*   代理模式能将客户端与目标对象分离，在一定程度上降低了系统的耦合度；
 <br/>
 缺点： <br/>
 
-*   对类适配器来说，更换适配器的实现过程比较复杂。
-
+*   在客户端和目标对象之间增加一个代理对象，会造成请求处理速度变慢；
+*   增加了系统的复杂度；
 <br/>
 
-### 适配器模式的结构
+### 代理模式的结构
 
+代理模式的结构比较简单，主要是通过定义一个继承抽象主题的代理来包含真实主题，从而实现对真实主题的访问。
 <br/>
 工厂方法模式构成要素：<br/>
 
-*   目标（Target）接口: 当前系统业务所期待的接口，它可以是抽象类或接口。
-*   适配者（Adaptee）类: 它是被访问和适配的现存组件库中的组件接口。
-*   适配器（Adapter）类: 它是一个转换器，通过继承或引用适配者的对象，把适配者接口转换成目标接口，让客户按目标接口的格式访问适配者。
+*   抽象主题（Subject）类: 通过接口或抽象类声明真实主题和代理对象实现的业务方法。
+*   真实主题（Real Subject）类: 实现了抽象主题中的具体业务，是代理对象所代表的真实对象，是最终要引用的对象。
+*   代理（Proxy）类: 提供了与真实主题相同的接口，其内部含有对真实主题的引用，它可以访问、控制或扩展真实主题的功能。
 
 <br/>
-类适配器模式的结构图如下图所示: <br/>
+结构图如下图所示: <br/>
 
-![](/img/dp-adapter/adapter-1.png)
+![](/img/dp-proxy/proxy-1.png)
 
 <br/>
-对象适配器模式的结构图如下图所示: <br/>
 
-![](/img/dp-adapter/adapter-2.png)
+### 代理模式的分类：
 
-### 工厂方法模式的实现
+*   静态代理：<br/>
+静态代理就是写死了在代理对象中执行这个方法前后执行添加功能的形式，每次要在接口中添加一个新方法，则需要在目标对象中实现这个方法，并且在代理对象中实现相应的代理方法。<br/>
+*   动态代理（jdk动态代理、cglib动态代理、Spring和AspectJ实现的动态代理）: <br/>
+Jdk的动态代理，是使用反射技术获得类的加载器并且创建实例，根据类执行的方法在执行方法的前后发送通知。
 <br/>
-其实现方式主要有两种：<br/>
-1. 类的适配器(采用继承实现) <br/>
-2. 对象适配器(采用对象组合方式实现) <br/>
 
-*   类适配器模式的代码如下：<br/>
+### 代理模式的实现
+<br/>
 
 ```
-package adapter;
-//目标接口
-interface Target
-{
-    public void request();
-}
-//适配者接口
-class Adaptee
-{
-    public void specificRequest()
-    {       
-        System.out.println("适配者中的业务代码被调用！");
-    }
-}
-//类适配器类
-class ClassAdapter extends Adaptee implements Target
-{
-    public void request()
-    {
-        specificRequest();
-    }
-}
-//客户端代码
-public class ClassAdapterTest
+package proxy;
+public class ProxyTest
 {
     public static void main(String[] args)
     {
-        System.out.println("类适配器模式测试：");
-        Target target = new ClassAdapter();
-        target.request();
+        Proxy proxy=new Proxy();
+        proxy.Request();
     }
 }
-```
-程序的运行结果如下：<br/>
->类适配器模式测试：<br/>
-适配者中的业务代码被调用！
-
-*   对象适配器模式的代码如下:<br/>
-
-```
-package adapter;
-//对象适配器类
-class ObjectAdapter implements Target
+//抽象主题
+interface Subject
 {
-    private Adaptee adaptee;
-    public ObjectAdapter(Adaptee adaptee)
+    void Request();
+}
+//真实主题
+class RealSubject implements Subject
+{
+    public void Request()
     {
-        this.adaptee=adaptee;
-    }
-    public void request()
-    {
-        adaptee.specificRequest();
+        System.out.println("访问真实主题方法...");
     }
 }
-//客户端代码
-public class ObjectAdapterTest
+//代理
+class Proxy implements Subject
 {
-    public static void main(String[] args)
+    private RealSubject realSubject;
+    public void Request()
     {
-        System.out.println("对象适配器模式测试：");
-        Adaptee adaptee = new Adaptee();
-        Target target = new ObjectAdapter(adaptee);
-        target.request();
+        if (realSubject==null)
+        {
+            realSubject=new RealSubject();
+        }
+        preRequest();
+        realSubject.Request();
+        postRequest();
+    }
+    public void preRequest()
+    {
+        System.out.println("访问真实主题之前的预处理。");
+    }
+    public void postRequest()
+    {
+        System.out.println("访问真实主题之后的后续处理。");
     }
 }
 ```
 
-说明：对象适配器模式中的“目标接口”和“适配者类”的代码同类适配器模式一样，只要修改适配器类和客户端的代码即可。
-<br/>
 程序的运行结果如下：<br/>
->对象适配器模式测试：<br/>
-适配者中的业务代码被调用！<br/>
+>访问真实主题之前的预处理。<br/>
+访问真实主题方法...<br/>
+访问真实主题之后的后续处理。<br/>
 
 ### 模式的应用场景
 
-适配器模式（Adapter）通常适用于以下场景:<br/>
+代理(Proxy)模式通常适用于以下场景:<br/>
 
-*   以前开发的系统存在满足新系统功能需求的类，但其接口同新系统的接口不一致。
-*   使用第三方提供的组件，但组件接口定义和自己要求的接口定义不同。
+*   远程代理，这种方式通常是为了隐藏目标对象存在于不同地址空间的事实，方便客户端访问。例如，用户申请某些网盘空间时，会在用户的文件系统中建立一个虚拟的硬盘，用户访问虚拟硬盘时实际访问的是网盘空间。
+*   虚拟代理，这种方式通常用于要创建的目标对象开销很大时。例如，下载一幅很大的图像需要很长时间，因某种计算比较复杂而短时间无法完成，这时可以先用小比例的虚拟代理替换真实的对象，消除用户对服务器慢的感觉。
+*   安全代理，这种方式通常用于控制不同种类客户对真实对象的访问权限。
+*   智能指引，主要用于调用目标对象时，代理附加一些额外的处理功能。例如，增加计算真实对象的引用次数的功能，这样当该对象没有被引用时，就可以自动释放它。
+*   延迟加载，指为了提高系统的性能，延迟对目标的加载。例如，Hibernate 中就存在属性的延迟加载和关联表的延时加载。
 
 ### 模式的扩展
 
-适配器模式（Adapter）可扩展为双向适配器模式，双向适配器类既可以把适配者接口转换成目标接口，也可以把目标接口转换成适配者接口，其结构图如图所示：<br/> 
-![](/img/dp-adapter/adapter-3.png)
+前面介绍的代理模式存在以下缺点：<br/>
+*   真实主题与代理主题一一对应，增加真实主题也要增加代理。
+*   设计代理以前真实主题必须事先存在，不太灵活。
+
 <br/>
-```
-package adapter;
-//目标接口
-interface TwoWayTarget
-{
-    public void request();
-}
-//适配者接口
-interface TwoWayAdaptee
-{
-    public void specificRequest();
-}
-//目标实现
-class TargetRealize implements TwoWayTarget
-{
-    public void request()
-    {       
-        System.out.println("目标代码被调用！");
-    }
-}
-//适配者实现
-class AdapteeRealize implements TwoWayAdaptee
-{
-    public void specificRequest()
-    {       
-        System.out.println("适配者代码被调用！");
-    }
-}
-//双向适配器
-class TwoWayAdapter  implements TwoWayTarget,TwoWayAdaptee
-{
-    private TwoWayTarget target;
-    private TwoWayAdaptee adaptee;
-    public TwoWayAdapter(TwoWayTarget target)
-    {
-        this.target=target;
-    }
-    public TwoWayAdapter(TwoWayAdaptee adaptee)
-    {
-        this.adaptee=adaptee;
-    }
-    public void request()
-    {
-        adaptee.specificRequest();
-    }
-    public void specificRequest()
-    {       
-        target.request();
-    }
-}
-//客户端代码
-public class TwoWayAdapterTest
-{
-    public static void main(String[] args)
-    {
-        System.out.println("目标通过双向适配器访问适配者：");
-        TwoWayAdaptee adaptee=new AdapteeRealize();
-        TwoWayTarget target=new TwoWayAdapter(adaptee);
-        target.request();
-        System.out.println("-------------------");
-        System.out.println("适配者通过双向适配器访问目标：");
-        target=new TargetRealize();
-        adaptee=new TwoWayAdapter(target);
-        adaptee.specificRequest();
-    }
-}
-```
-程序的运行结果如下：<br/>
->目标通过双向适配器访问适配者：<br/>
-适配者代码被调用！<br/>
--------------------<br/>
-适配者通过双向适配器访问目标：<br/>
-目标代码被调用！
+而采用态代理模式可以解决以上问题，如 SpringAOP，其结构如下图所示：<br/>
+
+![](/img/dp-proxy/proxy-2.png)
+<br/>
+
+
 
 ## 总结
-
-&ensp;&ensp;&ensp;&ensp;适配器模式也是一种包装模式，与之前的 Decorator 装饰模式同样具有包装的功能；此外，对象适配器模式还具有显式委托的意思在里面（其实类适配器也有这种意思，只不过比较隐含而已），那么我在认为它与 Proxy 代理模式也有点类似。<br/>
-
-&ensp;&ensp;&ensp;&ensp;从上面一点对比来看， Decorator 、 Proxy、 Adapter 在实现了自身的最主要目的（这个得看各个模式的最初动机、描述）之外，都可以在包装的前后进行额外的、特殊的功能上的增减，因为我认为它们都有委托的实现意思在里面。<br/>
-
-&ensp;&ensp;&ensp;&ensp;也有书中说适配器模式不适合在详细设计阶段使用它，它是一种补偿模式，专用来在系统后期扩展、修改时所用。
+&ensp;&ensp;&ensp;&ensp;所谓的代理，就是一个人或者一个机构代表另外一个人或者另外一个机构采取行动。在一些情况下，一个客户不想或者不能够直接引用一个对象，而代理对象可以在客户端和目标对象中间起到中介的作用。<br/>
+&ensp;&ensp;&ensp;&ensp;静态代理比动态代理更符合OOP原则，在日常开发中使用也较多。<br/>
+&ensp;&ensp;&ensp;&ensp;动态代理在开发框架时使用较多，例如大名鼎鼎的Spring。<br/>
+&ensp;&ensp;&ensp;&ensp;而上学时候，老师举了一个简单通俗的例子来说明代理模式：婚礼举办公司。对于结婚的人，只需要负责美美哒结婚就可以了。至于婚礼前的场地布置，婚礼后的场地清理，都不需要被代理人操心，都是由婚庆公司代理来操心。所以说技术和艺术都是源自于生活~
 
 ## 参考资料
 此次学习主要依赖于下面技术网站:<br/> 
-http://c.biancheng.net/view/1361.html <br/>
-https://www.cnblogs.com/V1haoge/p/6479118.html <br/>
+http://c.biancheng.net/view/1359.html <br/>
+https://www.jianshu.com/p/305c8da4563d <br/>
 
