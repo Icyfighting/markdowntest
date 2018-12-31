@@ -48,7 +48,6 @@ tags:
 **函数创建:**
 
 ```
-# 函数创建，
 def create_animal(type):
     if type == 'Dog':
         # 创建类
@@ -71,8 +70,11 @@ print(type(dog))
 ```
 <br/>
 输出结果：<br/>
-><class 'type'>#类类型 <br/>
+
+```
+<class 'type'>#类类型 <br/>
 <class '__main__.create_animal.<locals>.Dog'>#对象类型
+```
 <br/>
 
 这里通过调用函数传图不同的参数，来创建不同的类，创建出返回的是类的引用，并不是对象，我们可以通过返回的类来创建对象。
@@ -89,12 +91,14 @@ Test2 = type("Test2", (object,), {})
  
 print(type(Test1))
 print(type(Test2))
- 
-#打印结果
-<class 'type'>
-<class 'type'>
-
 ```
+输出结果：
+<br/>
+```
+<class 'type'>
+<class 'type'>
+```
+
 可以看出两种创建方式是相同的效果，说到这里我们大家应该都明白了，原来type就是创建类的一个方法，python用它来创建类，也就是说他是所有类的元类，例如在pyhton中是不是还有int，str...等等类型，int就是用来创建整数的类，而str就是用来创建字符串的类，这里的type也是，他就是python用来创建类的类（元类）。
 
 <br/>
@@ -105,7 +109,6 @@ print(type(Test2))
 自定义类的的目的，就是拦截类的创建，然后修改一些特性，然后返回该类。感觉是装饰器干的事情，只是装饰器是修饰一个函数，同样是一个东西进去，然后被额外加了一些东西，最后被返回。
 
 ```
-input:
 def upper_attr(class_name, class_parents, class_attr):
     """
     返回一个对象,将属性都改为大写的形式
