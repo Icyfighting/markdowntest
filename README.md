@@ -110,15 +110,15 @@ Response包含：html，json，图片，视频等<br/>
 **Response详解:**
 
 *   响应状态码:
-    **  200：代表成功
-    **  301：代表跳转
-    **  404：文件不存在
-    **  403：无权限访问
-    **  502：服务器错误
+    * 200：代表成功
+    * 301：代表跳转
+    * 404：文件不存在
+    * 403：无权限访问
+    * 502：服务器错误
     
 *   响应头:
-    **  Set-Cookie:BDSVRTM=0; path=/：可能有多个，是来告诉浏览器，把cookie保存下来
-    **  Content-Location：服务端响应头中包含Location返回浏览器之后，浏览器就会重新访问另一个页面
+    * Set-Cookie:BDSVRTM=0; path=/：可能有多个，是来告诉浏览器，把cookie保存下来
+    * Content-Location：服务端响应头中包含Location返回浏览器之后，浏览器就会重新访问另一个页面
 
 *   preview:就是网页源代码,包括JSO数据、网页html、图片、二进制数据等。
 
