@@ -82,7 +82,7 @@ The world of Erlang is very similar to our real world. Each Erlang process maint
 <br/>
 It is said that the following six functions make up the world view of Erlang. Let me know one by one:<br/>
 
-**spawn**
+#### spawn
  ```
 1>spawn(foo,hello,[]).
 
@@ -106,7 +106,7 @@ If you want to create two processes to do things at the same time, just spawn tw
 This will create two processes concurrently calling foo:hello(). This is the concurrency model of Erlang - also called the actor model.<br/>
 If you want to work on 100 processes at the same time, call spawn 100 times.<br/>
 
-**send**
+#### send
 
 We know how to create a process, the next step is to send a message to it:<br/>
 
@@ -122,7 +122,7 @@ hello
 
 Here we start a process call foo:loop(). We assume that this loop function will call itself recursively, so that our process will die without a click. Spawn will return a process ID <0.80.0>, we bind it to the Pid variable and send a message hello to it. Exclamation mark in Erlang! Send a message. The above is asynchronous messaging. This is also the only means of communication between the two processes in Erlang.
 
-**receive**
+#### receive
 
 When a message is sent to a process, how does the process receive the message? <br/>
 
@@ -146,7 +146,7 @@ hello
 
 Use receive to receive the message. You can use pattern matching here to match the information you want to receive, ignoring other messages. In this example, we only receive the message hello.
 
-**register**
+#### register
 
 We usually can't remember the phone number of a friend, so we use the address book to add a name to the phone number. There is no need to remember the Pid of each process in Erlang, register it with a name and access it later by name.<br/>
 
@@ -169,7 +169,7 @@ hello
 Just call register(Name,Pid) to register the name for any process. Then we can use the name to send a message to the process.
 
 
-**whereis**
+#### whereis
 
 When we register a name for a process, we can also find its Pid by looking up the address book.
 
@@ -183,7 +183,7 @@ true
 <0.102.0>
 ```
 
-**self**
+#### self
 
 A process can find its own Pid by calling self().<br/>
 
