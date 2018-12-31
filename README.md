@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Design Patterns (2)"
-subtitle: "Design patterns -- Singleton "
+title: "Design Patterns (3)"
+subtitle: "Design patterns -- Factory Method "
 author: "Bing Yan"
-header-img: "img/deadlock/post-bg-java.jpg"
+header-img: "img/dp_factory/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
@@ -13,151 +13,191 @@ tags:
 ---
 ## 前言
 
-经过上一次的设计模式基础的学习，已经了解了设计模式的意义和基本原则。<br/>
+经过上两次的设计模式基础的学习，已经了解了设计模式的意义和基本原则。<br/>
 从这次学习开始，主要针对20多种具体的设计模式的意义，场景，和具体实现来深入学习。<br/>
-这些学习的内容，都是根据网络上对于设计模式的书籍、博客等内容进行整理。
+这些学习的内容，都是根据网络上对于设计模式的书籍、博客等内容进行整理。<br/>
+本次学习工厂方法(Factory Method)模式。
 
 ## 正文
-### 什么是单例(Singleton)
+### 什么是工厂方法(Factory Method)
 
-一个类只有一个实例，且该类能自行创建这个实例的一种模式。例如，Windows 中只能打开一个任务管理器，这样可以避免因打开多个任务管理器窗口而造成内存资源的浪费，或出现各个窗口显示内容的不一致等错误。<br/>
+定义一个创建产品对象的工厂接口，将产品对象的实际创建工作推迟到具体子工厂类当中。这满足创建型模式中所要求的“创建与使用相分离”的特点。<br/>
+我们把被创建的对象称为“产品”，把创建产品的对象称为“工厂”。如果要创建的产品不多，只要一个工厂类就可以完成，这种模式叫“简单工厂模式”，它不属于 GoF 的 23 种经典设计模式，它的缺点是增加新产品时会违背“开闭原则”。<br/>
+本次学习的“工厂方法模式”是对简单工厂模式的进一步抽象化，其好处是可以使系统在不修改原来代码的情况下引进新的产品，即满足开闭原则。<br/>
+
+### 工厂方法模式特点
 <br/>
-在计算机系统中，还有 Windows 的回收站、操作系统中的文件系统、多线程中的线程池、显卡的驱动程序对象、打印机的后台处理服务、应用程序的日志对象、数据库的连接池、网站的计数器、Web 应用的配置对象、应用程序中的对话框、系统中的缓存等常常被设计成单例。
+优点： <br/>
+*   用户只需要知道具体工厂的名称就可得到所要的产品，无须知道产品的具体创建过程
+*   在系统增加新的产品时只需要添加具体产品类和对应的具体工厂类，无须对原工厂进行任何修改，满足开闭原则
 
-### 单例模式特点
-<br/>
+缺点： <br/>
+*   每增加一个产品就要增加一个具体产品类和一个对应的具体工厂类，这增加了系统的复杂度。
 
-*   单例类只有一个实例对象
-*   该单例对象必须由单例类自行创建
-*   单例类对外提供一个访问该单例的全局访问点
 <br/>
 
 ### 单例模式的结构
 
 <br/>
-单例模式是设计模式中最简单的模式之一。<br/>
-通常，普通类的构造函数是公有的，外部类可以通过“new 构造函数()”来生成多个实例。但是，如果将类的构造函数设为私有的，外部类就无法调用该构造函数，也就无法生成多个实例。这时该类自身必须定义一个静态私有实例，并向外提供一个静态的公有函数用于创建或获取该静态私有实例。
-<br/>
-单例模式的主要角色如下：<br/>
+工厂方法模式构成要素：<br/>
 
-*   单例类：包含一个实例且能自行创建这个实例的类。
-*   访问类：使用单例的类。
+*   抽象工厂 (Abstract Factory): 提供了创建产品的接口，调用者通过它访问具体工厂的工厂方法 newProduct() 来创建产品。
+*   具体工厂 (Concrete Factory): 主要是实现抽象工厂中的抽象方法，完成具体产品的创建。
+*   抽象产品 (Product): 定义了产品的规范，描述了产品的主要特性和功能。
+*   具体产品 (Concrete Product): 实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间一一对应。
 
 <br/>
 其结构如下图所示: <br/>
 
-![](/img/dp_singleton/singleton-1.png)
+![](/img/dp_factory/factory-1.png)
 
 <br/>
 
-### 单例模式的实现
+### 工厂方法模式的实现
 <br/>
-Singleton 模式通常有两种实现形式：<br/>
-
-*   懒汉式单例：
-<br/>
-该模式的特点是类加载时没有生成单例，只有当第一次调用 getlnstance 方法时才去创建这个单例。<br/>
+根据上述结构图，写出该模式的代码如下：<br/>
 
 ```
-public class LazySingleton
+package FactoryMethod;
+public class AbstractFactoryTest
 {
-    private static volatile LazySingleton instance=null;    //保证 instance 在所有线程中同步
-    private LazySingleton(){}    //private 避免类在外部被实例化
-    public static synchronized LazySingleton getInstance()
+    public static void main(String[] args)
     {
-        //getInstance 方法前加同步
-        if(instance==null)
+        try
         {
-            instance=new LazySingleton();
+            Product a;
+            AbstractFactory af;
+            af=(AbstractFactory) ReadXML1.getObject();
+            a=af.newProduct();
+            a.show();
         }
-        return instance;
+        catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
 }
-```
-
-<br/>
-注意：如果编写的是多线程程序，则不要删除上例代码中的关键字 volatile 和 synchronized，否则将存在线程非安全的问题。如果不删除这两个关键字就能保证线程安全，但是每次访问时都要同步，会影响性能，且消耗更多的资源，这是懒汉式单例的缺点。<br/>
-<br/>
-
-**学习笔记:** 
-
-<br/>
-这种方式的懒汉式单例实现，在多线程的时候效率比较低，为了可以提高在多线程场景下的效率，有一种“双重检测”(double check)方法的实现，在保证线程安全的前提下，更高效的实现了单例模式。<br/>
-
-```
-public class Singleton{
- 
-    private static Singleton singleton;   
- 
-    private Singleton(){
- 
-    }
- 
-    public static Singleton getInstance(){
- 
-       if(singleton == null){
- 
-           synchronized(Singleton.class){
- 
-              if(singleton == null){
- 
-                  singleton = new Singleton();
- 
-              }
-           }
-       }
- 
-    return singleton;
-    }
-}
-
-```
-
-<br/>
-
-
-*   饿汉式单例:
-<br/>
-该模式的特点是类一旦加载就创建一个单例，保证在调用 getInstance 方法之前单例已经存在了。<br/>
-
-```
-public class HungrySingleton
+//抽象产品：提供了产品的接口
+interface Product
 {
-    private static final HungrySingleton instance=new HungrySingleton();
-    private HungrySingleton(){}
-    public static HungrySingleton getInstance()
+    public void show();
+}
+//具体产品1：实现抽象产品中的抽象方法
+class ConcreteProduct1 implements Product
+{
+    public void show()
     {
-        return instance;
+        System.out.println("具体产品1显示...");
+    }
+}
+//具体产品2：实现抽象产品中的抽象方法
+class ConcreteProduct2 implements Product
+{
+    public void show()
+    {
+        System.out.println("具体产品2显示...");
+    }
+}
+//抽象工厂：提供了厂品的生成方法
+interface AbstractFactory
+{
+    public Product newProduct();
+}
+//具体工厂1：实现了厂品的生成方法
+class ConcreteFactory1 implements AbstractFactory
+{
+    public Product newProduct()
+    {
+        System.out.println("具体工厂1生成-->具体产品1...");
+        return new ConcreteProduct1();
+    }
+}
+//具体工厂2：实现了厂品的生成方法
+class ConcreteFactory2 implements AbstractFactory
+{
+    public Product newProduct()
+    {
+        System.out.println("具体工厂2生成-->具体产品2...");
+        return new ConcreteProduct2();
     }
 }
 ```
 
-<br/>
-饿汉式单例在类创建的同时就已经创建好一个静态的对象供系统使用，以后不再改变，所以是线程安全的，可以直接用于多线程而不会出现问题。
-<br/>
+```
+package FactoryMethod;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import java.io.*;
+class ReadXML1
+{
+    //该方法用于从XML配置文件中提取具体类类名，并返回一个实例对象
+    public static Object getObject()
+    {
+        try
+        {
+            //创建文档对象
+            DocumentBuilderFactory dFactory=DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder=dFactory.newDocumentBuilder();
+            Document doc;                           
+            doc=builder.parse(new File("src/FactoryMethod/config1.xml"));        
+            //获取包含类名的文本节点
+            NodeList nl=doc.getElementsByTagName("className");
+            Node classNode=nl.item(0).getFirstChild();
+            String cName="FactoryMethod."+classNode.getNodeValue();
+            //System.out.println("新类名："+cName);
+            //通过类名生成实例对象并将其返回
+            Class<?> c=Class.forName(cName);
+              Object obj=c.newInstance();
+            return obj;
+         }  
+         catch(Exception e)
+         {
+                   e.printStackTrace();
+                   return null;
+         }
+    }
+}
 
-### 单例模式的应用场景
+```
 
-前面分析了单例模式的结构与特点，以下是它通常适用的场景的特点:<br/>
-*   在应用场景中，某类只要求生成一个对象的时候，如一个班中的班长、每个人的身份证号等。
-*   当对象需要被共享的场合。由于单例模式只允许创建一个对象，共享该对象可以节省内存，并加快对象访问速度。如 Web 中的配置对象、数据库的连接池等。
-*   当某类需要频繁实例化，而创建的对象又频繁被销毁的时候，如多线程的线程池、网络连接池等。
+可以根据XML配置文件指定需要使用的具体工厂<br/>
 
-### 单例模式的扩展
-单例模式可扩展为有限的多例（Multitcm）模式，这种模式可生成有限个实例并保存在 ArmyList 中，客户需要时可随机获取，其结构图如下图所示：<br/>
-![](/img/dp_singleton/singleton-2.png)
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <className>ConcreteFactory1</className>
+</config>
+```
+运行结果如下：<br/>
+>具体工厂1生成-->具体产品1... <br/>
+具体产品1显示...
+
+将XML配置文件中的ConcreteFactory1 改为 ConcreteFactory2，则程序运行结果如下：<br/>
+>具体工厂2生成-->具体产品2... <br/>
+具体产品2显示...
+
+### 模式的应用场景
+
+工厂方法模式通常适用于以下场景:<br/>
+*   客户只知道创建产品的工厂名，而不知道具体的产品名。如 TCL 电视工厂、海信电视工厂等。
+*   创建对象的任务由多个具体子工厂中的某一个完成，而抽象工厂只提供创建产品的接口。
+*   客户不关心创建产品的细节，只关心产品的品牌。
+
+### 模式的扩展
+
+当需要生成的产品不多且不会增加，一个具体工厂类就可以完成任务时，可删除抽象工厂类。这时工厂方法模式将退化到简单工厂模式，其结构图下图所示: <br/>
+
+![](/img/dp_factory/factory-2.png)
 <br/>
 
 ## 总结
 
-单例模式确保某个类只有一个实例，而且自行实例化并向整个系统提供这个实例。<br/>
-在计算机系统中，线程池、缓存、日志对象、对话框、打印机、显卡的驱动程序对象常被设计成单例。这些应用都或多或少具有资源管理器的功能。<br/>
-如果我们能够保证系统中自始至终只有唯一一个数据库连接对象，显然我们会节省很多内存开销和cpu利用率。这就是单件模式的用途。当然单件模式不仅仅只用于这样的情况。在《设计模式：可复用面向对象软件的基础》一书中对单件模式的适用性有如下描述：<br/>
-*   当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时。<br/>
-*   当这个唯一实例应该是通过子类化可扩展的，并且客户应该无需更改代码就能使用一个扩展的实例时。<br/>
+在现实生活中社会分工越来越细，越来越专业化。各种产品有专门的工厂生产，彻底告别了自给自足的小农经济时代，这大大缩短了产品的生产周期，提高了生产效率。<br/> 在程序设计中，工厂方法模式也提供了一个这样的思路，实现了软件对象的生产和使用相分离。<br/> 
+无论是简单工厂模式，工厂方法模式，还是抽象工厂模式，他们都属于工厂模式，在形式和特点上也是极为相似的，他们的最终目的都是为了解耦。在使用时，我们不必去在意这个模式到底工厂方法模式还是抽象工厂模式，因为他们之间的演变常常是令人琢磨不透的。<br/> 经常你会发现，明明使用的工厂方法模式，当新需求来临，稍加修改，加入了一个新方法后，由于类中的产品构成了不同等级结构中的产品族，它就变成抽象工厂模式了；而对于抽象工厂模式，当减少一个方法使的提供的产品不再构成产品族之后，它就演变成了工厂方法模式。<br/> 
+所以，在使用工厂模式时，只需要关心降低耦合度的目的是否达到了。
 
 ## Reference-1
 此次学习主要依赖于下面技术网站:<br/> 
-http://c.biancheng.net/view/1338.html <br/>
-https://blog.csdn.net/qq_42145871/article/details/82014532 <br/>
+http://c.biancheng.net/view/1348.html <br/>
+https://www.cnblogs.com/yumo1627129/p/7197524.html <br/>
 
