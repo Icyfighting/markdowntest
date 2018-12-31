@@ -1,158 +1,248 @@
 ---
 layout: post
-title: "Design Patterns (5)"
-subtitle: "Design patterns -- Proxy "
+title: " Web Crawler "
+subtitle: "Python learning -- Web Crawler example"
 author: "Bing Yan"
-header-img: "img/dp-proxy/post-bg-java.jpg"
+header-img: "img/web-crawler/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
-  - Java
-  - Design Patterns
+  - Python
   - Learning
 ---
 ## 前言
 
-经过上几次的设计模式基础的学习，已经了解了设计模式的意义和基本原则。<br/>
-从这次学习开始，主要针对20多种具体的设计模式的意义，场景，和具体实现来深入学习。<br/>
-这些学习的内容，都是根据网络上对于设计模式的书籍、博客等内容进行整理。<br/>
-本次学习代理(Proxy)模式。
+&ensp;&ensp;&ensp;&ensp;Python 是一个高层次的结合了解释性、编译性、互动性和面向对象的脚本语言。<br/>
+Python 本身也是由诸多其他语言发展而来的,这包括 ABC、Modula-3、C、C++、Algol-68、SmallTalk、Unix shell 和其他的脚本语言等等。<br/>
+像 Perl 语言一样，Python 源代码同样遵循 GPL(GNU General Public License)协议。<br/>
+&ensp;&ensp;&ensp;&ensp;Python 的设计具有很强的可读性，相比其他语言经常使用英文关键字，其他语言的一些标点符号，它具有比其他语言更有特色语法结构。<br/>
+&ensp;&ensp;&ensp;&ensp;而大多数人最开始接触Python都是通过网络爬虫。今天我就通过一个自己编写的网络爬虫例子来初步了解一下Python。
 
 ## 正文
-### 什么是代理(Proxy)模式
+### 什么是网络爬虫(Web Crawler)
 
-&ensp;&ensp;&ensp;&ensp;在有些情况下，一个客户不能或者不想直接访问另一个对象，这时需要找一个中介帮忙完成某项任务，这个中介就是代理对象。例如，购买火车票不一定要去火车站买，可以通过 12306 网站或者去火车票代售点买。又如找女朋友、找保姆、找工作等都可以通过找中介完成。<br/>
+&ensp;&ensp;&ensp;&ensp;简单来说互联网是由一个个站点和网络设备组成的大网，我们通过浏览器访问站点，站点把HTML、JS、CSS代码返回给浏览器，这些代码经过浏览器解析、渲染，将丰富多彩的网页呈现我们眼前；<br/>
+&ensp;&ensp;&ensp;&ensp;如果我们把互联网比作一张大的蜘蛛网，数据便是存放于蜘蛛网的各个节点，而爬虫就是一只小蜘蛛，沿着网络抓取自己的猎物（数据）爬虫指的是：向网站发起请求，获取资源后分析并提取有用数据的程序。<br/>
+&ensp;&ensp;&ensp;&ensp;从技术层面来说就是 通过程序模拟浏览器请求站点的行为，把站点返回的HTML代码/JSON数据/二进制数据（图片、视频） 爬到本地，进而提取自己需要的数据，存放起来使用。
 
-&ensp;&ensp;&ensp;&ensp;在软件设计中，使用代理模式的例子也很多，例如，要访问的远程对象比较大（如视频或大图像等），其下载要花很多时间。还有因为安全原因需要屏蔽客户端直接访问真实对象，如某单位的内部数据库等。<br/>
-&ensp;&ensp;&ensp;&ensp;由于某些原因需要给某对象提供一个代理以控制对该对象的访问。这时，访问对象不适合或者不能直接引用目标对象，代理对象作为访问对象和目标对象之间的中介。<br/>
-
-### 代理模式特点
-<br/>
-优点： <br/>
-
-*   代理模式在客户端与目标对象之间起到一个中介作用和保护目标对象的作用；
-*   代理对象可以扩展目标对象的功能；
-*   代理模式能将客户端与目标对象分离，在一定程度上降低了系统的耦合度；
-<br/>
-缺点： <br/>
-
-*   在客户端和目标对象之间增加一个代理对象，会造成请求处理速度变慢；
-*   增加了系统的复杂度；
+### 网络爬虫(Web Crawler)能做什么
 <br/>
 
-### 代理模式的结构
-
-代理模式的结构比较简单，主要是通过定义一个继承抽象主题的代理来包含真实主题，从而实现对真实主题的访问。
+*   做为通用搜索引擎网页收集器(google,baidu)
+*   做垂直搜索引擎
+*   科学研究：在线人类行为，在线社群演化，人类动力学研究，计量社会学，复杂网络，数据挖掘，等领域的实证研究都需要大量数据，网络爬虫是收集相关数据的利器。
+*   偷窥，hacking，发垃圾邮件……
 <br/>
+我的理解：就是从网络中获取需要的大量数据，作为大数据等技术分析的原料。因为海量的数据本身是蕴含着很多规律，需要去发现和挖掘的。而这部分工作就需要之后的数据清洗、数据仓储、数据分析等技术手段。
+<br/>
+
+
+### 为什么用Python写网络爬虫
+
+所有语言都有相通的用处，比如写网络爬虫也有很多种语言选择。<br/>
 工厂方法模式构成要素：<br/>
 
-*   抽象主题（Subject）类: 通过接口或抽象类声明真实主题和代理对象实现的业务方法。
-*   真实主题（Real Subject）类: 实现了抽象主题中的具体业务，是代理对象所代表的真实对象，是最终要引用的对象。
-*   代理（Proxy）类: 提供了与真实主题相同的接口，其内部含有对真实主题的引用，它可以访问、控制或扩展真实主题的功能。
-
-<br/>
-结构图如下图所示: <br/>
-
-![](/img/dp-proxy/proxy-1.png)
-
+*   C，C++：高效率，快速，适合通用搜索引擎做全网爬取。缺点，开发慢，写起来又臭又长，例如：天网搜索源代码。
+*   脚本语言：Perl, Python, Java, Ruby。简单，易学，良好的文本处理能方便网页内容的细致提取，但效率往往不高，适合对少量网站的聚焦爬取
+*   C#（貌似信息管理的人比较喜欢的语言）
 <br/>
 
-### 代理模式的分类：
+那最终为什么python能够胜任这个工作，为大多数人接受？<br/>
 
-*   静态代理：<br/>
-静态代理就是写死了在代理对象中执行这个方法前后执行添加功能的形式，每次要在接口中添加一个新方法，则需要在目标对象中实现这个方法，并且在代理对象中实现相应的代理方法。<br/>
-*   动态代理（jdk动态代理、cglib动态代理、Spring和AspectJ实现的动态代理）: <br/>
-Jdk的动态代理，是使用反射技术获得类的加载器并且创建实例，根据类执行的方法在执行方法的前后发送通知。
+*   跨平台，对Linux和windows都有不错的支持。
+*   科学计算，数值拟合：Numpy，Scipy
+*   可视化：2d：Matplotlib(做图很漂亮), 3d: Mayavi2  
+*   复杂网络：Networkx
+*   统计：与R语言接口：Rpy
+*   交互式终端
+*   网站的快速开发
+
 <br/>
 
-### 代理模式的实现
+### 爬虫的基本流程
 <br/>
+用户获取网络数据的方式：<br/>
+*   浏览器提交请求--->下载网页代码--->解析成页面<br/>
+*   模拟浏览器发送请求(获取网页代码)->提取有用的数据->存放于数据库或文件中<br/>
+爬虫要做的就是方式2。
+
+![](/img/web-crawler/wc-1.png)
+<br/>
+ 1. 发起请求:<br/>
+>使用http库向目标站点发起请求，即发送一个Request<br/>
+Request包含：请求头、请求体等 <br/>
+Request模块缺陷：不能执行JS 和CSS 代码<br/>
+
+ 2. 获取响应内容:<br/>
+>如果服务器能正常响应，则会得到一个Response<br/>
+Response包含：html，json，图片，视频等<br/>
+
+ 3. 解析内容:<br/>
+> 解析html数据：正则表达式（RE模块），第三方解析库如Beautifulsoup，pyquery等。
+解析json数据：json模块 <br/>
+解析二进制数据:以wb的方式写入文件<br/>
+
+ 4. 保存数据:<br/>
+>数据库（MySQL，Mongdb、Redis）<br/>
+文件<br/>
+
+
+### HTTP协议复习
+编写网络爬虫需要对HTTP协议有一定了解。通过修改请求方式、请求URL、在响应体中过滤有用信息才能实现网络爬虫的功能。
+<br/>
+![](/img/web-crawler/wc-2.png)
+<br/>
+由图可知，用户通过发送请求给服务器，服务器根据请求发送响应。整个过程中有Request和Response两个消息。<br/>
+*   Request：用户将自己的信息通过浏览器（socket client）发送给服务器（socket server）<br/>
+*   Response：服务器接收请求，分析用户发来的请求信息，然后返回数据（返回的数据中可能包含其他链接，如：图片，js，css等）<br/>
+
+**Request详解:**
+
+*   请求方式:常见的请求方式：GET / POST
+*   请求的URL:URL是全球统一资源定位符，用来定义互联网上一个唯一的资源 例如：一张图片、一个文件、一段视频都可以用url唯一确定
+*   请求头:
+    **  User-agent:请求头中如果没有user-agent客户端配置，服务端可能将你当做一个非法用户host
+    **  cookies:cookie用来保存登录信息
+    **  Referrer:访问源至哪里来（一些大型网站，会通过Referrer 做防盗链策略；所有爬虫也要注意模拟）
+*   请求体:如果是get方式，请求体没有内容 （get请求的请求体放在 url后面参数中，直接能看到；如果是post方式，请求体是format data
+
+**Response详解:**
+
+*   响应状态码:
+    **  200：代表成功
+    **  301：代表跳转
+    **  404：文件不存在
+    **  403：无权限访问
+    **  502：服务器错误
+    
+*   响应头:
+    **  Set-Cookie:BDSVRTM=0; path=/：可能有多个，是来告诉浏览器，把cookie保存下来
+    **  Content-Location：服务端响应头中包含Location返回浏览器之后，浏览器就会重新访问另一个页面
+
+*   preview:就是网页源代码,包括JSO数据、网页html、图片、二进制数据等。
+
+### Sina News Web Crawler
+
+根据培训视频，一步一步完成了第一个网络爬虫--新浪新闻网络爬虫：<br/>
+整个过程并不很顺利。遇到的困难主要有：<br/>
+*   网站地址发生变更频繁，需要经常维护。这也是各大网站反爬虫的一种手段。因为编写的爬虫依赖的就是URL格式的统一，否则全自动就要变成“全得自己动”了。
+*   很多网页上的信息是通过多个请求加载进来的，要知道一个网页的展示，可能需要发送了上百个请求，如何在这些Response中找到正确的信息也需要细心。比如此例子中的“评论数”。而且即使经过多次增加和修改，评论数量的收集也还是会有不完整。
+
+此项目代码在[Github](https://github.com/Icyfighting/Web-Crawler-of-Sina-News-Website)
 
 ```
-package proxy;
-public class ProxyTest
-{
-    public static void main(String[] args)
-    {
-        Proxy proxy=new Proxy();
-        proxy.Request();
-    }
-}
-//抽象主题
-interface Subject
-{
-    void Request();
-}
-//真实主题
-class RealSubject implements Subject
-{
-    public void Request()
-    {
-        System.out.println("访问真实主题方法...");
-    }
-}
-//代理
-class Proxy implements Subject
-{
-    private RealSubject realSubject;
-    public void Request()
-    {
-        if (realSubject==null)
-        {
-            realSubject=new RealSubject();
-        }
-        preRequest();
-        realSubject.Request();
-        postRequest();
-    }
-    public void preRequest()
-    {
-        System.out.println("访问真实主题之前的预处理。");
-    }
-    public void postRequest()
-    {
-        System.out.println("访问真实主题之后的后续处理。");
-    }
-}
+commentCountUrl = 'https://comment5.news.sina.com.cn/cmnt/count?format=json&newslist=gn:comos-{}:0'
+commentCountUrl2 = 'https://comment.sina.com.cn/page/info?version=1&format=json&channel=cj&newsid=comos-{}'
+import re
+import requests
+from bs4 import BeautifulSoup
+import json
+from datetime import datetime
+def getCommentCount(newsurl):
+    m = re.search('doc-i(.+).shtml',newsurl)  #根据新闻url找出新闻的id
+    newsid= m.group(1)
+   # print(newsid)
+    commentCountUrlFormat = commentCountUrl.format(newsid)   #根据新闻id，组合出评论数量的链接
+    commentCountUrlFormat2 = commentCountUrl2.format(newsid)
+    #根据评论数量链接，取得评论数
+    res = requests.get(commentCountUrlFormat)
+    res2 = requests.get(commentCountUrlFormat2)
+    res.encoding='utf-8'
+   # print(res.text)
+    mm = re.search('\"total\":.*?(?=,)',res.text)
+    mm2 = re.search('\"total\":.*?(?=,)',res2.text) #这两个路径中只有一个是有返回值的，另一个没有返回值，需要判断
+    commentCount1=0
+    commentCount2=0
+    if mm is not None:
+        commentCountStr1 = mm.group(0).lstrip('"total":').strip()
+        commentCount1 = int(commentCountStr1)
+    if mm2 is not None:
+        commentCountStr2 = mm2.group(0).lstrip('"total":').strip()
+        commentCount2 = int(commentCountStr2)
+    
+    #当第二个地址返回正确 ，但是第一个地址返回也不是空，知识内容是0，所以不为空的都要取，然后返回大的评论数
+    
+    
+    if commentCount1 > commentCount2:
+        return commentCount1
+    else:
+        return commentCount2
+  
 ```
-
-程序的运行结果如下：<br/>
->访问真实主题之前的预处理。<br/>
-访问真实主题方法...<br/>
-访问真实主题之后的后续处理。<br/>
-
-### 模式的应用场景
-
-代理(Proxy)模式通常适用于以下场景:<br/>
-
-*   远程代理，这种方式通常是为了隐藏目标对象存在于不同地址空间的事实，方便客户端访问。例如，用户申请某些网盘空间时，会在用户的文件系统中建立一个虚拟的硬盘，用户访问虚拟硬盘时实际访问的是网盘空间。
-*   虚拟代理，这种方式通常用于要创建的目标对象开销很大时。例如，下载一幅很大的图像需要很长时间，因某种计算比较复杂而短时间无法完成，这时可以先用小比例的虚拟代理替换真实的对象，消除用户对服务器慢的感觉。
-*   安全代理，这种方式通常用于控制不同种类客户对真实对象的访问权限。
-*   智能指引，主要用于调用目标对象时，代理附加一些额外的处理功能。例如，增加计算真实对象的引用次数的功能，这样当该对象没有被引用时，就可以自动释放它。
-*   延迟加载，指为了提高系统的性能，延迟对目标的加载。例如，Hibernate 中就存在属性的延迟加载和关联表的延时加载。
-
-### 模式的扩展
-
-前面介绍的代理模式存在以下缺点：<br/>
-*   真实主题与代理主题一一对应，增加真实主题也要增加代理。
-*   设计代理以前真实主题必须事先存在，不太灵活。
-
+```
+def getAuthor(soup):
+    
+    show_author = soup.select('.show_author')
+    article_editor = soup.select('.article-editor')
+    if len(show_author)>0:
+        return show_author[0].text.lstrip('责任编辑：') 
+    elif len(article_editor)>0:
+        return article_editor[0].text.lstrip('责任编辑：')
+    else:
+        return 'null'
+```
+```
+def getNewsDetail(newsurl):
+    result = {}
+    res = requests.get(newsurl)
+    res.encoding='utf-8'
+    soup = BeautifulSoup(res.text,'html.parser')
+    result['title'] = soup.select('.main-title')[0].text
+    result['dt'] = datetime.strptime(soup.select('.date')[0].text,'%Y年%m月%d日 %H:%M')
+    result['newssource'] = soup.select('.source')[0].text
+    result['article'] = ' '.join([p.text.strip() for p in soup.select('.article p')[:-1]])
+    result['editor'] = getAuthor(soup)
+    result['commentsCount'] = getCommentCount(newsurl)
+    return result
+```
+```
+def parseListLinks(pageUrl):
+    newsdetails = []
+    res = requests.get(pageUrl)
+    res.encoding='utf-8'
+    jd = json.loads(res.text)
+    for ent in jd['result']['data']:
+        newsdetails.append(getNewsDetail(ent['url']))
+    return newsdetails
+```
+```
+def getNewsTotal(start, end):
+    pageCommonUrl = 'https://feed.mix.sina.com.cn/api/roll/get?pageid=153&lid=2509&k=&num=10&page={}'
+    if str(start).isdigit() and str(end).isdigit():
+        if int(start)< int(end):
+            news_total = []
+            for i in range(int(start),int(end)):
+                newsurl = pageCommonUrl.format(i)
+                newsary = parseListLinks(newsurl)
+                news_total.extend(newsary)
+            return news_total
+        else:
+            return None
+    else:
+        return None
+```
+```
+import pandas
+df = pandas.DataFrame(getNewsTotal(11,13))
+df.head(20)
+```
 <br/>
-而采用态代理模式可以解决以上问题，如 SpringAOP，其结构如下图所示：<br/>
-
-![](/img/dp-proxy/proxy-2.png)
+执行效果如图：
+![](/img/web-crawler/wc-3.png)
 <br/>
 
+当然也可以通过命令将结果存储在数据库或者表格中。
+```
+df.to_excel('news_result.xlsx')
+```
 
 
 ## 总结
-&ensp;&ensp;&ensp;&ensp;所谓的代理，就是一个人或者一个机构代表另外一个人或者另外一个机构采取行动。在一些情况下，一个客户不想或者不能够直接引用一个对象，而代理对象可以在客户端和目标对象中间起到中介的作用。<br/>
-&ensp;&ensp;&ensp;&ensp;静态代理比动态代理更符合OOP原则，在日常开发中使用也较多。<br/>
-&ensp;&ensp;&ensp;&ensp;动态代理在开发框架时使用较多，例如大名鼎鼎的Spring。<br/>
-&ensp;&ensp;&ensp;&ensp;而上学时候，老师举了一个简单通俗的例子来说明代理模式：婚礼举办公司。对于结婚的人，只需要负责美美哒结婚就可以了。至于婚礼前的场地布置，婚礼后的场地清理，都不需要被代理人操心，都是由婚庆公司代理来操心。所以说技术和艺术都是源自于生活~
+&ensp;&ensp;&ensp;&ensp;有人对Python的理解还仅仅是脚本语言。其实Python是一个全能选手，尤其是在科研领域更是大放异彩。
+在知乎上看到关于[“你都用 Python 来做什么？”](https://www.zhihu.com/question/20799742)问题的回复，可以说是只有想不到没有做不到的。
+
 
 ## 参考资料
 此次学习主要依赖于下面技术网站:<br/> 
-http://c.biancheng.net/view/1359.html <br/>
-https://www.jianshu.com/p/305c8da4563d <br/>
+https://study.163.com/course/courseMain.htm?courseId=1003285002 <br/>
 
