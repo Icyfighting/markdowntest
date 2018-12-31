@@ -1,9 +1,9 @@
 ---
 layout: post
-title: " Web Crawler "
-subtitle: "Python learning -- Web Crawler example"
+title: " Meta Class "
+subtitle: "Python learning (2)"
 author: "Bing Yan"
-header-img: "img/web-crawler/post-bg-java.jpg"
+header-img: "img/metaclass/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
@@ -12,240 +12,132 @@ tags:
 ---
 ## 前言
 
-&ensp;&ensp;&ensp;&ensp;Python 是一个高层次的结合了解释性、编译性、互动性和面向对象的脚本语言。<br/>
-Python 本身也是由诸多其他语言发展而来的,这包括 ABC、Modula-3、C、C++、Algol-68、SmallTalk、Unix shell 和其他的脚本语言等等。<br/>
-像 Perl 语言一样，Python 源代码同样遵循 GPL(GNU General Public License)协议。<br/>
-&ensp;&ensp;&ensp;&ensp;Python 的设计具有很强的可读性，相比其他语言经常使用英文关键字，其他语言的一些标点符号，它具有比其他语言更有特色语法结构。<br/>
-&ensp;&ensp;&ensp;&ensp;而大多数人最开始接触Python都是通过网络爬虫。今天我就通过一个自己编写的网络爬虫例子来初步了解一下Python。
+&ensp;&ensp;&ensp;&ensp;对于元类有一个通俗易懂又颇具禅意的比喻：<br/>
+道生一，一生二，二生三，三生万物<br/>
+
+![](/img/metaclass/dao.jpg)
+<br/>
+
+*   道 即是 type
+*   一 即是 metaclass(元类，或者叫类生成器)
+*   二 即是 class(类，或者叫实例生成器)
+*   三 即是 instance(实例)
+*   万物 即是 实例的各种属性与方法，我们平常使用python时，调用的就是它们。
+
+“一”就是今天要学习的重点--元类(Meta Class)。
 
 ## 正文
-### 什么是网络爬虫(Web Crawler)
+### 什么是元类(Meta Class)
 
-&ensp;&ensp;&ensp;&ensp;简单来说互联网是由一个个站点和网络设备组成的大网，我们通过浏览器访问站点，站点把HTML、JS、CSS代码返回给浏览器，这些代码经过浏览器解析、渲染，将丰富多彩的网页呈现我们眼前；<br/>
-&ensp;&ensp;&ensp;&ensp;如果我们把互联网比作一张大的蜘蛛网，数据便是存放于蜘蛛网的各个节点，而爬虫就是一只小蜘蛛，沿着网络抓取自己的猎物（数据）爬虫指的是：向网站发起请求，获取资源后分析并提取有用数据的程序。<br/>
-&ensp;&ensp;&ensp;&ensp;从技术层面来说就是 通过程序模拟浏览器请求站点的行为，把站点返回的HTML代码/JSON数据/二进制数据（图片、视频） 爬到本地，进而提取自己需要的数据，存放起来使用。
-
-### 网络爬虫(Web Crawler)能做什么
+&ensp;&ensp;&ensp;&ensp;简单的讲，元类创建了Python中所有的对象。<br/>
+&ensp;&ensp;&ensp;&ensp;我们说Python是一种动态语言，而动态语言和静态语言最大的不同，就是函数和类不是编译时定义的，而是运行时动态创建的。<br/>
+&ensp;&ensp;&ensp;&ensp;class的定义是运行时动态创建的，而创建class的方法就是使用type()函数。<br/>
+&ensp;&ensp;&ensp;&ensp;通过type()函数创建的类和直接写class是完全一样的，因为Python解释器遇到class定义时，仅仅是扫描一下class定义的语法，然后调用type()函数创建出class。<br/>
+&ensp;&ensp;&ensp;&ensp;除了使用type()动态创建类以外，要控制类的创建行为，还可以使用metaclass，直译为元类。<br/>
+&ensp;&ensp;&ensp;&ensp;当我们定义了类以后，就可以根据这个类创建出实例，所以：先定义类，然后创建实例。但是如果我们想创建出类呢？那就必须根据metaclass创建出类，所以：先定义metaclass，然后创建类。所以，metaclass允许你创建类或者修改类。换句话说，你可以把类看成是metaclass创建出来的“实例”。
 <br/>
 
-*   做为通用搜索引擎网页收集器(google,baidu)
-*   做垂直搜索引擎
-*   科学研究：在线人类行为，在线社群演化，人类动力学研究，计量社会学，复杂网络，数据挖掘，等领域的实证研究都需要大量数据，网络爬虫是收集相关数据的利器。
-*   偷窥，hacking，发垃圾邮件……
-<br/>
-我的理解：就是从网络中获取需要的大量数据，作为大数据等技术分析的原料。因为海量的数据本身是蕴含着很多规律，需要去发现和挖掘的。而这部分工作就需要之后的数据清洗、数据仓储、数据分析等技术手段。
+### 动态创建类
+
+下面来举例集几种类的创建方式
 <br/>
 
+*   函数创建
+*   type()创建
 
-### 为什么用Python写网络爬虫
-
-所有语言都有相通的用处，比如写网络爬虫也有很多种语言选择。<br/>
-工厂方法模式构成要素：<br/>
-
-*   C，C++：高效率，快速，适合通用搜索引擎做全网爬取。缺点，开发慢，写起来又臭又长，例如：天网搜索源代码。
-*   脚本语言：Perl, Python, Java, Ruby。简单，易学，良好的文本处理能方便网页内容的细致提取，但效率往往不高，适合对少量网站的聚焦爬取
-*   C#（貌似信息管理的人比较喜欢的语言）
-<br/>
-
-那最终为什么python能够胜任这个工作，为大多数人接受？<br/>
-
-*   跨平台，对Linux和windows都有不错的支持。
-*   科学计算，数值拟合：Numpy，Scipy
-*   可视化：2d：Matplotlib(做图很漂亮), 3d: Mayavi2  
-*   复杂网络：Networkx
-*   统计：与R语言接口：Rpy
-*   交互式终端
-*   网站的快速开发
-
-<br/>
-
-### 爬虫的基本流程
-<br/>
-用户获取网络数据的方式：<br/>
-
-*   浏览器提交请求--->下载网页代码--->解析成页面<br/>
-*   模拟浏览器发送请求(获取网页代码)->提取有用的数据->存放于数据库或文件中<br/>
-爬虫要做的就是方式2。
-
-![](/img/web-crawler/wc-1.png)
-<br/>
- 1. 发起请求:<br/>
->使用http库向目标站点发起请求，即发送一个Request<br/>
-Request包含：请求头、请求体等 <br/>
-Request模块缺陷：不能执行JS 和CSS 代码<br/>
-
- 2. 获取响应内容:<br/>
->如果服务器能正常响应，则会得到一个Response<br/>
-Response包含：html，json，图片，视频等<br/>
-
- 3. 解析内容:<br/>
-> 解析html数据：正则表达式（RE模块），第三方解析库如Beautifulsoup，pyquery等。
-解析json数据：json模块 <br/>
-解析二进制数据:以wb的方式写入文件<br/>
-
- 4. 保存数据:<br/>
->数据库（MySQL，Mongdb、Redis）<br/>
-文件<br/>
-
-
-### HTTP协议复习
-编写网络爬虫需要对HTTP协议有一定了解。通过修改请求方式、请求URL、在响应体中过滤有用信息才能实现网络爬虫的功能。
-<br/>
-![](/img/web-crawler/wc-2.png)
-<br/>
-由图可知，用户通过发送请求给服务器，服务器根据请求发送响应。整个过程中有Request和Response两个消息。<br/>
-*   Request：用户将自己的信息通过浏览器（socket client）发送给服务器（socket server）<br/>
-*   Response：服务器接收请求，分析用户发来的请求信息，然后返回数据（返回的数据中可能包含其他链接，如：图片，js，css等）<br/>
-
-**Request详解:**
-
-*   请求方式:常见的请求方式：GET / POST
-*   请求的URL:URL是全球统一资源定位符，用来定义互联网上一个唯一的资源 例如：一张图片、一个文件、一段视频都可以用url唯一确定
-*   请求头:
-    * User-agent:请求头中如果没有user-agent客户端配置，服务端可能将你当做一个非法用户host
-    * cookies:cookie用来保存登录信息
-    * Referrer:访问源至哪里来（一些大型网站，会通过Referrer 做防盗链策略；所有爬虫也要注意模拟）
-*   请求体:如果是get方式，请求体没有内容 （get请求的请求体放在 url后面参数中，直接能看到；如果是post方式，请求体是format data
-
-**Response详解:**
-
-*   响应状态码:
-    * 200：代表成功
-    * 301：代表跳转
-    * 404：文件不存在
-    * 403：无权限访问
-    * 502：服务器错误
-    
-*   响应头:
-    * Set-Cookie:BDSVRTM=0; path=/：可能有多个，是来告诉浏览器，把cookie保存下来
-    * Content-Location：服务端响应头中包含Location返回浏览器之后，浏览器就会重新访问另一个页面
-
-*   preview:就是网页源代码,包括JSO数据、网页html、图片、二进制数据等。
-
-### Sina News Web Crawler
-
-根据培训视频，一步一步完成了第一个网络爬虫--新浪新闻网络爬虫：<br/>
-整个过程并不很顺利。遇到的困难主要有：<br/>
-*   网站地址发生变更频繁，需要经常维护。这也是各大网站反爬虫的一种手段。因为编写的爬虫依赖的就是URL格式的统一，否则全自动就要变成“全得自己动”了。
-*   很多网页上的信息是通过多个请求加载进来的，要知道一个网页的展示，可能需要发送了上百个请求，如何在这些Response中找到正确的信息也需要细心。比如此例子中的“评论数”。而且即使经过多次增加和修改，评论数量的收集也还是会有不完整。
-
-此项目代码在[Github](https://github.com/Icyfighting/Web-Crawler-of-Sina-News-Website)
+**函数创建:**
 
 ```
-commentCountUrl = 'https://comment5.news.sina.com.cn/cmnt/count?format=json&newslist=gn:comos-{}:0'
-commentCountUrl2 = 'https://comment.sina.com.cn/page/info?version=1&format=json&channel=cj&newsid=comos-{}'
-import re
-import requests
-from bs4 import BeautifulSoup
-import json
-from datetime import datetime
-def getCommentCount(newsurl):
-    m = re.search('doc-i(.+).shtml',newsurl)  #根据新闻url找出新闻的id
-    newsid= m.group(1)
-   # print(newsid)
-    commentCountUrlFormat = commentCountUrl.format(newsid)   #根据新闻id，组合出评论数量的链接
-    commentCountUrlFormat2 = commentCountUrl2.format(newsid)
-    #根据评论数量链接，取得评论数
-    res = requests.get(commentCountUrlFormat)
-    res2 = requests.get(commentCountUrlFormat2)
-    res.encoding='utf-8'
-   # print(res.text)
-    mm = re.search('\"total\":.*?(?=,)',res.text)
-    mm2 = re.search('\"total\":.*?(?=,)',res2.text) #这两个路径中只有一个是有返回值的，另一个没有返回值，需要判断
-    commentCount1=0
-    commentCount2=0
-    if mm is not None:
-        commentCountStr1 = mm.group(0).lstrip('"total":').strip()
-        commentCount1 = int(commentCountStr1)
-    if mm2 is not None:
-        commentCountStr2 = mm2.group(0).lstrip('"total":').strip()
-        commentCount2 = int(commentCountStr2)
-    
-    #当第二个地址返回正确 ，但是第一个地址返回也不是空，知识内容是0，所以不为空的都要取，然后返回大的评论数
-    
-    
-    if commentCount1 > commentCount2:
-        return commentCount1
-    else:
-        return commentCount2
-  
-```
-```
-def getAuthor(soup):
-    
-    show_author = soup.select('.show_author')
-    article_editor = soup.select('.article-editor')
-    if len(show_author)>0:
-        return show_author[0].text.lstrip('责任编辑：') 
-    elif len(article_editor)>0:
-        return article_editor[0].text.lstrip('责任编辑：')
-    else:
-        return 'null'
-```
-```
-def getNewsDetail(newsurl):
-    result = {}
-    res = requests.get(newsurl)
-    res.encoding='utf-8'
-    soup = BeautifulSoup(res.text,'html.parser')
-    result['title'] = soup.select('.main-title')[0].text
-    result['dt'] = datetime.strptime(soup.select('.date')[0].text,'%Y年%m月%d日 %H:%M')
-    result['newssource'] = soup.select('.source')[0].text
-    result['article'] = ' '.join([p.text.strip() for p in soup.select('.article p')[:-1]])
-    result['editor'] = getAuthor(soup)
-    result['commentsCount'] = getCommentCount(newsurl)
-    return result
-```
-```
-def parseListLinks(pageUrl):
-    newsdetails = []
-    res = requests.get(pageUrl)
-    res.encoding='utf-8'
-    jd = json.loads(res.text)
-    for ent in jd['result']['data']:
-        newsdetails.append(getNewsDetail(ent['url']))
-    return newsdetails
-```
-```
-def getNewsTotal(start, end):
-    pageCommonUrl = 'https://feed.mix.sina.com.cn/api/roll/get?pageid=153&lid=2509&k=&num=10&page={}'
-    if str(start).isdigit() and str(end).isdigit():
-        if int(start)< int(end):
-            news_total = []
-            for i in range(int(start),int(end)):
-                newsurl = pageCommonUrl.format(i)
-                newsary = parseListLinks(newsurl)
-                news_total.extend(newsary)
-            return news_total
-        else:
-            return None
-    else:
-        return None
-```
-```
-import pandas
-df = pandas.DataFrame(getNewsTotal(11,13))
-df.head(20)
+# 函数创建，
+def create_animal(type):
+    if type == 'Dog':
+        # 创建类
+        class Dog(object):
+            pass
+ 
+        return Dog
+    elif type == 'Cat':
+        class Cat(object):
+            pass
+ 
+        return Cat
+ 
+ 
+Dog = create_animal("Dog")
+print(type(Dog))
+dog = Dog()
+print(type(dog))
+
 ```
 <br/>
-执行效果如图：<br/>
+输出结果：<br/>
+><class 'type'>#类类型 <br/>
+<class '__main__.create_animal.<locals>.Dog'>#对象类型
+<br/>
 
-![](/img/web-crawler/wc-3.png)
+这里通过调用函数传图不同的参数，来创建不同的类，创建出返回的是类的引用，并不是对象，我们可以通过返回的类来创建对象。
+<br/>
+
+**type()创建:**
+
+```
+class Test1(object):
+    pass
+ 
+ 
+Test2 = type("Test2", (object,), {})
+ 
+print(type(Test1))
+print(type(Test2))
+ 
+#打印结果
+<class 'type'>
+<class 'type'>
+
+```
+可以看出两种创建方式是相同的效果，说到这里我们大家应该都明白了，原来type就是创建类的一个方法，python用它来创建类，也就是说他是所有类的元类，例如在pyhton中是不是还有int，str...等等类型，int就是用来创建整数的类，而str就是用来创建字符串的类，这里的type也是，他就是python用来创建类的类（元类）。
 
 <br/>
 
-当然也可以通过命令将结果存储在数据库或者表格中。
+
+### 自定义元类
+
+自定义类的的目的，就是拦截类的创建，然后修改一些特性，然后返回该类。感觉是装饰器干的事情，只是装饰器是修饰一个函数，同样是一个东西进去，然后被额外加了一些东西，最后被返回。
+
 ```
-df.to_excel('news_result.xlsx')
+input:
+def upper_attr(class_name, class_parents, class_attr):
+    """
+    返回一个对象,将属性都改为大写的形式
+    :param class_name:  类的名称
+    :param class_parents: 类的父类tuple
+    :param class_attr: 类的参数
+    :return: 返回类
+    """
+    # 生成了一个generator
+    attrs = ((name, value) for name, value in class_attr.items() if not name.startswith('__'))
+    uppercase_attrs = dict((name.upper(), value) for name, value in attrs)
+    return type(class_name, class_parents, uppercase_attrs)
+
+__metaclass__ = upper_attr
+
+pw = upper_attr('Trick', (), {'bar': 0})
+print hasattr(pw, 'bar')
+print hasattr(pw, 'BAR')
+print pw.BAR
 ```
 
+输出结果：<br/>
+>False<br/>
+True
+
+可以从上面看到，实现了一个元类(metaclass)， 然后指定了模块使用这个元类来创建类，所以当下面使用type进行类创建的时候，可以发现小写的bar参数被替换成了大写的BAR参数，并且在最后调用了这个类属性并，打印了它。<br/>
 
 ## 总结
-&ensp;&ensp;&ensp;&ensp;有人对Python的理解还仅仅是脚本语言。其实Python是一个全能选手，尤其是在科研领域更是大放异彩。
-在知乎上看到关于[“你都用 Python 来做什么？”](https://www.zhihu.com/question/20799742)问题的回复，可以说是只有想不到没有做不到的。
-
+&ensp;&ensp;&ensp;&ensp;类其实是能够创建出类实例的对象。好吧，事实上，类本身也是实例，当然，它们是元类的实例。<br/>
+&ensp;&ensp;&ensp;&ensp;Python中的一切都是对象，它们要么是类的实例，要么是元类的实例，除了type。type实际上是它自己的元类，在纯Python环境中这可不是你能够做到的，这是通过在实现层面耍一些小手段做到的。其次，元类是很复杂的。对于非常简单的类，你可能不希望通过使用元类来对类做修改。
 
 ## 参考资料
 此次学习主要依赖于下面技术网站:<br/> 
-https://study.163.com/course/courseMain.htm?courseId=1003285002 <br/>
-
+https://stackoverflow.com/questions/100003/what-are-metaclasses-in-python <br/>
+http://blog.jobbole.com/21351/ <br/>
