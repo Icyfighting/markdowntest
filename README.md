@@ -346,7 +346,7 @@ dict['School']:  RUNOOB
 
 *   删除字典元素
 *   删除字典
-<br/>
+
 ```
 dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
  
