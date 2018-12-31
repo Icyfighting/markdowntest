@@ -59,6 +59,7 @@ The mutual call between Erlang nodes and the execution of cross-node remote modu
 >*   Erlang virtual machine scheduling mechanism
 >*   Memory garbage collection strategy
 >*   Process resource isolation
+
 The Erlang system garbage collection strategy is divided and recycled. The incremental garbage collection method is based on the characteristics of process resource isolation. Erlang memory garbage collection is based on a single Erlang process. In the process of garbage collection, the world will not stop. That is, it will not affect the entire system. Combine the Erlang virtual machine preemptive scheduling mechanism to ensure high availability and soft real-time performance of the Erlang system.
 
 *   Hot update:<br/>
