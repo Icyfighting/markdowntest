@@ -102,9 +102,9 @@ Response包含：html，json，图片，视频等<br/>
 *   请求方式:常见的请求方式：GET / POST
 *   请求的URL:URL是全球统一资源定位符，用来定义互联网上一个唯一的资源 例如：一张图片、一个文件、一段视频都可以用url唯一确定
 *   请求头:
-**  User-agent:请求头中如果没有user-agent客户端配置，服务端可能将你当做一个非法用户host
-**  cookies:cookie用来保存登录信息
-**  Referrer:访问源至哪里来（一些大型网站，会通过Referrer 做防盗链策略；所有爬虫也要注意模拟）
+  *   User-agent:请求头中如果没有user-agent客户端配置，服务端可能将你当做一个非法用户host
+  *   cookies:cookie用来保存登录信息
+  *   Referrer:访问源至哪里来（一些大型网站，会通过Referrer 做防盗链策略；所有爬虫也要注意模拟）
 *   请求体:如果是get方式，请求体没有内容 （get请求的请求体放在 url后面参数中，直接能看到；如果是post方式，请求体是format data
 
 **Response详解:**
