@@ -1,9 +1,9 @@
 ---
 layout: post
-title: " Meta Class "
-subtitle: "Python learning (2)"
+title: " Magic Method "
+subtitle: "Python learning (3)"
 author: "Bing Yan"
-header-img: "img/metaclass/post-bg-java.jpg"
+header-img: "img/magic/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
@@ -12,135 +12,176 @@ tags:
 ---
 ## 前言
 
-&ensp;&ensp;&ensp;&ensp;对于元类有一个通俗易懂又颇具禅意的比喻：<br/>
-道生一，一生二，二生三，三生万物<br/>
-
-![](/img/metaclass/dao.jpg)
-<br/>
-
-*   道 即是 type
-*   一 即是 metaclass(元类，或者叫类生成器)
-*   二 即是 class(类，或者叫实例生成器)
-*   三 即是 instance(实例)
-*   万物 即是 实例的各种属性与方法，我们平常使用python时，调用的就是它们。
-
-“一”就是今天要学习的重点--元类(Meta Class)。
+&ensp;&ensp;&ensp;&ensp;魔法方法就如同它的名字一样神奇，总能在你需要的时候为你提供某种方法来让你的想法实现。魔法方法是指Python内部已经包含的，被双下划线所包围的方法，这些方法在进行特定的操作时会自动被调用，它们是Python面向对象下智慧的结晶。作为初学者的我，掌握Python的魔法方法也就变得尤为重要，今天就学习一下吧。
 
 ## 正文
-### 什么是元类(Meta Class)
+### 什么是魔法方法(Magic Method)
 
-&ensp;&ensp;&ensp;&ensp;简单的讲，元类创建了Python中所有的对象。<br/>
-&ensp;&ensp;&ensp;&ensp;我们说Python是一种动态语言，而动态语言和静态语言最大的不同，就是函数和类不是编译时定义的，而是运行时动态创建的。<br/>
-&ensp;&ensp;&ensp;&ensp;class的定义是运行时动态创建的，而创建class的方法就是使用type()函数。<br/>
-&ensp;&ensp;&ensp;&ensp;通过type()函数创建的类和直接写class是完全一样的，因为Python解释器遇到class定义时，仅仅是扫描一下class定义的语法，然后调用type()函数创建出class。<br/>
-&ensp;&ensp;&ensp;&ensp;除了使用type()动态创建类以外，要控制类的创建行为，还可以使用metaclass，直译为元类。<br/>
-&ensp;&ensp;&ensp;&ensp;当我们定义了类以后，就可以根据这个类创建出实例，所以：先定义类，然后创建实例。但是如果我们想创建出类呢？那就必须根据metaclass创建出类，所以：先定义metaclass，然后创建类。所以，metaclass允许你创建类或者修改类。换句话说，你可以把类看成是metaclass创建出来的“实例”。
+&ensp;&ensp;&ensp;&ensp;简单的讲，python中以双下划线开始和结束的函数（不可自己定义）为魔法函数。<br/>
+调用类实例化的对象的方法时自动调用魔法函数（感觉不需要显示调用的函数都叫）。
+
+### 为什么要用魔法方法
+
+使用Python的魔法方法可以使Python的自由度变得更高，当不需要重写时魔法方法也可以在规定的默认情况下生效，在需要重写时也可以让使用者根据自己的需求来重写部分方法来达到自己的期待。而且众所周知Python是支持面向对象的语言Python的基本魔法方法就使得Python在面对对象方面做得更好。
+
+
+### 魔法方法分类
+
+来来来，扔个魔法方法分类表格镇镇宅
+<br/>
+![](/img/magic/mm-1.png)
+<br/>
+![](/img/magic/mm-2.png)
+<br/>
+![](/img/magic/mm-3.png)
+<br/>
+![](/img/magic/mm-4.png)
+<br/>
+![](/img/magic/mm-5.png)
+<br/>
+![](/img/magic/mm-6.png)
 <br/>
 
-### 动态创建类
 
-下面来举例集几种类的创建方式
+### 常用魔法方法
+
+虽然上面表格给出了各种魔法方法，但是今天我们先学习几个常用的魔法方法。
 <br/>
 
-*   函数创建
-*   type()创建
+**__new__**
 
-**函数创建:**
+__new__ 方法主要是当你继承一些不可变的class时(比如int, str, tuple)， 提供给你一个自定义这些类的实例化过程的途径。还有就是实现自定义的metaclass。
+假如我们需要一个永远都是正数的整数类型，通过集成int，我们可能会写出这样的代码。
 
 ```
-def create_animal(type):
-    if type == 'Dog':
-        # 创建类
-        class Dog(object):
-            pass
- 
-        return Dog
-    elif type == 'Cat':
-        class Cat(object):
-            pass
- 
-        return Cat
- 
- 
-Dog = create_animal("Dog")
-print(type(Dog))
-dog = Dog()
-print(type(dog))
+class PositiveInteger(int):
 
+  def __init__(self, value):
+
+    super(PositiveInteger, self).__init__(self, abs(value))
+
+i = PositiveInteger(-3)
+
+print i
 ```
 <br/>
 输出结果：<br/>
 
 ```
-<class 'type'>#类类型 <br/>
-<class '__main__.create_animal.<locals>.Dog'>#对象类型
+-3
 ```
 <br/>
 
-这里通过调用函数传图不同的参数，来创建不同的类，创建出返回的是类的引用，并不是对象，我们可以通过返回的类来创建对象。
+运行后会发现，结果根本不是我们想的那样，我们仍然得到了-3。这是因为对于int这种不可变的对象，我们只有重载它的__new__方法才能起到自定义的作用。
+<br/>
+修改代码如下：
 <br/>
 
-**type()创建:**
+```
+class PositiveInteger(int):
 
+  def __new__(cls, value):
+
+    return super(PositiveInteger, cls).__new__(cls, abs(value))
+
+i = PositiveInteger(-3)
+
+print i
 ```
-class Test1(object):
-    pass
- 
- 
-Test2 = type("Test2", (object,), {})
- 
-print(type(Test1))
-print(type(Test2))
-```
-输出结果：
 <br/>
-```
-<class 'type'>
-<class 'type'>
-```
-
-可以看出两种创建方式是相同的效果，说到这里我们大家应该都明白了，原来type就是创建类的一个方法，python用它来创建类，也就是说他是所有类的元类，例如在pyhton中是不是还有int，str...等等类型，int就是用来创建整数的类，而str就是用来创建字符串的类，这里的type也是，他就是python用来创建类的类（元类）。
-
-<br/>
-
-
-### 自定义元类
-
-自定义类的的目的，就是拦截类的创建，然后修改一些特性，然后返回该类。感觉是装饰器干的事情，只是装饰器是修饰一个函数，同样是一个东西进去，然后被额外加了一些东西，最后被返回。
-
-```
-def upper_attr(class_name, class_parents, class_attr):
-    """
-    返回一个对象,将属性都改为大写的形式
-    :param class_name:  类的名称
-    :param class_parents: 类的父类tuple
-    :param class_attr: 类的参数
-    :return: 返回类
-    """
-    # 生成了一个generator
-    attrs = ((name, value) for name, value in class_attr.items() if not name.startswith('__'))
-    uppercase_attrs = dict((name.upper(), value) for name, value in attrs)
-    return type(class_name, class_parents, uppercase_attrs)
-
-__metaclass__ = upper_attr
-
-pw = upper_attr('Trick', (), {'bar': 0})
-print hasattr(pw, 'bar')
-print hasattr(pw, 'BAR')
-print pw.BAR
-```
-
 输出结果：<br/>
->False<br/>
+
+```
+3
+```
+还可以用来实现单例(singleton)。因为类每一次实例化后产生的过程都是通过__new__来控制的，所以通过重载__new__方法，我们 可以很简单的实现单例模式。
+<br/>
+```
+class Singleton(object):
+
+  def __new__(cls):
+
+    # 关键在于这，每一次实例化的时候，我们都只会返回这同一个instance对象
+
+    if not hasattr(cls, 'instance'):
+
+      cls.instance = super(Singleton, cls).__new__(cls)
+
+    return cls.instance
+
+obj1 = Singleton()
+
+obj2 = Singleton()
+
+obj1.attr1 = 'value1'
+
+print obj1.attr1, obj2.attr1
+
+print obj1 is obj2
+```
+
+<br/>
+输出结果：<br/>
+
+```
+value1 value1
 True
+```
 
-可以从上面看到，实现了一个元类(metaclass)， 然后指定了模块使用这个元类来创建类，所以当下面使用type进行类创建的时候，可以发现小写的bar参数被替换成了大写的BAR参数，并且在最后调用了这个类属性并，打印了它。<br/>
+**__init__**
+
+我们知道__init__方法负责对象的初始化，系统执行该方法前，其实该对象已经存在了，要不然初始化什么东西呢？
+如果把创造对象比喻成建造一栋房子，__new__方法可以创造出房子的骨架，那么__init__更像是给房子装修。<br/>
+其实__init__方法意义重大的原因有两个。第一个原因是在对象生命周期中初始化是最重要的一步；每个对象必须正确初始化后才能正常工作。第二个原因是__init__()参数值可以有多种形式。<br/>
+
+对于__init__()和__new__()的顺序问题可以通过以下例子来验证：
+
+```
+class A:
+ def __init__(self):
+  print("__init__ ")
+  print(self)
+  super(A, self).__init__()
+ 
+ def __new__(cls):
+  print("__new__ ")
+  print(self)
+  return super(A, cls).__new__(cls)
+ 
+ def __call__(self): # 可以定义任意参数
+  print('__call__ ')
+ 
+A()
+```
+输出结果为：<br/>
+```
+__new__ 
+<__main__.A object at 0x1007a95f8>
+__init__ 
+<__main__.A object at 0x1007a95f8>
+```
+<br/>
+从输出结果来看，__new__方法先被调用，返回一个实例对象，接着__init__ 被调用。<br/>
+并且可以知道__new__ 方法的返回值就是类的实例对象，这个实例对象会传递给__init__ 方法中定义的self参数，以便实例对象可以被正确地初始化。<br/>
+
+**__call__**
+
+关于__call__ 方法，不得不先提到一个概念，就是可调用对象（callable），我们平时自定义的函数、内置函数和类都属于可调用对象，但凡是可以把一对括号()应用到某个对象身上都可称之为可调用对象，判断对象是否为可调用对象可以用函数 callable。<br/>
+如果在类中实现了__call__ 方法，那么实例对象也将成为一个可调用对象，我们回到最开始的那个例子：
+
+```
+class Foo(object): 
+  def __call__(self): 
+    pass
+  
+f = Foo()#类Foo可call 
+f()#对象f可call 
+```
 
 ## 总结
-&ensp;&ensp;&ensp;&ensp;类其实是能够创建出类实例的对象。好吧，事实上，类本身也是实例，当然，它们是元类的实例。<br/>
-&ensp;&ensp;&ensp;&ensp;Python中的一切都是对象，它们要么是类的实例，要么是元类的实例，除了type。type实际上是它自己的元类，在纯Python环境中这可不是你能够做到的，这是通过在实现层面耍一些小手段做到的。其次，元类是很复杂的。对于非常简单的类，你可能不希望通过使用元类来对类做修改。
+&ensp;&ensp;&ensp;&ensp;今天只学习最常用的三种魔法方法，而__new__、__init__、__call__等方法不是必须写的，会默认调用，如果自己定义了，就是override,可以custom。既然override了，通常也会显式调用进行补偿以达到extend的目的。<br/> 
+之后也会随着代码的积累和项目的需要对其他魔法方法进行进一步的学习。<br/> 
 
 ## 参考资料
 此次学习主要依赖于下面技术网站:<br/> 
-https://stackoverflow.com/questions/100003/what-are-metaclasses-in-python <br/>
-http://blog.jobbole.com/21351/ <br/>
+https://www.jb51.net/article/118917.htm <br/>
