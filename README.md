@@ -195,8 +195,10 @@ A process can find its own Pid by calling self().<br/>
 
 ## Summary
 
-Erlang is a functional programming language whose core is the Erlang virtual machine. Erlang concurrent process is different from operating system process, it is very lightweight, Erlang built-in distributed features, very convenient, Erlang programming language soft real-time features can be more robust under the protection of its error exception handling mechanism, its hot update Can bring us a lot of convenience to the code farmers.
+&ensp;&ensp;&ensp;&ensp;Erlang is a functional programming language whose core is the Erlang virtual machine. Erlang concurrent process is different from operating system process, it is very lightweight, Erlang built-in distributed features, very convenient, Erlang programming language soft real-time features can be more robust under the protection of its error exception handling mechanism, its hot update Can bring us a lot of convenience to the code farmers.
 
+
+## Surprise
 It is said that this is the founder of the Erlang language, our colleague: Joe Armstrong
 <br/>
 ![](/img/erlang/Joe.jpeg)
