@@ -1,186 +1,366 @@
 ---
 layout: post
-title: " Magic Method "
-subtitle: "Python learning (3)"
+title: " Python Data Structure learning"
+subtitle: "List & Tuple & Set & Dictionary"
 author: "Bing Yan"
 header-img: "img/magic/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
   - Python
+  - Data Structure
   - Learning
 ---
 ## 前言
 
-&ensp;&ensp;&ensp;&ensp;魔法方法就如同它的名字一样神奇，总能在你需要的时候为你提供某种方法来让你的想法实现。魔法方法是指Python内部已经包含的，被双下划线所包围的方法，这些方法在进行特定的操作时会自动被调用，它们是Python面向对象下智慧的结晶。作为初学者的我，掌握Python的魔法方法也就变得尤为重要，今天就学习一下吧。
+
 
 ## 正文
-### 什么是魔法方法(Magic Method)
+### 列表(List)
 
-&ensp;&ensp;&ensp;&ensp;简单的讲，python中以双下划线开始和结束的函数（不可自己定义）为魔法函数。<br/>
-调用类实例化的对象的方法时自动调用魔法函数（感觉不需要显示调用的函数都叫）。
-
-### 为什么要用魔法方法
-
-使用Python的魔法方法可以使Python的自由度变得更高，当不需要重写时魔法方法也可以在规定的默认情况下生效，在需要重写时也可以让使用者根据自己的需求来重写部分方法来达到自己的期待。而且众所周知Python是支持面向对象的语言Python的基本魔法方法就使得Python在面对对象方面做得更好。
-
-
-### 魔法方法分类
-
-来来来，扔个魔法方法分类表格镇镇宅
-<br/>
-![](/img/magic/mm-1.png)
-<br/>
-![](/img/magic/mm-2.png)
-<br/>
-![](/img/magic/mm-3.png)
-<br/>
-![](/img/magic/mm-4.png)
-<br/>
-![](/img/magic/mm-5.png)
-<br/>
-![](/img/magic/mm-6.png)
-<br/>
+&ensp;&ensp;&ensp;&ensp;序列是Python中最基本的数据结构。序列中的每个元素都分配一个数字 - 它的位置，或索引，第一个索引是0，第二个索引是1，依此类推。<br/>
+&ensp;&ensp;&ensp;&ensp;Python有6个序列的内置类型，但最常见的是列表和元组。<br/>
+&ensp;&ensp;&ensp;&ensp;序列都可以进行的操作包括索引，切片，加，乘，检查成员。<br/>
+&ensp;&ensp;&ensp;&ensp;此外，Python已经内置确定序列的长度以及确定最大和最小的元素的方法。<br/>
+&ensp;&ensp;&ensp;&ensp;列表是最常用的Python数据类型，它可以作为一个方括号内的逗号分隔值出现。<br/>
+&ensp;&ensp;&ensp;&ensp;列表的数据项不需要具有相同的类型。<br/>
 
 
-### 常用魔法方法
-
-虽然上面表格给出了各种魔法方法，但是今天我们先学习几个常用的魔法方法。
-<br/>
-
-**魔法方法__new__**
-
-首先是__new__方法，主要是当你继承一些不可变的class时(比如int, str, tuple)， 提供给你一个自定义这些类的实例化过程的途径。还有就是实现自定义的metaclass。假如我们需要一个永远都是正数的整数类型，通过集成int，我们可能会写出这样的代码。
+**List创建**
+创建一个列表，只要把逗号分隔的不同的数据项使用方括号括起来即可。<br/>
 
 ```
-class PositiveInteger(int):
+list1 = ['physics', 'chemistry', 1997, 2000]
+list2 = [1, 2, 3, 4, 5 ]
+list3 = ["a", "b", "c", "d"]
+```
+**List中值的访问**
+使用下标索引来访问列表中的值，同样你也可以使用方括号的形式截取字符：<br/>
 
-  def __init__(self, value):
-
-    super(PositiveInteger, self).__init__(self, abs(value))
-
-i = PositiveInteger(-3)
-
-print i
+```
+list1 = ['physics', 'chemistry', 1997, 2000]
+list2 = [1, 2, 3, 4, 5, 6, 7 ]
+print("list1[0]: ", list1[0])
+print(list2[1:5]: ", list2[1:5])
 ```
 <br/>
 输出结果：<br/>
 
 ```
--3
+list1[0]:  physics
+list2[1:5]:  [2, 3, 4, 5]
 ```
-<br/>
 
-运行后会发现，结果根本不是我们想的那样，我们仍然得到了-3。这是因为对于int这种不可变的对象，我们只有重载它的__new__方法才能起到自定义的作用。
-<br/>
-修改代码如下：
-<br/>
-
+**更新List**
 ```
-class PositiveInteger(int):
-
-  def __new__(cls, value):
-
-    return super(PositiveInteger, cls).__new__(cls, abs(value))
-
-i = PositiveInteger(-3)
-
-print i
+list = []          ## 空列表
+list.append('Google')   ## 使用 append() 添加元素
+list.append('Runoob')
+print(list)
 ```
 <br/>
 输出结果：<br/>
 
 ```
+['Google', 'Runoob']
+```
+
+**删除List中元素**
+
+```
+list1 = ['physics', 'chemistry', 1997, 2000]
+ 
+print(list1)
+del(list1[2])
+print("After deleting value at index 2 : ")
+print(list1)
+```
+<br/>
+输出结果：<br/>
+
+```
+['physics', 'chemistry', 1997, 2000]
+After deleting value at index 2 :
+['physics', 'chemistry', 2000]
+```
+
+### 元组(Tuple)
+
+Python的元组与列表类似，不同之处在于元组的元素不能修改。<br/>
+元组使用小括号，列表使用方括号。
+
+**Tuple创建**
+
+元组创建很简单，只需要在括号中添加元素，并使用逗号隔开即可：<br/>
+注意：元组中只包含一个元素时，需要在元素后面添加逗号。<br/>
+
+```
+tup1 = ('physics', 'chemistry', 1997, 2000)
+tup2 = (1, 2, 3, 4, 5 )
+tup3 = "a", "b", "c", "d"
+tup4 = (50,)
+```
+<br/>
+
+**Tuple访问**
+
+```
+tup1 = ('physics', 'chemistry', 1997, 2000)
+tup2 = (1, 2, 3, 4, 5, 6, 7 )
+ 
+print("tup1[0]: ", tup1[0])
+print("tup2[1:5]: ", tup2[1:5])
+```
+<br/>
+输出结果：<br/>
+
+```
+tup1[0]:  physics
+tup2[1:5]:  (2, 3, 4, 5)
+```
+
+**Tuple修改**
+
+元组中的元素值是不允许修改的，但我们可以对元组进行连接组合：<br/>
+
+```
+tup1 = (12, 34.56)
+tup2 = ('abc', 'xyz')
+ 
+# tup1[0] = 100   #修改元组元素操作是非法的
+ 
+# 创建一个新的元组
+tup3 = tup1 + tup2
+print(tup3)
+```
+<br/>
+输出结果：<br/>
+
+```
+(12, 34.56, 'abc', 'xyz')
+```
+
+**Tuple删除**
+
+元组中的元素值是不允许删除的，但我们可以使用del语句来删除整个元组:
+```
+tup = ('physics', 'chemistry', 1997, 2000)
+ 
+print(tup)
+del(tup)
+print("After deleting tup : ")
+print(tup)
+```
+<br/>
+输出结果：<br/>
+
+```
+('physics', 'chemistry', 1997, 2000)
+After deleting tup :
+Traceback (most recent call last):
+  File "test.py", line 9, in <module>
+    print tup
+NameError: name 'tup' is not defined
+```
+
+### 集合(Set)
+
+集合（set）是一个无序的不重复元素序列。
+
+**Set创建**
+可以使用大括号 { } 或者 set() 函数创建集合，注意：创建一个空集合必须用 set() 而不是 { }，因为 { } 是用来创建一个空字典。:
+>parame = {value01,value02,...} <br/>
+或者set(value)<br/>
+
+```
+>>>basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+>>> print(basket)                      # 这里演示的是去重功能
+{'orange', 'banana', 'pear', 'apple'}
+>>> 'orange' in basket                 # 快速判断元素是否在集合内
+True
+>>> 'crabgrass' in basket
+False
+>>>a = {x for x in 'abracadabra' if x not in 'abc'}  #集合推导式(Set comprehension)
+>>> a
+{'r', 'd'}
+```
+
+**Set元素移除**
+
+```
+>>>thisset = set(("Google", "Runoob", "Taobao"))
+>>> thisset.remove("Taobao")
+>>> print(thisset)
+{'Google', 'Runoob'}
+>>> thisset.remove("Facebook")   # 使用remove()不存在会发生错误
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+KeyError: 'Facebook'
+```
+
+推荐使用discard()，元素不存在时，不会发生错误。<br/>
+
+```
+>>>thisset = set(("Google", "Runoob", "Taobao"))
+>>> thisset.discard("Facebook")  # 不存在不会发生错误
+>>> print(thisset)
+{'Taobao', 'Google', 'Runoob'}
+```
+
+随机删除集合中的一个元素<br/>
+然而在交互模式，pop 是删除集合的第一个元素（排序后的集合的第一个元素）<br/>
+
+```
+thisset = set(("Google", "Runoob", "Taobao", "Facebook"))
+x = thisset.pop()
+print(x)
+```
+<br/>
+输出结果：<br/>
+
+```
+Runoob
+```
+
+也可以清空集合<br/>
+
+```
+>>>thisset = set(("Google", "Runoob", "Taobao"))
+>>> thisset.clear()
+>>> print(thisset)
+set()
+```
+
+**Set元素个数计算**
+
+```
+>>>thisset = set(("Google", "Runoob", "Taobao"))
+>>> len(thisset)
 3
 ```
-还可以用来实现单例(singleton)。因为类每一次实例化后产生的过程都是通过__new__来控制的，所以通过重载__new__方法，我们 可以很简单的实现单例模式。
-<br/>
+
+
+**Set元素是否存在**
+
+判断元素 x 是否在集合 s 中，存在返回 True，不存在返回 False：<br/>
+
 ```
-class Singleton(object):
-
-  def __new__(cls):
-
-    # 关键在于这，每一次实例化的时候，我们都只会返回这同一个instance对象
-
-    if not hasattr(cls, 'instance'):
-
-      cls.instance = super(Singleton, cls).__new__(cls)
-
-    return cls.instance
-
-obj1 = Singleton()
-
-obj2 = Singleton()
-
-obj1.attr1 = 'value1'
-
-print obj1.attr1, obj2.attr1
-
-print obj1 is obj2
+>>>thisset = set(("Google", "Runoob", "Taobao"))
+>>> "Runoob" in thisset
+True
+>>> "Facebook" in thisset
+False
 ```
 
+### 字典(Dictionary)
+
+字典是另一种可变容器模型，且可存储任意类型对象。<br/>
+
+**Dictionary创建**
+
+字典的每个键值 key=>value 对用冒号 : 分割，每个键值对之间用逗号 , 分割，整个字典包括在花括号 {} 中：<br/>
+d = {key1 : value1, key2 : value2 } <br/>
+键一般是唯一的，如果重复最后的一个键值对会替换前面的，值不需要唯一。<br/>
+值可以取任何数据类型，但键必须是不可变的，如字符串，数字或元组。<br/>
+*学习笔记：<br/>
+
+针对字典键的要求，还有更准确的说法是：<br/>
+>python中什么对象不能作为字典的key：有__hash__方法可以做字典的key，没有则不能作为字典的key;<br/>
+除了list、dict、set和内部至少带有上述三种类型之一的tuple之外，其余对象均可作为字典的key。
+
+```
+>>>dict = {'a': 1, 'b': 2, 'b': '3'}
+>>> dict['b']
+'3'
+>>> dict
+{'a': 1, 'b': '3'}
+```
+
+**Dictionary访问**
+
+把相应的键放入方括弧。
+```
+dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+print("dict['Name']: ", dict['Name'])
+print("dict['Age']: ", dict['Age'])
+```
 <br/>
 输出结果：<br/>
 
 ```
-value1 value1
-True
+dict['Name']:  Zara
+dict['Age']:  7
 ```
 
-**魔法方法__init__**
-
-我们知道__init__方法负责对象的初始化，系统执行该方法前，其实该对象已经存在了，要不然初始化什么东西呢？
-如果把创造对象比喻成建造一栋房子，那么__new__方法可以创造出房子的骨架，而__init__就是给房子装修。<br/>
-其实__init__方法意义重大的原因有两个。第一个原因是在对象生命周期中初始化是最重要的一步；每个对象必须正确初始化后才能正常工作。第二个原因是__init__()参数值可以有多种形式。<br/>
-
-对于__init__()和__new__()的顺序问题可以通过以下例子来验证：
+如果用字典里没有的键访问数据，会输出错误如下：<br/>
 
 ```
-class A:
- def __init__(self):
-  print("__init__ ")
-  print(self)
-  super(A, self).__init__()
- 
- def __new__(cls):
-  print("__new__ ")
-  print(self)
-  return super(A, cls).__new__(cls)
- 
- def __call__(self): # 可以定义任意参数
-  print('__call__ ')
- 
-A()
-```
-输出结果为：<br/>
-```
-__new__ 
-<__main__.A object at 0x1007a95f8>
-__init__ 
-<__main__.A object at 0x1007a95f8>
+dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+print("dict['Alice']: ", dict['Alice'])
 ```
 <br/>
-从输出结果来看，发现__new__方法先被调用，返回一个实例对象，接着__init__ 被调用。<br/>
-并且可以知道__new__ 方法的返回值就是类的实例对象，这个实例对象会传递给__init__ 方法中定义的self参数，以便实例对象可以被正确地初始化。<br/>
+输出结果：<br/>
+```
+dict['Alice']: 
+Traceback (most recent call last):
+  File "test.py", line 5, in <module>
+    print "dict['Alice']: ", dict['Alice']
+KeyError: 'Alice'
+```
 
-**魔法方法__call__**
+为了避免这种异常，可以使用collections.defaultdict()方法创建带默认值的dictionary。<br/>
+```
+from collections import defaultdict
+d2 = defaultdict(lambda :'default value')
+d2['one'] = 1
+d2['two'] = 2
+print(d2['two'])
+print(d2['three'])
+```
+<br/>
+输出结果：<br/>
+```
+2
+default value
+```
 
-关于__call__ 方法，不得不先提到一个概念，就是可调用对象（callable），我们平时自定义的函数、内置函数和类都属于可调用对象，但凡是可以把一对括号()应用到某个对象身上都可称之为可调用对象，判断对象是否为可调用对象可以用函数 callable。<br/>
-如果在类中实现了__call__ 方法，那么实例对象也将成为一个可调用对象，我们回到最开始的那个例子：
+**Dictionary修改**
+
+向字典添加新内容的方法是增加新的键/值对，修改或删除已有键/值对:<br/>
+```
+dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+dict['Age'] = 8 # 更新
+dict['School'] = "RUNOOB" # 添加 
+print("dict['Age']: ", dict['Age'])
+print("dict['School']: ", dict['School'])
+```
+<br/>
+输出结果：<br/>
 
 ```
-class Foo(object): 
-  def __call__(self): 
-    pass
-  
-f = Foo()#类Foo可call 
-f()#对象f可call 
+dict['Age']:  8
+dict['School']:  RUNOOB
 ```
+
+**Dictionary删除**
+
+*   删除字典元素
+*   删除字典
+<br/>
+```
+dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+ 
+del dict['Name']  # 删除键是'Name'的条目
+dict.clear()      # 清空词典所有条目
+del dict          # 删除词典
+```
+
 
 ## 总结
-&ensp;&ensp;&ensp;&ensp;今天只学习最常用的三种魔法方法，而__new__和__init__还有__call__等方法不是必须写的，会默认调用，如果自己定义了，就是override,可以custom。既然override了，通常也会显式调用进行补偿以达到extend的目的。<br/> 
-&ensp;&ensp;&ensp;&ensp;之后也会随着代码的积累和项目的需要对其他魔法方法进行进一步的学习。<br/> 
+&ensp;&ensp;&ensp;&ensp;今天学习了Python中常用的4种数据结构，它们有不同的存储结构和特点。<br/>
+&ensp;&ensp;&ensp;&ensp;除了记录的几种常用的创建、访问、修改、删除等基本操作，每一种数据结构的类还提供了丰富的方法来方便操作。<br/>
+&ensp;&ensp;&ensp;&ensp;在编写代码的过程中，也已经使用到了一部分，最重要的是需要使用什么操作时候，使用help来查看具体的方法说明，可以边用边学。
 
 ## 参考资料
 此次学习主要依赖于下面技术网站:<br/> 
-https://www.jb51.net/article/118917.htm <br/>
+http://www.runoob.com/python3/python3-tutorial.html <br/>
