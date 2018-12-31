@@ -14,7 +14,8 @@ tags:
 
 ## Preface
 
-This is the first time I met Erlang. I heard about Erlang because Erlang is a programming language developed by Ericsson, the company I work for 6 years. In order to adapt to the potential needs of the new position, I would like to have a preliminary understanding of Erlang through self-study, so that I can use Erlang for project development more quickly when needed later.
+&ensp;&ensp;&ensp;&ensp;This is the first time I met Erlang. I heard about Erlang because Erlang is a programming language developed by Ericsson, the company I work for 6 years. <br/>
+&ensp;&ensp;&ensp;&ensp;In order to adapt to the potential needs of the new position, I would like to have a preliminary understanding of Erlang through self-study, so that I can use Erlang for project development more quickly when needed later.
 
 ## Text
 
@@ -22,15 +23,15 @@ This is the first time I met Erlang. I heard about Erlang because Erlang is a pr
 
 Let us first understand the basic situation of Erlang from Baidu Encyclopedia. Although it is not very beautiful to read...
 
->Erlang is a general-purpose, concurrent programming language developed by CS-Lab, a Swedish telecom equipment manufacturer based in Ericsson, to create a programming language that can handle large-scale concurrent activities and the operating environment. <br/>
-Erlang was born in 1987. After ten years of development, it released an open source version in 1998. Erlang is an interpreted language that runs on virtual machines, but now also includes native code compilers developed by Uppsala University's High Performance Erlang Project (HiPE). Since R11B-4, Erlang has also supported scripted interpreters. <br/>
-In the programming paradigm, Erlang is a multi-paradigm programming language, covering functional, concurrent and distributed. The sequential execution of Erlang is a functional programming language for early evaluation, single assignment and dynamic typing. <br/>
-Erlang is a structured, dynamic type programming language with built-in parallel computing support. Originally designed for communication applications by Ericsson, such as control switches or conversion protocols, it is ideally suited for building distributed, real-time, soft-parallel computing systems. <br/>
-Application runtimes written in Erlang typically consist of thousands of lightweight processes and communicate with each other via messaging. Inter-process context switching is only one or two links for Erlang, much more efficient than thread switching for C programs.<br/>
-Using Erlang to write a distributed application is much simpler because its distributed mechanism is transparent: it is not known to the program that it is running distributed. The Erlang runtime environment is a virtual machine, a bit like a Java virtual machine, so that once the code is compiled, it can be run anywhere. <br/>
-Its runtime system even allows code to be updated without interruption. In addition, if you need more efficient, the byte code can also be compiled to run the code.<br/>
+>&ensp;&ensp;&ensp;&ensp;Erlang is a general-purpose, concurrent programming language developed by CS-Lab, a Swedish telecom equipment manufacturer based in Ericsson, to create a programming language that can handle large-scale concurrent activities and the operating environment. <br/>
+&ensp;&ensp;&ensp;&ensp;Erlang was born in 1987. After ten years of development, it released an open source version in 1998. Erlang is an interpreted language that runs on virtual machines, but now also includes native code compilers developed by Uppsala University's High Performance Erlang Project (HiPE). Since R11B-4, Erlang has also supported scripted interpreters. <br/>
+&ensp;&ensp;&ensp;&ensp;In the programming paradigm, Erlang is a multi-paradigm programming language, covering functional, concurrent and distributed. The sequential execution of Erlang is a functional programming language for early evaluation, single assignment and dynamic typing. <br/>
+&ensp;&ensp;&ensp;&ensp;Erlang is a structured, dynamic type programming language with built-in parallel computing support. Originally designed for communication applications by Ericsson, such as control switches or conversion protocols, it is ideally suited for building distributed, real-time, soft-parallel computing systems. <br/>
+&ensp;&ensp;&ensp;&ensp;Application runtimes written in Erlang typically consist of thousands of lightweight processes and communicate with each other via messaging. Inter-process context switching is only one or two links for Erlang, much more efficient than thread switching for C programs.<br/>
+&ensp;&ensp;&ensp;&ensp;Using Erlang to write a distributed application is much simpler because its distributed mechanism is transparent: it is not known to the program that it is running distributed. The Erlang runtime environment is a virtual machine, a bit like a Java virtual machine, so that once the code is compiled, it can be run anywhere. <br/>
+&ensp;&ensp;&ensp;&ensp;Its runtime system even allows code to be updated without interruption. In addition, if you need more efficient, the byte code can also be compiled to run the code.<br/>
 
-So in a nutshell, Erlang is a concurrent, suitable for building distributed, structured, dynamic type programming languages.<br/>
+**So in a nutshell, Erlang is a concurrent, suitable for building distributed, structured, dynamic type programming languages.** <br/>
 
 ### Erlang Features
 
@@ -55,9 +56,9 @@ The mutual call between Erlang nodes and the execution of cross-node remote modu
  
 *   Soft real time:<br/>
 >The characteristics of Erlang soft real-time mainly depend on:<br/>
-*   Erlang virtual machine scheduling mechanism
-*   Memory garbage collection strategy
-*   Process resource isolation
+>*   Erlang virtual machine scheduling mechanism
+>*   Memory garbage collection strategy
+>*   Process resource isolation
 The Erlang system garbage collection strategy is divided and recycled. The incremental garbage collection method is based on the characteristics of process resource isolation. Erlang memory garbage collection is based on a single Erlang process. In the process of garbage collection, the world will not stop. That is, it will not affect the entire system. Combine the Erlang virtual machine preemptive scheduling mechanism to ensure high availability and soft real-time performance of the Erlang system.
 
 *   Hot update:<br/>
