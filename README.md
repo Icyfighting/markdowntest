@@ -107,6 +107,7 @@ This will create two processes concurrently calling foo:hello(). This is the con
 If you want to work on 100 processes at the same time, call spawn 100 times.<br/>
 
 **send**
+
 We know how to create a process, the next step is to send a message to it:<br/>
 
 ```
@@ -122,6 +123,7 @@ hello
 Here we start a process call foo:loop(). We assume that this loop function will call itself recursively, so that our process will die without a click. Spawn will return a process ID <0.80.0>, we bind it to the Pid variable and send a message hello to it. Exclamation mark in Erlang! Send a message. The above is asynchronous messaging. This is also the only means of communication between the two processes in Erlang.
 
 **receive**
+
 When a message is sent to a process, how does the process receive the message? <br/>
 
 ```
@@ -145,6 +147,7 @@ hello
 Use receive to receive the message. You can use pattern matching here to match the information you want to receive, ignoring other messages. In this example, we only receive the message hello.
 
 **register**
+
 We usually can't remember the phone number of a friend, so we use the address book to add a name to the phone number. There is no need to remember the Pid of each process in Erlang, register it with a name and access it later by name.<br/>
 
 ```
