@@ -228,7 +228,7 @@ df = pandas.DataFrame(getNewsTotal(11,13))
 df.head(20)
 ```
 <br/>
-执行效果如图：
+执行效果如图：<br/>
 ![](/img/web-crawler/wc-3.png)
 <br/>
 
