@@ -48,10 +48,10 @@ The mutual call between Erlang nodes and the execution of cross-node remote modu
 
 *   Robustness:<br/>
 >Robustness is a very important feature of the Erlang programming language. The robustness of the Erlang programming language depends on the following points:<br/>
-*   Process isolation
-*   Perfect error exception handling
-*   Error handling philosophy
-*   Monitor process
+>*   Process isolation
+>*   Perfect error exception handling
+>*   Error handling philosophy
+>*   Monitor process
  
 *   Soft real time:<br/>
 >The characteristics of Erlang soft real-time mainly depend on:<br/>
