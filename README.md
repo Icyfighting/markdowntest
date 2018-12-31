@@ -1,369 +1,206 @@
 ---
 layout: post
-title: " Python Data Structure learning"
-subtitle: "List & Tuple & Set & Dictionary"
+title: " First meet with Erlang"
+subtitle: "Erlang learning (1) - basic"
 author: "Bing Yan"
-header-img: "img/magic/post-bg-java.jpg"
+header-img: "img/erlang/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
-  - Python
-  - Data Structure
+  - Erlang
+  - Golang
   - Learning
 ---
 
-## 前言
+## Preface
 
-这次学习主要针对Python中常用的4种数据结构的创建、访问、修改、删除等基本操作，及各个数据结构的特点进行学习。<br/>
+This is the first time I met Erlang. I heard about Erlang because Erlang is a programming language developed by Ericsson, the company I work for 6 years. In order to adapt to the potential needs of the new position, I would like to have a preliminary understanding of Erlang through self-study, so that I can use Erlang for project development more quickly when needed later.
 
-## 正文
+## Text
 
-### 列表(List)
+### What's Erlang
 
-&ensp;&ensp;&ensp;&ensp;序列是Python中最基本的数据结构。序列中的每个元素都分配一个数字 - 它的位置，或索引，第一个索引是0，第二个索引是1，依此类推。<br/>
-&ensp;&ensp;&ensp;&ensp;Python有6个序列的内置类型，但最常见的是列表和元组。<br/>
-&ensp;&ensp;&ensp;&ensp;序列都可以进行的操作包括索引，切片，加，乘，检查成员。<br/>
-&ensp;&ensp;&ensp;&ensp;此外，Python已经内置确定序列的长度以及确定最大和最小的元素的方法。<br/>
-&ensp;&ensp;&ensp;&ensp;列表是最常用的Python数据类型，它可以作为一个方括号内的逗号分隔值出现。<br/>
-&ensp;&ensp;&ensp;&ensp;列表的数据项不需要具有相同的类型。<br/>
+Let us first understand the basic situation of Erlang from Baidu Encyclopedia. Although it is not very beautiful to read...
 
+>Erlang is a general-purpose, concurrent programming language developed by CS-Lab, a Swedish telecom equipment manufacturer based in Ericsson, to create a programming language that can handle large-scale concurrent activities and the operating environment. <br/>
+Erlang was born in 1987. After ten years of development, it released an open source version in 1998. Erlang is an interpreted language that runs on virtual machines, but now also includes native code compilers developed by Uppsala University's High Performance Erlang Project (HiPE). Since R11B-4, Erlang has also supported scripted interpreters. <br/>
+In the programming paradigm, Erlang is a multi-paradigm programming language, covering functional, concurrent and distributed. The sequential execution of Erlang is a functional programming language for early evaluation, single assignment and dynamic typing. <br/>
+Erlang is a structured, dynamic type programming language with built-in parallel computing support. Originally designed for communication applications by Ericsson, such as control switches or conversion protocols, it is ideally suited for building distributed, real-time, soft-parallel computing systems. <br/>
+Application runtimes written in Erlang typically consist of thousands of lightweight processes and communicate with each other via messaging. Inter-process context switching is only one or two links for Erlang, much more efficient than thread switching for C programs.<br/>
+Using Erlang to write a distributed application is much simpler because its distributed mechanism is transparent: it is not known to the program that it is running distributed. The Erlang runtime environment is a virtual machine, a bit like a Java virtual machine, so that once the code is compiled, it can be run anywhere. <br/>
+Its runtime system even allows code to be updated without interruption. In addition, if you need more efficient, the byte code can also be compiled to run the code.<br/>
 
-**List创建**
-创建一个列表，只要把逗号分隔的不同的数据项使用方括号括起来即可。<br/>
+So in a nutshell, Erlang is a concurrent, suitable for building distributed, structured, dynamic type programming languages.<br/>
 
-```
-list1 = ['physics', 'chemistry', 1997, 2000]
-list2 = [1, 2, 3, 4, 5 ]
-list3 = ["a", "b", "c", "d"]
-```
-**List中值的访问**
-使用下标索引来访问列表中的值，同样你也可以使用方括号的形式截取字符：<br/>
+### Erlang Features
 
-```
-list1 = ['physics', 'chemistry', 1997, 2000]
-list2 = [1, 2, 3, 4, 5, 6, 7 ]
-print("list1[0]: ", list1[0])
-print(list2[1:5]: ", list2[1:5])
-```
-<br/>
-输出结果：<br/>
+Erlang is a programming language with multiple paradigms. It has many features. The main features are as follows:<br/>
 
-```
-list1[0]:  physics
-list2[1:5]:  [2, 3, 4, 5]
-```
+*   Functional formula:<br/>
+>Function is a programming model that treats operations in a computer as function calculations in mathematics, avoiding the concept of states and variables.Functions are the basic unit of the Erlang programming language. In Erlang, functions are the first type, and functions are used almost exclusively, including the simplest calculations. All concepts are expressed by functions, and all operations are also operated by functions.
 
-**更新List**
-```
-list = []          ## 空列表
-list.append('Google')   ## 使用 append() 添加元素
-list.append('Runoob')
-print(list)
-```
-<br/>
-输出结果：<br/>
+*   Concurrency:<br/>
+>The Erlang programming language can support a very large number of levels of concurrency without relying on the operating system and third-party external libraries. Erlang's concurrency relies heavily on Erlang virtual machines and lightweight Erlang processes.
 
-```
-['Google', 'Runoob']
-```
+*   Distributed:<br/>
+>Erlang's distributed features are supported by Erlang at the language level. You can use the language built-in API functions to create Erlang processes on remote nodes and then execute the specified module functions. Similarly, you can use the RPC module of Erlang to call the module function of the remote node.<br/>
+The mutual call between Erlang nodes and the execution of cross-node remote module functions are very convenient. The communication between Erlang nodes is completely supported by the Erlang programming language at the language level. The Erlang language has its own node protocol.
 
-**删除List中元素**
-
-```
-list1 = ['physics', 'chemistry', 1997, 2000]
+*   Robustness:<br/>
+>Robustness is a very important feature of the Erlang programming language. The robustness of the Erlang programming language depends on the following points:<br/>
+*   Process isolation
+*   Perfect error exception handling
+*   Error handling philosophy
+*   Monitor process
  
-print(list1)
-del(list1[2])
-print("After deleting value at index 2 : ")
-print(list1)
-```
+*   Soft real time:<br/>
+>The characteristics of Erlang soft real-time mainly depend on:<br/>
+*   Erlang virtual machine scheduling mechanism
+*   Memory garbage collection strategy
+*   Process resource isolation
+The Erlang system garbage collection strategy is divided and recycled. The incremental garbage collection method is based on the characteristics of process resource isolation. Erlang memory garbage collection is based on a single Erlang process. In the process of garbage collection, the world will not stop. That is, it will not affect the entire system. Combine the Erlang virtual machine preemptive scheduling mechanism to ensure high availability and soft real-time performance of the Erlang system.
+
+*   Hot update:<br/>
+>The Erlang system allows program code to be modified during runtime, and old code logic can be phased out and replaced by new code logic. In this process, the old and new code logic coexist in the system, Erlang "hot update" features, can guarantee the operation of the Erlang system to the greatest extent, and will not suspend the system due to business updates.
+
+*   Incremental code loading:<br/>
+>Erlang's libraries, including the existing libraries in Erlang and the libraries created by Code Farm, are run on the outer layer of the Erlang virtual machine (there is a picture above). It can be loaded, started, stopped, and uninstalled while the Erlang system is running. These are all programmers can control.
+
+*   Dynamic type:<br/>
+>Erlang is both a dynamic language and a dynamic type.<br/>
+Dynamic language means that the structure of the code can be changed during system operation. Existing functions can be deleted or modified. The runtime code can change its structure according to certain conditions. This is also a basis for Erlang to be hot updated.<br/>The dynamic type is worth checking that the data type is checked during the prototype, and the binding of the data type is not in the compile phase, but is delayed to the run phase.
+
+*   Explanatory:<br/>
+>Erlang is an interpreted language that runs on a virtual machine and has good platform compatibility.
+
+### Erlang Functions
+
+From our birth to the present, we have been maintaining this memory in the brain, and we are constantly updating this memory with constant interaction with the outside world. We learned a lot about how to deal with people, we talk, write letters, send text messages, and make phone calls. This is asynchronous messaging.<br/>
 <br/>
-输出结果：<br/>
-
-```
-['physics', 'chemistry', 1997, 2000]
-After deleting value at index 2 :
-['physics', 'chemistry', 2000]
-```
-
-### 元组(Tuple)
-
-Python的元组与列表类似，不同之处在于元组的元素不能修改。<br/>
-元组使用小括号，列表使用方括号。
-
-**Tuple创建**
-
-元组创建很简单，只需要在括号中添加元素，并使用逗号隔开即可：<br/>
-注意：元组中只包含一个元素时，需要在元素后面添加逗号。<br/>
-
-```
-tup1 = ('physics', 'chemistry', 1997, 2000)
-tup2 = (1, 2, 3, 4, 5 )
-tup3 = "a", "b", "c", "d"
-tup4 = (50,)
-```
+The world of Erlang is very similar to our real world. Each Erlang process maintains its own unique memory, and other processes cannot access its internal state unless they exchange messages for each other. All messaging is asynchronous, just like our real world.<br/>
 <br/>
+It is said that the following six functions make up the world view of Erlang. Let me know one by one:<br/>
 
-**Tuple访问**
+**spawn**
+ ```
+1>spawn(foo,hello,[]).
 
-```
-tup1 = ('physics', 'chemistry', 1997, 2000)
-tup2 = (1, 2, 3, 4, 5, 6, 7 )
+<0.70.0>
+ ```
  
-print("tup1[0]: ", tup1[0])
-print("tup2[1:5]: ", tup2[1:5])
+This will create a new process, calling foo:hello(). Once the process completes the function, it will die and return all allocated memory to the BEAM.<br/>
+
+If you want to create two processes to do things at the same time, just spawn twice:<br/>
+
 ```
+1>spawn(foo,hello,[]).
+
+<0.70.0>
+
+2>spawn(foo,hello,[]).
+
+<0.71.0>
+```
+
+This will create two processes concurrently calling foo:hello(). This is the concurrency model of Erlang - also called the actor model.<br/>
+If you want to work on 100 processes at the same time, call spawn 100 times.<br/>
+
+**send**
+We know how to create a process, the next step is to send a message to it:<br/>
+
+```
+1>Pid=spawn(foo,loop,[]).
+
+<0.80.0>
+
+2>Pid!hello.
+
+hello
+```
+
+Here we start a process call foo:loop(). We assume that this loop function will call itself recursively, so that our process will die without a click. Spawn will return a process ID <0.80.0>, we bind it to the Pid variable and send a message hello to it. Exclamation mark in Erlang! Send a message. The above is asynchronous messaging. This is also the only means of communication between the two processes in Erlang.
+
+**receive**
+When a message is sent to a process, how does the process receive the message? <br/>
+
+```
+1>Pid=spawn(fun()->
+
+1>receive
+
+1>hello->io:format("Got hello message~n")
+
+1>end
+
+1>end).<0.86.0>
+
+2>Pid!hello.
+
+Gothellomessage
+
+hello
+```
+
+Use receive to receive the message. You can use pattern matching here to match the information you want to receive, ignoring other messages. In this example, we only receive the message hello.
+
+**register**
+We usually can't remember the phone number of a friend, so we use the address book to add a name to the phone number. There is no need to remember the Pid of each process in Erlang, register it with a name and access it later by name.<br/>
+
+```
+1>Pid=spawn(fun()->receivehello->io:format("Got hello message~n")endend).
+
+<0.93.0>
+
+2>register(foo,Pid).
+
+true
+
+3>foo!hello.
+
+Gothellomessage
+
+hello
+```
+
+Just call register(Name,Pid) to register the name for any process. Then we can use the name to send a message to the process.
+
+
+**whereis**
+
+When we register a name for a process, we can also find its Pid by looking up the address book.
+
+```
+1>register(foo,spawn(fun()->receivehello->helloendend)).
+
+true
+
+2>whereis(foo).
+
+<0.102.0>
+```
+
+**self**
+
+A process can find its own Pid by calling self().<br/>
+
+```
+1>self().
+
+<0.90.0>
+```
+
+## Summary
+
+Erlang is a functional programming language whose core is the Erlang virtual machine. Erlang concurrent process is different from operating system process, it is very lightweight, Erlang built-in distributed features, very convenient, Erlang programming language soft real-time features can be more robust under the protection of its error exception handling mechanism, its hot update Can bring us a lot of convenience to the code farmers.
+
+It is said that this is the founder of the Erlang language, our colleague: Joe Armstrong
 <br/>
-输出结果：<br/>
-
-```
-tup1[0]:  physics
-tup2[1:5]:  (2, 3, 4, 5)
-```
-
-**Tuple修改**
-
-元组中的元素值是不允许修改的，但我们可以对元组进行连接组合：<br/>
-
-```
-tup1 = (12, 34.56)
-tup2 = ('abc', 'xyz')
- 
-# tup1[0] = 100   #修改元组元素操作是非法的
- 
-# 创建一个新的元组
-tup3 = tup1 + tup2
-print(tup3)
-```
-<br/>
-输出结果：<br/>
-
-```
-(12, 34.56, 'abc', 'xyz')
-```
-
-**Tuple删除**
-
-元组中的元素值是不允许删除的，但我们可以使用del语句来删除整个元组:
-```
-tup = ('physics', 'chemistry', 1997, 2000)
- 
-print(tup)
-del(tup)
-print("After deleting tup : ")
-print(tup)
-```
-<br/>
-输出结果：<br/>
-
-```
-('physics', 'chemistry', 1997, 2000)
-After deleting tup :
-Traceback (most recent call last):
-  File "test.py", line 9, in <module>
-    print tup
-NameError: name 'tup' is not defined
-```
-
-### 集合(Set)
-
-集合（set）是一个无序的不重复元素序列。
-
-**Set创建**
-可以使用大括号 { } 或者 set() 函数创建集合，注意：创建一个空集合必须用 set() 而不是 { }，因为 { } 是用来创建一个空字典。:
->parame = {value01,value02,...} <br/>
-或者set(value)<br/>
-
-```
->>>basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
->>> print(basket)                      # 这里演示的是去重功能
-{'orange', 'banana', 'pear', 'apple'}
->>> 'orange' in basket                 # 快速判断元素是否在集合内
-True
->>> 'crabgrass' in basket
-False
->>>a = {x for x in 'abracadabra' if x not in 'abc'}  #集合推导式(Set comprehension)
->>> a
-{'r', 'd'}
-```
-
-**Set元素移除**
-
-```
->>>thisset = set(("Google", "Runoob", "Taobao"))
->>> thisset.remove("Taobao")
->>> print(thisset)
-{'Google', 'Runoob'}
->>> thisset.remove("Facebook")   # 使用remove()不存在会发生错误
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-KeyError: 'Facebook'
-```
-
-推荐使用discard()，元素不存在时，不会发生错误。<br/>
-
-```
->>>thisset = set(("Google", "Runoob", "Taobao"))
->>> thisset.discard("Facebook")  # 不存在不会发生错误
->>> print(thisset)
-{'Taobao', 'Google', 'Runoob'}
-```
-
-随机删除集合中的一个元素<br/>
-然而在交互模式，pop 是删除集合的第一个元素（排序后的集合的第一个元素）<br/>
-
-```
-thisset = set(("Google", "Runoob", "Taobao", "Facebook"))
-x = thisset.pop()
-print(x)
-```
-<br/>
-输出结果：<br/>
-
-```
-Runoob
-```
-
-也可以清空集合<br/>
-
-```
->>>thisset = set(("Google", "Runoob", "Taobao"))
->>> thisset.clear()
->>> print(thisset)
-set()
-```
-
-**Set元素个数计算**
-
-```
->>>thisset = set(("Google", "Runoob", "Taobao"))
->>> len(thisset)
-3
-```
+![](/img/erlang/Joe.jpeg)
 
 
-**Set元素是否存在**
-
-判断元素 x 是否在集合 s 中，存在返回 True，不存在返回 False：<br/>
-
-```
->>>thisset = set(("Google", "Runoob", "Taobao"))
->>> "Runoob" in thisset
-True
->>> "Facebook" in thisset
-False
-```
-
-### 字典(Dictionary)
-
-字典是另一种可变容器模型，且可存储任意类型对象。<br/>
-
-**Dictionary创建**
-
-字典的每个键值 key=>value 对用冒号 : 分割，每个键值对之间用逗号 , 分割，整个字典包括在花括号 {} 中：<br/>
-d = {key1 : value1, key2 : value2 } <br/>
-键一般是唯一的，如果重复最后的一个键值对会替换前面的，值不需要唯一。<br/>
-值可以取任何数据类型，但键必须是不可变的，如字符串，数字或元组。<br/>
-*学习笔记：<br/>
-
-针对字典键的要求，还有更准确的说法是：<br/>
->python中什么对象不能作为字典的key：有__hash__方法可以做字典的key，没有则不能作为字典的key;<br/>
-除了list、dict、set和内部至少带有上述三种类型之一的tuple之外，其余对象均可作为字典的key。
-
-```
->>>dict = {'a': 1, 'b': 2, 'b': '3'}
->>> dict['b']
-'3'
->>> dict
-{'a': 1, 'b': '3'}
-```
-
-**Dictionary访问**
-
-把相应的键放入方括弧。
-```
-dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
-print("dict['Name']: ", dict['Name'])
-print("dict['Age']: ", dict['Age'])
-```
-<br/>
-输出结果：<br/>
-
-```
-dict['Name']:  Zara
-dict['Age']:  7
-```
-
-如果用字典里没有的键访问数据，会输出错误如下：<br/>
-
-```
-dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
-print("dict['Alice']: ", dict['Alice'])
-```
-<br/>
-输出结果：<br/>
-```
-dict['Alice']: 
-Traceback (most recent call last):
-  File "test.py", line 5, in <module>
-    print "dict['Alice']: ", dict['Alice']
-KeyError: 'Alice'
-```
-
-为了避免这种异常，可以使用collections.defaultdict()方法创建带默认值的dictionary。<br/>
-```
-from collections import defaultdict
-d2 = defaultdict(lambda :'default value')
-d2['one'] = 1
-d2['two'] = 2
-print(d2['two'])
-print(d2['three'])
-```
-<br/>
-输出结果：<br/>
-```
-2
-default value
-```
-
-**Dictionary修改**
-
-向字典添加新内容的方法是增加新的键/值对，修改或删除已有键/值对:<br/>
-```
-dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
-dict['Age'] = 8 # 更新
-dict['School'] = "RUNOOB" # 添加 
-print("dict['Age']: ", dict['Age'])
-print("dict['School']: ", dict['School'])
-```
-<br/>
-输出结果：<br/>
-
-```
-dict['Age']:  8
-dict['School']:  RUNOOB
-```
-
-**Dictionary删除**
-
-*   删除字典元素
-*   删除字典
-
-```
-dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
- 
-del dict['Name']  # 删除键是'Name'的条目
-dict.clear()      # 清空词典所有条目
-del dict          # 删除词典
-```
-
-
-## 总结
-&ensp;&ensp;&ensp;&ensp;今天学习了Python中常用的4种数据结构，它们有不同的存储结构和特点。除了记录的几种常用的创建、访问、修改、删除等基本操作，每一种数据结构的类还提供了丰富的方法来方便操作。<br/>
-&ensp;&ensp;&ensp;&ensp;在编写代码的过程中，也已经使用到了一部分，最重要的是需要使用什么操作时候，使用help来查看具体的方法说明，可以边用边学。
-
-## 参考资料
-此次学习主要依赖于下面技术网站:<br/> 
-http://www.runoob.com/python3/python3-tutorial.html <br/>
-
+## Reference
+https://www.cnblogs.com/--00/p/erlang_into_style.html <br/>
+https://www.sohu.com/a/244980510_473282 <br/>
+https://www.cnblogs.com/dasea/archive/2012/08/18/2644927.html <br/>
+http://www.erlang.org/docs
 
