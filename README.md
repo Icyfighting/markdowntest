@@ -65,7 +65,7 @@ Let us see what happens if something other than centimeter or inch is entered in
 ![](/img/erlang-3/atom-2.png)
 
 <br/>
-The two parts of the convert function are called its **clauses** . <br/>
+The two parts of the convert function are called its clauses. <br/>
 As shown, meter is not part of either of the clauses. The Erlang system cannot match either of the clauses so an error message function_clause is returned. 
 
 ### Tuple
