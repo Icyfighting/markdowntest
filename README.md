@@ -1,234 +1,192 @@
 ---
 layout: post
-title: "Erlang learning (3) - Data Types (1)"
-subtitle: "Atom & Tuple & List & Map"
+title: "Erlang learning (4) - By Examples"
+subtitle: "Module & Guard & BIFs & High-Order Func "
 author: "Bing Yan"
-header-img: "img/erlang-3/post-bg-java.jpg"
+header-img: "img/erlang-4/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
   - Erlang
-  - Data Type
   - Learning
 ---
 
 ## Preface
 
-&ensp;&ensp;&ensp;&ensp;Erlang can be said to be very different from the language I have been in contact with before. This can be seen from its type definition. It is not familiar.<br/>
-&ensp;&ensp;&ensp;&ensp;However, existence is reasonable. I think Erlang has great advantages in concurrent, lightweight processes, convenient data processing and fault tolerance, and may also be related to these data types.<br/>
+&ensp;&ensp;&ensp;&ensp;This study is based on the chapter of the Guide - Sequential Programming. This chapter is dedicated to the reader's basic knowledge of Erlang programming by writing and modifying simple examples.
+I quickly read and practice these examples, which gives me an intuitive understanding of how Erlang handles iterable data, such as List. And compares with Java, Python that I have learned before.
 
 ## Text
 
-### Erlang Data Types Features
+### Example-v1
 
-*   Erlang does not define the type of a variable, it can be assigned to any type of value, and all types of values in Erlang are collectively referred to as a Term. <br/>
-This makes the compiler not find a mismatch of numeric types at compile time, only errors are found at runtime, the advantage is that unlike C++, you can blind the system by forcing a type conversion, causing memory leaks. <br/>
-However, Erlang now has a set of types, function definition mechanism, can use the dialyzer to find the mismatch in the code.<br/>
+**Knowledge Points:**
 
-*   Variables in Erlang can only be assigned once, and the second assignment will be interpreted by the compiler as a comparison. If the value is the same, the value will be returned. If it is different, an exception will be thrown. <br/>
+*   io:format function: 
+> Module io: io - Standard I/O Server Interface Functions.<br/>
+The function format/2 (that is, format with two arguments) takes two lists. The first one is nearly always a list written between " ". This list is printed out as it is, except that each ~w is replaced by a term taken in order from the second list. Each ~n is replaced by a new line. The io:format/2 function itself returns the atom ok if everything goes as planned. Like other functions in Erlang, it crashes if an error occurs. 
 
-In the examples of **[Getting started with Erlang User's Guide](http://erlang.org/doc/getting_started/users_guide.html)**, new variable names are used, instead of reusing the old ones: First, TheRest, E1, E2, R, A, B, and C. The reason for this is that a variable can only be given a value once in its context (scope). 
+*   comment: 
+>A comment starts with a %-character and goes on to the end of the line.
 
-*   Variables must start with a capital letter. Examples of variables are Number, ShoeSize, and Age, otherwise they will not be interpreted by the compiler as variables, and the variables starting with uppercase letters and underscores will behave differently.<br/>
-More details of variable are included in manual **[Variables](http://erlang.org/doc/reference_manual/expressions.html#variables)**.
+*   export: 
+>The -export([format_temps/1]). line only includes the function format_temps/1. The other functions are local functions, that is, they are not visible from outside the module tut6.
 
-### Atom
+*   Nested:
+>Here is a function call as convert_to_celsius({moscow,{c,-10}}) as the argument to the function print_temp. When function calls are nested like this, they execute (evaluate) from the inside out. That is, first convert_to_celsius({moscow,{c,-10}}) is evaluated, which gives the value {moscow,{c,-10}} as the temperature is already in Celsius. Then print_temp({moscow,{c,-10}}) is evaluated. 
 
-Atom is data type in Erlang. Atoms start with a small letter, for example, charles, centimeter, and inch. <br/>
-Atoms are simply names, nothing else. <br/>
-They are not like variables, which can have a value.
+*   Recursion:
+>format_temps(Rest) is called with the rest of the list as an argument. This way of doing things is similar to the loop constructs in other languages.So the same format_temps function is called again, this time City gets the value {cape_town,{f,70}} and the same procedure is repeated as before. This is done until the list becomes empty, that is [], which causes the first clause format_temps([]) to match.<br/>
+As my understanding by now, handling iterable data as list, Erlang uses a recursive-like approach that implements a loop traversal of the list. Later, foreach and map functions are introduced for iterable data handling.
 
-**Example**
 
 ```
--module(tut2).
--export([convert/2]).
+-module(tut6).
+-export([format_temps/1]).
 
-convert(M, inch) ->
-	M / 2.54;
+%% Only this function is exported
+format_temps([])->                        % No output for an empty list
+    ok;
+format_temps([City | Rest]) ->			  % By now, traversing list use |, and recursive call
+    print_temp(convert_to_celsius(City)),
+    format_temps(Rest).
 
-convert(N, centimeter) ->
-	N * 2.54.
-```
+convert_to_celsius({Name, {c, Temp}}) ->  % Atom is used as matching. Variables get corresponding values in tuple.
+    {Name, {c, Temp}};
+convert_to_celsius({Name, {f, Temp}}) ->  % Do the conversion
+    {Name, {c, (Temp - 32) * 5 / 9}}.
 
-**Test**
-
-![](/img/erlang-3/atom-1.png)
-
-<br/>
-Let us see what happens if something other than centimeter or inch is entered in the convert function:<br/>
-
-
-![](/img/erlang-3/atom-2.png)
-<br/>
-The two parts of the convert function are called its clauses. <br/>
-As shown, meter is not part of either of the clauses. The Erlang system cannot match either of the clauses so an error message function_clause is returned. 
-
-### Tuple
-
-**Example**
-
-```
--module(tut3).
--export([convert_length/1]).
-
-convert_length({centimeter, X}) ->
-	{inch, X / 2.54};
-convert_length({inch, Y}) ->
-	{centimeter, Y * 2.54}.
+print_temp({Name, {c, Temp}}) ->
+    io:format("~-15w ~w c~n", [Name, Temp]). % Module io
 ```
 
 **Test**
 
-![](/img/erlang-3/tuple-1.png)
+![](/img/erlang-4/example-1.png)
 
-<br/>
+### Example-v2
 
-Tuples can have more than two parts, in fact as many parts as you want, and contain any valid Erlang term. <br/>
-Tuples have a fixed number of items in them. Each item in a tuple is called an element. 
+**Knowledge Points:**
 
-### List
+*   if:
+```
+if
+    Condition 1 ->
+        Action 1;
+    Condition 2 ->
+        Action 2;
+    Condition 3 ->
+        Action 3;
+    Condition 4 ->
+        Action 4
+end
+```
+>Notice that there is no ";" before end. Conditions do the same as guards, that is, tests that succeed or fail. Erlang starts at the top and tests until it finds a condition that succeeds. Then it evaluates (performs) the action following the condition and ignores all other conditions and actions before the end. If no condition matches, a run-time failure occurs. A condition that always succeeds is the atom true. This is often used last in an if, meaning, do the action following the true if all other conditions have failed.
 
-Lists in Erlang are surrounded by square brackets, "[" and "]". For example, a list of the scores can be: <br/>
+*   lists:
+> The module lists contains many functions for manipulating lists, for example, for reversing them. So before writing a list-manipulating function it is a good idea to check if one not already is written for you.
+In below example, to find the max and min value list, can use lists:max/1, lists:min/1, lists:sort/2 and so on.
 
 ```
-[{java,90},{python,85},{erlang,95}]
-```
-A useful way of looking at parts of lists, is by using "|". This is best explained by an example using the shell: <br/>
+-module(tut7).
+-export([format_temps/1]).
 
-```
-1> [E1,E2 | Rest] = [97,98,99,100,101].
-"abcde"
-2> E1.
-97
-3> E2.
-98
-4> Rest.
-"cde"
-```
-<br/>
-Erlang does not have a string data type. Instead, strings can be represented by lists of Unicode characters. The Erlang shell is "clever" and guesses what list you mean and outputs it in what it thinks is the most appropriate form. See above example.<br/>
+format_temps(List_of_cities) ->
+    Converted_List = convert_list_to_c(List_of_cities),    
+    print_temp(Converted_List),
+    {Max_city, Min_city} = find_max_and_min(Converted_List),
+    print_max_and_min(Max_city, Min_city).
 
-**Example**
+convert_list_to_c([{Name, {f, Temp}} | Rest]) ->        % Convert all temperature in list to Celsius
+    Converted_City = {Name, {c, (Temp -32)* 5 / 9}},
+    [Converted_City | convert_list_to_c(Rest)];
 
-Using "|", we can realize how to find the length of a list. <br/>
+convert_list_to_c([City | Rest]) ->
+    [City | convert_list_to_c(Rest)];
 
-```
--module(tut4).
--export([list_length/1]).
+convert_list_to_c([]) ->                                % Boundary conditions of recursive-like function
+    [].
 
-list_length([]) ->
-	0;
-list_length([First | Rest]) ->
-	1 + list_length(Rest).
-```
+print_temp([{Name, {c, Temp}} | Rest]) ->		% print list of city with recursive-like function
+    io:format("~-15w ~w c~n", [Name, Temp]),
+    print_temp(Rest);
+print_temp([]) ->					% Boundary conditions
+    ok.
 
-**Test**
+find_max_and_min([City | Rest]) ->
+    find_max_and_min(Rest, City, City).
 
-![](/img/erlang-3/list-1.png)
+find_max_and_min([{Name, {c, Temp}} | Rest], 
+         {Max_Name, {c, Max_Temp}}, 
+         {Min_Name, {c, Min_Temp}}) ->
+    if 
+        Temp > Max_Temp ->
+            Max_City = {Name, {c, Temp}};           % Change
+        true -> 					% similar as 'else' in Java, make sure all conditions have matching actions.
+            Max_City = {Max_Name, {c, Max_Temp}} 	% Unchanged
+    end,
+    if
+         Temp < Min_Temp ->
+            Min_City = {Name, {c, Temp}};           % Change
+        true -> 
+            Min_City = {Min_Name, {c, Min_Temp}} 	% Unchanged
+    end,
+    find_max_and_min(Rest, Max_City, Min_City);		% Recursive call
 
-<br/>
+find_max_and_min([], Max_City, Min_City) ->
+    {Max_City, Min_City}.
 
-### Map
- 
-Maps are a set of key to value associations. These associations are encapsulated with "#{" and "}". <br/>
-Only the => operator is allowed when creating a new map. <br/>
-The syntax for updating an existing key with a new value is with the := operator. <br/>
-
-**Example-1**
-
-```
--module(tut5).
--export([score/3]).
--define(is_score(V), (is_integer(V) andalso V >= 0 andalso V =< 100)).
-
-score(Java, Python, Erlang) when ?is_score(Java), ?is_score(Python), ?is_score(Erlang) ->
-	#{java => Java, python => Python, erlang => Erlang}.
-```
-
-**Test**
-
-![](/img/erlang-3/map-1.png)
-
-**Example-2**
-
-Guides provides an example shows how to calculate alpha blending using maps to reference color and alpha channels.<br/>
-I follow the steps, code and test it, to practise the => operator, := operator and function definition.<br/>
-
-```
--module(color).
-
--export([new/4,blend/2]).
--define(is_channel(V), (is_float(V) andalso V >= 0.0 andalso V =< 1.0)).
-
-new(R,G,B,A) when ?is_channel(R), ?is_channel(G),
-				  ?is_channel(B), ?is_channel(A) ->
-	#{red => R, green => G, blue => B, alpha => A}.
-
-blend(Src, Dst) ->
-	blend(Src, Dst, alpha(Src,Dst)).
-
-blend(Src, Dst, Alpha) when Alpha > 0.0 ->
-	Dst#{
-		 red	:=  red(Src, Dst) / Alpha,
-		 green	:=	green(Src, Dst) / Alpha,
-		 blue	:=	blue(Src, Dst) / Alpha,
-		 alpha	:=	Alpha
-		};
-
-blend(_,Dst,_) ->
-	Dst#{
-		 red	:= 0.0,
-		 green 	:= 0.0,
-		 blue	:= 0.0,
-		 alpha	:= 0.0
-		}.
-
-alpha(#{alpha := SA}, #{alpha := DA}) ->
-    SA + DA*(1.0 - SA).
-
-red(#{red := SV, alpha := SA}, #{red := DV, alpha := DA}) ->
-    SV*SA + DV*DA*(1.0 - SA).
-green(#{green := SV, alpha := SA}, #{green := DV, alpha := DA}) ->
-    SV*SA + DV*DA*(1.0 - SA).
-blue(#{blue := SV, alpha := SA}, #{blue := DV, alpha := DA}) ->
-    SV*SA + DV*DA*(1.0 - SA).
+print_max_and_min({Max_name, {c, Max_temp}}, {Min_name, {c, Min_temp}}) ->
+    io:format("Max temperature was ~w c in ~w~n", [Max_temp, Max_name]),
+    io:format("Min temperature was ~w c in ~w~n", [Min_temp, Min_name]).
 ```
 
 **Test**
 
-![](/img/erlang-3/map-2.png)
+![](/img/erlang-4/example-2.png)
 
-### Data Type Decide Method
+### Example-v3
 
-According to list of data type decide method, we can also basically know all types in Erlang.<br/>
+**Knowledge Points:**
+
+*   anonymous variable:
+> In sort the fun is used: fun({_, {c, Temp1}}, {_, {c, Temp2}}) -> Temp1 < Temp2 end .
+This is simply shorthand for a variable that gets a value, but the value is ignored. This can be used anywhere suitable,
+
+*   lists:
+>The standard module lists also contains a function sort(Fun, List) where Fun is a fun with two arguments.  <br/>
+This fun returns true if the first argument is less than the second argument, or else false. <br/>
+Sorting is added to the convert_list_to_c .
+
+*   foreach and map:
+>These two functions are provided in the standard module lists. foreach takes a list and applies a fun to every element in the list. map creates a new list by applying a fun to every element in a list.
 
 ```
-is_atom/1           
-is_binary/1        
-is_bitstring/1      
-is_boolean/1        
-is_builtin/3       
-is_float/1          
-is_function/1       is_function/2      
-is_integer/1        
-is_list/1           
-is_number/1        
-is_pid/1            
-is_port/1           
-is_record/2         is_record/3         
-is_reference/1      
-is_tuple/1
+-module(tut8).
+
+-export([convert_list_to_c/1]).
+
+convert_to_c({Name, {f, Temp}}) ->
+    {Name, {c, trunc((Temp - 32) * 5 / 9)}};
+convert_to_c({Name, {c, Temp}}) ->
+    {Name, {c, Temp}}.
+
+convert_list_to_c(List) ->
+    New_list = lists:map(fun convert_to_c/1, List),
+    lists:sort(fun({_, {c, Temp1}}, {_, {c, Temp2}}) ->
+                       Temp1 < Temp2 end, New_list).
 ```
+
+**Test**
+
+![](/img/erlang-4/example-3.png)
+
 
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp; From these simple examples, we practise some data type of Erlang.<br/>
-&ensp;&ensp;&ensp;&ensp; Besides these types, we also learn the simple function definition.<br/>
-&ensp;&ensp;&ensp;&ensp; Next time, I will learn more data types and other knowledge following the Guides.<br/>
-
-
+&ensp;&ensp;&ensp;&ensp; From these simple examples, I practise some data type and modules of Erlang.<br/>
+&ensp;&ensp;&ensp;&ensp; Next time, I will start to learn Concurrent Programming chapter following the Guides.<br/>
+&ensp;&ensp;&ensp;&ensp; One of the main reasons for using Erlang instead of other functional languages is Erlang's ability to handle concurrency and distributed programming. So next chapter will be very interesting.
 ## Reference
 http://www.erlang.org <br/>
-http://erlang.org/doc/getting_started/seq_prog.html#atoms <br/>
-https://www.cnblogs.com/studynote/p/3218958.html 
+http://erlang.org/doc/getting_started/seq_prog.html <br/>
