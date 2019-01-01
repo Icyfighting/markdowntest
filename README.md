@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Erlang learning (4) - By Examples"
+title: "Erlang learning (4) - Sequential Programming"
 subtitle: "Module & Guard & BIFs & High-Order Func "
 author: "Bing Yan"
 header-img: "img/erlang-4/post-bg-java.jpg"
