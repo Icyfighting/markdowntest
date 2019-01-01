@@ -59,14 +59,17 @@ According to programming conventions, the first project of Erlang also outputs '
 
 1. New project: File -> New -> Project -> Erlang -> Erlang Project -> Name: first_erlang_project
 <br/>
+
 2. New module: Right click on src of first_erlang_project -> new module -> Module name: tut
 <br/>
+
 3. Edit tut.erl file as below:
 <br/>
 
 ![](/img/erlang-2/tut.png)
 
 <br/>
+
 4. Right click on first_erlang_project -> run as -> run configurations <br/>
 Right click on Erlang application on the left -> new <br/>
 Select first_erlang_project on main page on the right. <br/>
