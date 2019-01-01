@@ -22,7 +22,7 @@ tags:
 
 ### Erlang Installation
 
-1. Find the official [website](http://www.erlang.org/downloads) of Erlang and download the latest installation package.
+1. Find the official **[website](http://www.erlang.org/downloads)** of Erlang and download the latest installation package.
 <br/>
 
 ![](/img/erlang-2/download-1.png)
@@ -43,9 +43,9 @@ Run 'erl' in cmd, confirm installation and env configuration are correct.<br/>
 ### Erlide Installation
 
 Erlide is an IDE for Erlang, powered by Eclipse.<br/>
-Erlide official [website](https://erlide.org/) <br/>
+Erlide official **[website](https://erlide.org/)** <br/>
 
-Find [link](https://erlide.org/articles/eclipse/120_Installing-and-updating.html) of Erlide Installing and updating.<br/>
+Find **[link](https://erlide.org/articles/eclipse/120_Installing-and-updating.html)** of Erlide Installing and updating.<br/>
 My Eclipse is Release 4.7.0 (Oxygen), later than required version 4.6. The Erlide installation is OK.<br/>
 After Erlide installation, Eclipse can new Erlang project.
 <br/>
