@@ -78,7 +78,7 @@ Select first_erlang_project on main page on the right. <br/>
 ![](/img/erlang-2/run-as-2.png)
 
 <br/>
-Select runtimes page -> run
+ Select runtimes page -> run
 <br/>
 
 ![](/img/erlang-2/run-as-1.png)
