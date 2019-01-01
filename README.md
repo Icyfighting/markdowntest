@@ -24,16 +24,19 @@ tags:
 
 1. Find the official [website](http://www.erlang.org/downloads) of Erlang and download the latest installation package.
 <br/>
+
 ![](/img/erlang-2/download-1.png)
 
 2. Install Erlang by running .exe file -> select components -> Next -> Installation Complete.<br/>
 During installation, there is prompt about Microsoft Visual C++，Redistributable package, I selected 'Repair'.<br/>
 <br/>
+
 ![](/img/erlang-2/env-1.png)
 
 3. Configure environment variables. Similar as other env configuration - add Erlang bin path in env 'Path'.<br/>
 Run 'erl' in cmd, confirm installation and env configuration are correct.<br/>
 <br/>
+
 ![](/img/erlang-2/erl-version.png)
 
 
@@ -46,6 +49,7 @@ Find [link](https://erlide.org/articles/eclipse/120_Installing-and-updating.html
 My Eclipse is Release 4.7.0 (Oxygen), later than required version 4.6. The Erlide installation is OK.<br/>
 After Erlide installation, Eclipse can new Erlang project.
 <br/>
+
 ![](/img/erlang-2/erlide.png)
 
 
@@ -59,22 +63,30 @@ According to programming conventions, the first project of Erlang also outputs '
 <br/>
 3. Edit tut.erl file as below:
 <br/>
+
 ![](/img/erlang-2/tut.png)
+
 <br/>
 4. Right click on first_erlang_project -> run as -> run configurations <br/>
 Right click on Erlang application on the left -> new <br/>
 Select first_erlang_project on main page on the right. <br/>
 <br/>
+
 ![](/img/erlang-2/run-as-2.png)
+
 <br/>
 Select runtimes page -> run
 <br/>
+
 ![](/img/erlang-2/run-as-1.png)
+
 <br/>
 
 5. In Console, input 'test:say()'
 <br/>
+
 ![](/img/erlang-2/result.png)
+
 <br/>
 
 
