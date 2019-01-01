@@ -22,18 +22,18 @@ tags:
 
 ### Erlang Installation
 
-1. Find the official **[website](http://www.erlang.org/downloads)** of Erlang and download the latest installation package.
+*   Find the official **[website](http://www.erlang.org/downloads)** of Erlang and download the latest installation package.
 <br/>
 
 ![](/img/erlang-2/download-1.png)
 
-2. Install Erlang by running .exe file -> select components -> Next -> Installation Complete.<br/>
+*   Install Erlang by running .exe file -> select components -> Next -> Installation Complete.<br/>
 During installation, there is prompt about Microsoft Visual C++，Redistributable package, I selected 'Repair'.<br/>
 <br/>
 
 ![](/img/erlang-2/env-1.png)
 
-3. Configure environment variables. Similar as other env configuration - add Erlang bin path in env 'Path'.<br/>
+*   Configure environment variables. Similar as other env configuration - add Erlang bin path in env 'Path'.<br/>
 Run 'erl' in cmd, confirm installation and env configuration are correct.<br/>
 <br/>
 
@@ -57,20 +57,20 @@ After Erlide installation, Eclipse can new Erlang project.
 
 According to programming conventions, the first project of Erlang also outputs 'Hello World'. <br/>
 
-1. New project: File -> New -> Project -> Erlang -> Erlang Project -> Name: first_erlang_project
+*   New project: File -> New -> Project -> Erlang -> Erlang Project -> Name: first_erlang_project
 <br/>
 
-2. New module: Right click on src of first_erlang_project -> new module -> Module name: tut
+*   New module: Right click on src of first_erlang_project -> new module -> Module name: tut
 <br/>
 
-3. Edit tut.erl file as below:
+*   Edit tut.erl file as below:
 <br/>
 
 ![](/img/erlang-2/tut.png)
 
 <br/>
 
-4. Right click on first_erlang_project -> run as -> run configurations <br/>
+*   Right click on first_erlang_project -> run as -> run configurations <br/>
 Right click on Erlang application on the left -> new <br/>
 Select first_erlang_project on main page on the right. <br/>
 <br/>
@@ -85,7 +85,7 @@ Select first_erlang_project on main page on the right. <br/>
 
 <br/>
 
-5. In Console, input 'test:say()'
+*   In Console, input 'test:say()'
 <br/>
 
 ![](/img/erlang-2/result.png)
