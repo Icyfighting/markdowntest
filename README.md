@@ -1,249 +1,100 @@
 ---
 layout: post
-title: "Erlang learning (8) - Robustness (1)"
-subtitle: "Time-outs & Error Handling"
+title: "How to write high quality code"
+subtitle: "Software development learning (1)"
 author: "Bing Yan"
-header-img: "img/erlang-8/post-bg-java.jpg"
+header-img: "img/high/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
-  - Erlang
-  - Robustness
+  - Software development
   - Learning
 ---
 
 ## Preface
 
-&ensp;&ensp;&ensp;&ensp; When learning other programming languages, such as Java, I know that the amount of code required to complete a good robust program is likely to be three times amount of function code. <br/>
-&ensp;&ensp;&ensp;&ensp; The programs we write must withstand the test of various anomalies and errors, and try to keep the system from crashing even under the worst conditions. <br/>
-&ensp;&ensp;&ensp;&ensp; In [First meet with Erlang](https://icyfighting.github.io/2018/12/15/erlang-basic/), we already know Robustness is important feature of Erlang, so this learning, let's understand how Erlang keep good robustness.
+&ensp;&ensp;&ensp;&ensp; As one who wants to be a good programmer, besides learning a rich and solid programming skills, I need to think about how to write high quality and elegant code.<br/>
+
+&ensp;&ensp;&ensp;&ensp; To be frank, I haven't thought about this question before, because my understanding is that software development is a very programmed work, and there are many processes and management methods to ensure the quality of the code.<br/>
+
+&ensp;&ensp;&ensp;&ensp; But in addition to relying on software development project management, it is also necessary to understand for the programmers ourselves, to strengthen the need to write high-quality code, and to master certain correct methods.<br/>
+
+&ensp;&ensp;&ensp;&ensp; The purpose of this study is to sum up the answer to this question based on the experience of other programmers.
 
 
 ## Text
 
-Recall the Ping-Pong example in earlier Blog [Erlang learning (7) - Concurrent Programming (3)](https://icyfighting.github.io/2018/12/28/erlang-concurrent-programming-3/), what will happen if something wrong? <br/>
-Such as, if a node where a user is logged on goes down without doing a logoff, the user remains in the server's User_List, but the client disappears. This makes it impossible for the user to log on again as the server thinks the user already is logged on. <br/>
-Or if the server goes down in the middle of sending a message, leaving the sending client hanging forever in the await_result function?
-To avoid this waiting forever, we can use time-outs mechanism.
+### What's Code Quality
 
-### Time-outs
+Before we answer how, we have to know what does code quality include. <br/>
+There are 5 aspects: <br/>
 
-Take Ping-Pong example for earier understanding of time-outs: <br/>
+*   Coding specification
+*   Code duplication
+*   Code coverage
+*   Dependency analysis
+*   Complexity analysis
 
-```
--module(tut14).
--export([start_ping/1, start_pong/0,  ping/2, pong/0]).
+Let’s look at these aspects one by one: <br/>
 
-ping(0, Pong_Node) ->
-    io:format("ping finished~n", []);
+*   Coding specification
+>In general, companies have a coding specification that stipulates class naming, package naming, code style and so on. The quality of this specification, and level that code compliance with specification, are both included.
 
-ping(N, Pong_Node) ->
-    {pong, Pong_Node} ! {ping, self()},
-    receive
-        pong ->
-            io:format("Ping received pong~n", [])
-    end,
-    ping(N - 1, Pong_Node).
+*   Code duplication
+>If there is a large amount of duplicate code in the code, consider whether to extract the duplicate code and package it into a common method or component.
 
-pong() ->
-    receive
-        {ping, Ping_PID} ->
-            io:format("Pong received ping~n", []),
-            Ping_PID ! pong,
-            pong()
-    after 5000 ->
-            io:format("Pong timed out~n", [])
-    end.
+*   Code coverage
+> The ratio of test code that can run to code. The code has been unit tested? Is every method tested? What is the code coverage ratio? This is related to the functionality and stability of the code.
 
-start_pong() ->
-    register(pong, spawn(tut14, pong, [])).
+*   Dependency analysis
+>How about code dependencies? What is the coupling relationship? Is there a circular dependency? Does it meet the principle of high cohesion and low coupling?
 
-start_ping(Pong_Node) ->
-    spawn(tut14, ping, [3, Pong_Node]).
+*   Complexity analysis
+> If there are many layers of if else nested in the code, it will be hard to read. The more excellent the code, the easier it is to read. As my understanding, time complexity and space complexity will also have a big impact on the efficiency of the program.<br/>
+Optimize code and reduce time and space complexity is important for high quality code.
 
-```
+### How to write high quality code
 
-Test: <br/>
+Experienced programmers gave us a lot of suggestions, summarized as follow:
 
-![](/img/erlang-8/ping-1.png)
+*   Thinking before action
+In the actual software development cycle, the design time is usually not shorter than the encoding time. We should not rush to write the code first, but carefully analyze and design at the beginning. Rather than writing a loophole of code, it's better to analyze it carefully and write robust code.
 
-![](/img/erlang-8/pong-1.png)
+*   Develop good coding habits
+Developing a good habit is very important to our work. To develop a good habit requires us to cultivate from the very beginning, and persevere.
 
-The time-out (after 5000) is started when receive is entered. The time-out is canceled if {ping,Ping_PID} is received. If {ping,Ping_PID} is not received, the actions following the time-out are done after 5000 milliseconds. after must be last in the receive, that is, preceded by all other message reception specifications in the receive. It is also possible to call a function that returned an integer for the time-out:
+*   Coding follow specification
+The code follows a uniform format specification, first of all to facilitate future maintenance, and secondly to facilitate the transfer of others. A good coding specification can reduce the maintenance cost of a software as much as possible. A good coding specification can also improve the readability of the software. Not only will it be clear to the reader, but others will be easier to understand the new code, which will maximize the efficiency of team development cooperation. This is very important for a project team. 
 
-```
-after pong_timeout() ->
-```
-In general, there are better ways than using time-outs to supervise parts of a distributed Erlang system. Time-outs are usually appropriate to supervise external events, for example, if you have expected a message from some external system within a specified time. For example, a time-out can be used to log a user out of the messenger system if they have not accessed it for, say, ten minutes.
-<br/>
-**Learning notes: why do not add time-outs for ping process? If process pong dead, ping will wait forever? So do below test:**
+*   Write code comments
+Software development is a coordination effort, and team members' communication becomes very important, so the code written by one person needs to be understood by other members of the entire team. Moreover, with the rapid development of hardware devices, the readability of the program instead of the execution efficiency has become the first consideration. Program comments are an important part of the source code. For a standard program source code, comments should account for more than 30% of the source code.
 
-```
--module(tut15).
--export([start_ping/1, start_pong/0,  ping/2, pong/0]).
+*   Methods with limited arguments
+When method arguments exceed 5, you should consider whether method design is reasonable. Do you really need so many arguments ? Can it be streamlined? Not only the difficulty of understanding is added, also increase risk of problem caused by arguments position. If it is necessary, then when you have to change, you need to encapsulate the object to pass it. This not only reduces the number of parameters, but also provides the possibility of infinite expansion. At the same time, the user does not have to remember the order of the arguments .
 
-ping(0, Pong_Node) ->
-    io:format("ping finished~n", []);
+*   Do not write duplicate code
+Duplicate code is definitely the first feature of junk code and is the biggest feature. Copying and pasting is easy, but once it goes wrong, it means double the workload and continuous uncontrollable. For repeated functions, be sure to extract the method.
 
-ping(N, Pong_Node) ->
-    {pong, Pong_Node} ! {ping, self()},
-    receive
-        pong ->
-            io:format("Ping received pong~n", [])
-    end,
-    ping(N - 1, Pong_Node).
+*   Properly placed code
+Besides implementing functionality, it's important to place the code correctly. Check methods to see if any logic should be placed in the method; check the class to see if methods are placed in the correct class; check the project to see if the classes are placed in correct project.
 
-pong() ->
-    receive
-        {ping, Ping_PID} ->
-            io:format("Pong received ping~n", []),
-            Ping_PID ! pong,
-            exit(normal)                  % do not call pong(), receive once and exit.
-   
-    end.
+*   Think more for your users
+If there is no user, there is no meaning of job, as does coding.
+If you develop framework, then users are software developers; if you develop projects, then your users are clients.
+No matter what object you are facing, a good starting point is very important: think more for your users. In other words, customers come first.
+Whether method overload in java or adapter in design pattern, it is all about this concept, so that your users are as simple as possible and do less.
 
-start_pong() ->
-    register(pong, spawn(tut15, pong, [])).
+*   Disassemble your code
+One of the most important indicators for evaluating a code is: Whether it is easy to disassemble,means  its coupling.
 
-start_ping(Pong_Node) ->
-    register(ping, spawn(tut15, ping, [3, Pong_Node])).    %register ping, try to use whereis(ping) to check if process ping alive
-```
+*   Use of inspection tools
+When code is finished, use some simple static checking tools, such as checkstyle to check the format of your code and some hidden vulnerabilities. In addition, you can do unit tests to make your code more robust.
 
-Test: <br/>
-
-![](/img/erlang-8/ping-pong-2.png)
-
-**Learning notes: both process ping and pong need time-outs. The only reason for first example wihtout ping timeout, because pong process is created firsly, if process ping is not created, pong will wait forever. But besides this error condition, we need also consider possibility that process dead during conmunication.**
-
-
-### Error Handling
-
-**Knowledge points:**
-
-*   exit/1:
->A process which executes exit(normal) or simply runs out of things to do has a normal exit. <br/>
-A process which encounters a runtime error (for example, divide by zero, bad match, trying to call a function that does not exist and so on) exits with an error, that is, has an abnormal exit. A process which executes exit(Reason) where Reason is any Erlang term except the atom normal, also has an abnormal exit.
-
-*   link/1:
->An Erlang process can set up links to other Erlang processes. If a process calls link(Other_Pid) it sets up a bidirectional link between itself and the process called Other_Pid. When a process terminates, it sends something called a signal to all the processes it has links to.<br/>
-The signal carries information about the pid it was sent from and the exit reason. <br/>
-The default behaviour of a process that receives a normal exit is to ignore the signal.
-
-*   abnormal exit:
->The default behaviour in the two other cases (that is, abnormal exit) above is to:
->*   Bypass all messages to the receiving process.
->*   Kill the receiving process.
->*   Propagate the same error signal to the links of the killed process.
- 
-*   spawn_link:
-With the default behaviour of abnormal exit and link mechanism, we can connect all processes in a transaction together using links. If one of the processes exits abnormally, all the processes in the transaction are killed.<br/>
-As it is often wanted to create a process and link to it at the same time, there is a special BIF, spawn_link that does the same as spawn, but also creates a link to the spawned process.
-
-
-**Ping-Pong Example**
-
-Take Ping-Pong example to use link to terminate process "pong": <br/>
-
-```
--module(tut16).
--export([start/1,  ping/2, pong/0]).
-
-ping(N, Pong_Pid) ->
-    link(Pong_Pid),
-    ping1(N, Pong_Pid).
-
-ping1(0, _) ->
-    exit(ping);
-
-ping1(N, Pong_Pid) ->
-    Pong_Pid ! {ping, self()},
-    receive
-        pong ->
-            io:format("Ping received pong~n", [])
-    end,
-    ping1(N - 1, Pong_Pid).
-
-pong() ->
-    receive
-        {ping, Ping_PID} ->
-            io:format("Pong received ping~n", []),
-            Ping_PID ! pong,
-            pong()
-    end.
-
-start(Ping_Node) ->
-    Pong_PID = spawn(tut16, pong, []),
-    spawn(Ping_Node, tut16, ping, [3, Pong_PID]).
-```
-
-Test: <br/>
-
-![](/img/erlang-8/ping-pong-3.png)
-
-**Learning notes: I understand that all the output is received on Erlang node (pong@Icy). This is because the I/O system finds out where the process is spawned from and sends all output there.**
-
-<br/>
-This is a slight modification of the ping pong program where both processes are spawned from the same start/1 function, and the "ping" process can be spawned on a separate node. Notice the use of the link BIF. "Ping" calls exit(ping) when it finishes and this causes an exit signal to be sent to "pong", which also terminates.<br/>
-
-It is possible to modify the default behaviour of a process so that it does not get killed when it receives abnormal exit signals. Instead, all signals are turned into normal messages on the format {'EXIT',FromPID,Reason} and added to the end of the receiving process' message queue. This behaviour is set by:
-
-```
-process_flag(trap_exit, true)
-```
-There are several other process flags. Changing the default behaviour of a process in this way is usually not done in standard user programs, but is left to the supervisory programs in OTP. However, the ping pong program is modified to illustrate exit trapping.
-
-```
--module(tut17).
-
--export([start/1,  ping/2, pong/0]).
-
-ping(N, Pong_Pid) ->
-    link(Pong_Pid), 
-    ping1(N, Pong_Pid).
-
-ping1(0, _) ->
-    exit(ping);
-
-ping1(N, Pong_Pid) ->
-    Pong_Pid ! {ping, self()},
-    receive
-        pong ->
-            io:format("Ping received pong~n", [])
-    end,
-    ping1(N - 1, Pong_Pid).
-
-pong() ->
-    process_flag(trap_exit, true),      % modify the default behaviour of a process so that it does not get killed when it receives                                             %abnormal exit signals.
-    pong1().
-
-pong1() ->
-    receive
-        {ping, Ping_PID} ->
-            io:format("Pong received ping~n", []),
-            Ping_PID ! pong,
-            pong1();
-        {'EXIT', From, Reason} ->      % abnormal exit signals are turned into normal messages on the format {'EXIT',FromPID,Reason}                                          %and added to the end of the receiving process' message queue. 
-            io:format("pong exiting, got ~p~n", [{'EXIT', From, Reason}])
-    end.
-
-start(Ping_Node) ->
-    PongPID = spawn(tut17, pong, []),
-    spawn(Ping_Node, tut17, ping, [3, PongPID]).
-
-```
-
-Test: <br/>
-
-![](/img/erlang-8/ping-pong-4.png)
-
-
+*   Refactor your code
+It can improve software design, makes the software easier to understand,helps to find bugs, increase programming speed.
 
 
 ## Summary
 
 &ensp;&ensp;&ensp;&ensp; This study is mainly to understand some of the implementation of the robustness of the Erlang program. But compared to the mechanism of exception handling such as Java, these Erlang exception handling mechanisms learned today should be just the beginning.
 
-
-## Reference
-http://www.erlang.org <br/>
-http://erlang.org/doc/getting_started/robustness.html <br/>
