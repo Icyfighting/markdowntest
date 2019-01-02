@@ -64,24 +64,31 @@ In the actual software development cycle, the design time is usually not shorter
 Developing a good habit is very important to our work. To develop a good habit requires us to cultivate from the very beginning, and persevere.
 
 *   Coding follow specification
-The code follows a uniform format specification, first of all to facilitate future maintenance, and secondly to facilitate the transfer of others. A good coding specification can reduce the maintenance cost of a software as much as possible. A good coding specification can also improve the readability of the software. Not only will it be clear to the reader, but others will be easier to understand the new code, which will maximize the efficiency of team development cooperation. This is very important for a project team. 
+The code follows a uniform format specification, first of all to facilitate future maintenance, and secondly to facilitate the transfer of others. A good coding specification can reduce the maintenance cost of a software as much as possible. <br/>
+A good coding specification can also improve the readability of the software. Not only will it be clear to the reader, but others will be easier to understand the new code, which will maximize the efficiency of team development cooperation. This is very important for a project team. 
 
 *   Write code comments
-Software development is a coordination effort, and team members' communication becomes very important, so the code written by one person needs to be understood by other members of the entire team. Moreover, with the rapid development of hardware devices, the readability of the program instead of the execution efficiency has become the first consideration. Program comments are an important part of the source code. For a standard program source code, comments should account for more than 30% of the source code.
+Software development is a coordination effort, and team members' communication becomes very important, so the code written by one person needs to be understood by other members of the entire team. <br/>
+Moreover, with the rapid development of hardware devices, the readability of the program instead of the execution efficiency has become the first consideration. Program comments are an important part of the source code. For a standard program source code, comments should account for more than 30% of the source code.
 
 *   Methods with limited arguments
-When method arguments exceed 5, you should consider whether method design is reasonable. Do you really need so many arguments ? Can it be streamlined? Not only the difficulty of understanding is added, also increase risk of problem caused by arguments position. If it is necessary, then when you have to change, you need to encapsulate the object to pass it. This not only reduces the number of parameters, but also provides the possibility of infinite expansion. At the same time, the user does not have to remember the order of the arguments .
+When method arguments exceed 5, you should consider whether method design is reasonable. Do you really need so many arguments ? Can it be streamlined? Not only the difficulty of understanding is added, also increase risk of problem caused by arguments position. <br/>
+If it is necessary, then when you have to change, you need to encapsulate the object to pass it. This not only reduces the number of parameters, but also provides the possibility of infinite expansion. At the same time, the user does not have to remember the order of the arguments .
 
 *   Do not write duplicate code
 Duplicate code is definitely the first feature of junk code and is the biggest feature. Copying and pasting is easy, but once it goes wrong, it means double the workload and continuous uncontrollable. For repeated functions, be sure to extract the method.
 
 *   Properly placed code
-Besides implementing functionality, it's important to place the code correctly. Check methods to see if any logic should be placed in the method; check the class to see if methods are placed in the correct class; check the project to see if the classes are placed in correct project.
+Besides implementing functionality, it's important to place the code correctly. <br/>
+Check methods to see if any logic should be placed in the method;  <br/>
+Check the class to see if methods are placed in the correct class;  <br/>
+Check the project to see if the classes are placed in correct project.
 
 *   Think more for your users
-If there is no user, there is no meaning of job, as does coding.
-If you develop framework, then users are software developers; if you develop projects, then your users are clients.
-No matter what object you are facing, a good starting point is very important: think more for your users. In other words, customers come first.
+If there is no user, there is no meaning of job, as does coding.<br/>
+If you develop framework, then users are software developers; <br/>
+if you develop projects, then your users are clients.<br/>
+No matter what object you are facing, a good starting point is very important: think more for your users. In other words, customers come first.<br/>
 Whether method overload in java or adapter in design pattern, it is all about this concept, so that your users are as simple as possible and do less.
 
 *   Disassemble your code
@@ -96,5 +103,5 @@ It can improve software design, makes the software easier to understand,helps to
 
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp; This study is mainly to understand some of the implementation of the robustness of the Erlang program. But compared to the mechanism of exception handling such as Java, these Erlang exception handling mechanisms learned today should be just the beginning.
+&ensp;&ensp;&ensp;&ensp;
 
