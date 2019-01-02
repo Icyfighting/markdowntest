@@ -24,7 +24,7 @@ tags:
 
 ## Text
 
-### What's Code Quality
+### What is Code Quality
 
 Before we answer how, we have to know what does code quality include. <br/>
 There are 5 aspects: <br/>
@@ -35,7 +35,7 @@ There are 5 aspects: <br/>
 *   Dependency analysis
 *   Complexity analysis
 
-Let’s look at these aspects one by one: <br/>
+Let's look at these aspects one by one: <br/>
 
 *   Coding specification
 >In general, companies have a coding specification that stipulates class naming, package naming, code style and so on. The quality of this specification, and level that code compliance with specification, are both included.
