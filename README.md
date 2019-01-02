@@ -69,6 +69,12 @@ Test: <br/>
 
 ### Distributed Programming
 
+I want to experiment with distributed Erlang, but I only have one computer to work on, so I start two separate Erlang systems on the same computer but give them different names. Each Erlang system running on a computer is called an Erlang node.<br/>
+
+```
+$ erl -sname my_name
+```
+
 ```
 -module(tut13).
 
@@ -112,11 +118,11 @@ Test: <br/>
 
 ![](/img/erlang-6/ping-2.png)
 
+<br/>
 **Learning notes: From result, I understand there are 2 Erlang system:"ping" and "pong" on same Node "Icy". Process ping on Erlang system ping@Icy can find process pong on Erlang system pong@Icy by argument Pong_Node.
 But how process pong find process ping on different Erlang system just by Ping_PID <0.83.0>?
 There is one explanation as this: Erlang pids contain information about where the process executes. So if you know the pid of a process, the "!" operator can be used to send it a message disregarding if the process is on the same node or on a different node.
-So that means, the reason function start_ping/1 need argument Pong_Node, because process pong register name as pong, name pong does not include all information as pid itself?
-**
+So that means, the reason function start_ping/1 need argument Pong_Node, because process pong register name as pong, name pong does not include all information as pid itself?**
 
 ## Summary
 
