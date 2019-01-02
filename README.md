@@ -100,8 +100,15 @@ When code is finished, use some simple static checking tools, such as checkstyle
 *   Refactor your code
 It can improve software design, makes the software easier to understand,helps to find bugs, increase programming speed.
 
+*   Use open source
+The quality of the open source projects with high degree of concern, high number of users and good reputation is guaranteed.<br/>
+Even if there are some problems, you can continue to improve by submitting feedback. Most importantly, the time you build your own wheels requires a lot of energy to maintain, and taking advantage of open source projects can help you save a lot of time and focus on what you care most about.<br/>
+On the other hand, some well-known projects in open source projects are often written by the leaders in the field. Learning the code of these masters will let you know what good code should be and cultivate a more sensitive sense of smell.<br/>
 
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp;
+&ensp;&ensp;&ensp;&ensp;After learning the theoretical knowledge of writing high quality code, it is important to cultivate and follow it in the daily coding work.<br/>
+&ensp;&ensp;&ensp;&ensp;In the process of collecting data, I also find some more advanced and sophisticated ways. But I can't get away from reality, what I need to do now is to write the code well.<br/>
+&ensp;&ensp;&ensp;&ensp; When I have more programming experience, I will continue to learn this knowledge.
+
 
