@@ -22,10 +22,13 @@ tags:
 ### Processes
 
 **What's process**
+
 Each processor (CPU) in the system is probably only handling one thread (or job) at a time, but it swaps between the jobs at such a rate that it gives the illusion of running them all at the same time. It is easy to create parallel threads of execution in an Erlang program and to allow these threads to communicate with each other. In Erlang, each thread of execution is called a process.<br/>
 The term "process" is usually used when the threads of execution share no data with each other and the term "thread" when they share data in some way. Threads of execution in Erlang share no data, that is why they are called processes.<br/>
+
 **Learning notes: the concept of thread and process are consistent with those in Java.<br/>
 In Java, each process has its own heap space, but threads of same process share the same heap spaces, but each thread has own stack space.**
+
 <br/>
 
 **How to create process**
@@ -82,10 +85,10 @@ receive
        actionsN
 end.
 ```
->Messages between Erlang processes are simply valid Erlang terms. That is, they can be lists, tuples, integers, atoms, pids, and so on.<br/>
-Each process has its own input queue for messages it receives. New messages received are put at the end of the queue. When a process executes a receive, the first message in the queue is matched against the first pattern in the receive. If this matches, the message is removed from the queue and the actions corresponding to the pattern are executed.<br/>
-However, if the first pattern does not match, the second pattern is tested. If this matches, the message is removed from the queue and the actions corresponding to the second pattern are executed. If the second pattern does not match, the third is tried and so on until there are no more patterns to test. If there are no more patterns to test, the first message is kept in the queue and the second message is tried instead. If this matches any pattern, the appropriate actions are executed and the second message is removed from the queue (keeping the first message and any other messages in the queue). If the second message does not match, the third message is tried, and so on, until the end of the queue is reached. If the end of the queue is reached, the process blocks (stops execution) and waits until a new message is received and this procedure is repeated.<br/>
-The Erlang implementation is "clever" and minimizes the number of times each message is tested against the patterns in each receive.
+&ensp;&ensp;&ensp;&ensp;Messages between Erlang processes are simply valid Erlang terms. That is, they can be lists, tuples, integers, atoms, pids, and so on.<br/>
+&ensp;&ensp;&ensp;&ensp;Each process has its own input queue for messages it receives. New messages received are put at the end of the queue. When a process executes a receive, the first message in the queue is matched against the first pattern in the receive. If this matches, the message is removed from the queue and the actions corresponding to the pattern are executed.<br/>
+&ensp;&ensp;&ensp;&ensp;However, if the first pattern does not match, the second pattern is tested. If this matches, the message is removed from the queue and the actions corresponding to the second pattern are executed. If the second pattern does not match, the third is tried and so on until there are no more patterns to test. If there are no more patterns to test, the first message is kept in the queue and the second message is tried instead. If this matches any pattern, the appropriate actions are executed and the second message is removed from the queue (keeping the first message and any other messages in the queue). If the second message does not match, the third message is tried, and so on, until the end of the queue is reached. If the end of the queue is reached, the process blocks (stops execution) and waits until a new message is received and this procedure is repeated.<br/>
+&ensp;&ensp;&ensp;&ensp;The Erlang implementation is "clever" and minimizes the number of times each message is tested against the patterns in each receive.
 
 **Learning notes: what will happen to these messages are not matched in the queue? Is there still an opportunity to rematch these messages, such as matching condition changed? What is the significance of keeping these match failure messages?**
 
