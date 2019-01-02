@@ -69,12 +69,59 @@ Test: <br/>
 
 ### Distributed Programming
 
+```
+-module(tut13).
 
+-export([start_ping/1, start_pong/0,  ping/2, pong/0]).
+
+ping(0, Pong_Node) ->
+    {pong, Pong_Node} ! finished,
+    io:format("ping finished~n", []);
+
+ping(N, Pong_Node) ->
+	io:format("Pong_Node: ~w~n", [Pong_Node]),
+	io:format("ping_self(): ~w~n", [self()]),
+    {pong, Pong_Node} ! {ping, self()},
+    receive
+        pong ->
+            io:format("Ping received pong~n", [])
+    end,
+    ping(N - 1, Pong_Node).
+
+pong() ->
+    receive
+        finished ->
+            io:format("Pong finished~n", []);
+        {ping, Ping_PID} ->
+            io:format("Pong received ping~n", []),
+            Ping_PID ! pong,
+            pong()
+    end.
+
+start_pong() ->
+    register(pong, spawn(tut13, pong, [])).
+
+start_ping(Pong_Node) ->
+    spawn(tut13, ping, [3, Pong_Node]).
+
+```
+
+Test: <br/>
+
+![](/img/erlang-6/pong-2.png)
+
+![](/img/erlang-6/ping-2.png)
+
+**Learning notes: From result, I understand there are 2 Erlang system:"ping" and "pong" on same Node "Icy". Process ping on Erlang system ping@Icy can find process pong on Erlang system pong@Icy by argument Pong_Node.
+But how process pong find process ping on different Erlang system just by Ping_PID <0.83.0>?
+There is one explanation as this: Erlang pids contain information about where the process executes. So if you know the pid of a process, the "!" operator can be used to send it a message disregarding if the process is on the same node or on a different node.
+So that means, the reason function start_ping/1 need argument Pong_Node, because process pong register name as pong, name pong does not include all information as pid itself?
+**
 
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp; These methods used in concurrent programming have been touched in my previous blog [First meet with Erlang](https://icyfighting.github.io/2018/12/15/erlang-basic/), and this time I learn the processing logic and precautions in more detail.<br/>
-&ensp;&ensp;&ensp;&ensp; For some of the questions in the study, I haven't gotten the answer yet. I will continue to learn the rest of the knowledge of concurrent programming, hoping to find or think about the answer.
+&ensp;&ensp;&ensp;&ensp; This study is mainly to learn the basics of distributed programming in Erlang. There are some questions in the study, which are solved by testing and finding information. But I still need to continue practicing to understand the mechanism of concurrency and distribution.
+
 
 ## Reference
 http://www.erlang.org <br/>
