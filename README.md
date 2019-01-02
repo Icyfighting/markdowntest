@@ -75,7 +75,7 @@ The time-out (after 5000) is started when receive is entered. The time-out is ca
 after pong_timeout() ->
 ```
 In general, there are better ways than using time-outs to supervise parts of a distributed Erlang system. Time-outs are usually appropriate to supervise external events, for example, if you have expected a message from some external system within a specified time. For example, a time-out can be used to log a user out of the messenger system if they have not accessed it for, say, ten minutes.
-
+<br/>
 **Learning notes: why do not add time-outs for ping process? If process pong dead, ping will wait forever? So do below test: **
 
 ```
