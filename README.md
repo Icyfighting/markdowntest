@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Erlang learning (5) - Concurrent Programming"
-subtitle: "Process & Message Passing & Distributed Programming"
+title: "Erlang learning (5) - Concurrent Programming (1)"
+subtitle: "Process & Message Passing"
 author: "Bing Yan"
 header-img: "img/erlang-5/post-bg-java.jpg"
 header-mask: 0.2
@@ -67,15 +67,104 @@ spawn returns a process identifier, or pid, which uniquely identifies the proces
 
 ### Message Passing
 
+Since processes do not share data each other, Erlang have to provide other way to let process communicate. They communicate by message passing. Let's see the grammar used in passing messages firstly. <br/>
 
+*   The receive construct is used to allow processes to wait for messages from other processes. It has the following format:
+
+```
+receive
+   pattern1 ->
+       actions1;
+   pattern2 ->
+       actions2;
+   ....
+   patternN
+       actionsN
+end.
+```
+>Messages between Erlang processes are simply valid Erlang terms. That is, they can be lists, tuples, integers, atoms, pids, and so on.<br/>
+Each process has its own input queue for messages it receives. New messages received are put at the end of the queue. When a process executes a receive, the first message in the queue is matched against the first pattern in the receive. If this matches, the message is removed from the queue and the actions corresponding to the pattern are executed.<br/>
+However, if the first pattern does not match, the second pattern is tested. If this matches, the message is removed from the queue and the actions corresponding to the second pattern are executed. If the second pattern does not match, the third is tried and so on until there are no more patterns to test. If there are no more patterns to test, the first message is kept in the queue and the second message is tried instead. If this matches any pattern, the appropriate actions are executed and the second message is removed from the queue (keeping the first message and any other messages in the queue). If the second message does not match, the third message is tried, and so on, until the end of the queue is reached. If the end of the queue is reached, the process blocks (stops execution) and waits until a new message is received and this procedure is repeated.<br/>
+The Erlang implementation is "clever" and minimizes the number of times each message is tested against the patterns in each receive.
+
+**Learning notes: what will happen to these messages are not matched in the queue? Is there still an opportunity to rematch these messages, such as matching condition changed? What is the significance of keeping these match failure messages?**
+
+
+*   The operator "!" is used to send messages. Message (any Erlang term) is sent to the process with identity Pid. <br/>
+The syntax of "!" is:
+
+```
+Pid ! Message
+```
+
+**Ping-Pong Example**
+
+Two processes are created and send messages to each other: <br/>
+
+```
+-module(tut10).
+-export([start/0, ping/2, pong/0]).
+
+ping(0, Pong_PID) ->
+    Pong_PID ! finished,
+    io:format("ping finished~n", []);
+
+ping(N, Pong_PID) ->
+    Pong_PID ! {ping, self()},
+    receive
+        pong ->
+            io:format("Ping received pong~n", [])
+    end,
+    ping(N - 1, Pong_PID).
+
+pong() ->
+    receive
+        finished ->
+            io:format("Pong finished~n", []);
+        {ping, Ping_PID} ->
+            io:format("Pong received ping~n", []),
+            Ping_PID ! pong,
+            pong()
+    end.
+
+start() ->
+    Pong_PID = spawn(tut10, pong, []),
+    spawn(tut10, ping, [3, Pong_PID]).
+```
+
+Test: <br/>
+
+![](/img/erlang-5/example-2.png)
+
+**Program interpretation:**
+
+*   <0.168.0>:
+> Return value of start/0 function. Pid of process Ping.
+
+*   self():
+> self() returns the pid of the process that executes self(). In this example, it's the pid of "ping".  <br/>
+Pid of "ping" lands up in the variable Ping_PID in receive code of "pong".
+
+**Execution Logic:**
+
+1.  Function start first creates a process "pong", Pong_PID is pid of "pong", and wait for messages.
+2.  Function start second creates a process "ping", set communication time and Pong_PID.
+3.  Communication time is 3, not 0, matching ping(N, Pong_PID) clause.<br/>
+Send atom "ping" and pid of "ping" as message to "pong" process. And wait for new message.
+4.  Process "pong" find there is new message in input queue, message cannot match atom "finished", then try match {ping, Ping_PID}.<br/>
+New message match {ping, xx}, and set received xx value as variable Ping_PID. <br/>
+Output and send atom "pong" to process "ping". Recursive call pong() realize continuous receive.<br/>
+5.  process "ping" find there is new message in input queue, match atom "pong", output and recursive call ping() with communication time-1 = 2, repeat step-3 to step-5, until communication time=0, to step-6.
+6.  Process "ping" match ping(0, Pong_PID) clause, send atom "finished" to process "pong", and output "ping finished".
+7.  Process "pong" find there is new message in input queue, message match atom "finished", output "Pong finished".
 
 
 
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp; From these simple examples, I practise some data type and modules of Erlang.<br/>
-&ensp;&ensp;&ensp;&ensp; Next time, I will start to learn Concurrent Programming chapter following the Guides.<br/>
-&ensp;&ensp;&ensp;&ensp; One of the main reasons for using Erlang instead of other functional languages is Erlang's ability to handle concurrency and distributed programming. So next chapter will be very interesting.
+&ensp;&ensp;&ensp;&ensp; These methods used in concurrent programming have been touched in my previous blog [First meet with Erlang](https://icyfighting.github.io/2018/12/15/erlang-basic/), and this time I learn the processing logic and precautions in more detail.<br/>
+&ensp;&ensp;&ensp;&ensp; For some of the questions in the study, I haven't gotten the answer yet. I will continue to learn the rest of the knowledge of concurrent programming, hoping to find or think about the answer.
+
 ## Reference
 http://www.erlang.org <br/>
-http://erlang.org/doc/getting_started/seq_prog.html <br/>
+http://erlang.org/doc/getting_started/conc_prog.html <br/>
