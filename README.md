@@ -121,6 +121,7 @@ Test: <br/>
 ![](/img/erlang-6/ping-2.png)
 
 <br/>
+
 **Learning notes: From result, I understand there are 2 Erlang system:"ping" and "pong" on same Node "Icy". Process ping on Erlang system ping@Icy can find process pong on Erlang system pong@Icy by argument Pong_Node.
 But how process pong find process ping on different Erlang system just by Ping_PID <0.83.0>?
 There is one explanation as this: Erlang pids contain information about where the process executes. So if you know the pid of a process, the "!" operator can be used to send it a message disregarding if the process is on the same node or on a different node.
