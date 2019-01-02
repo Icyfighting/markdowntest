@@ -131,9 +131,9 @@ The default behaviour of a process that receives a normal exit is to ignore the 
 
 *   abnormal exit:
 >The default behaviour in the two other cases (that is, abnormal exit) above is to:
-*   Bypass all messages to the receiving process.
-*   Kill the receiving process.
-*   Propagate the same error signal to the links of the killed process.
+>*   Bypass all messages to the receiving process.
+>*   Kill the receiving process.
+>*   Propagate the same error signal to the links of the killed process.
  
 *   spawn_link:
 With the default behaviour of abnormal exit and link mechanism, we can connect all processes in a transaction together using links. If one of the processes exits abnormally, all the processes in the transaction are killed.<br/>
