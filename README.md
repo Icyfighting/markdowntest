@@ -21,7 +21,13 @@ tags:
 
 ### Processes
 
-**What's process**
+**Why register process name:**
+
+In the last blog [Erlang learning (5) - Concurrent Programming (1)](https://icyfighting.github.io/2018/12/24/erlang-concurrent-programming-1/), in Ping-Pong example, we know processes which need to know each other's identities are started independently of each other. Erlang thus provides a mechanism for processes to be given names so that these names can be used as identities instead of pids. This is done by using the register BIF:<br/>
+```
+register(some_atom, Pid)
+```
+
 
 Each processor (CPU) in the system is probably only handling one thread (or job) at a time, but it swaps between the jobs at such a rate that it gives the illusion of running them all at the same time. It is easy to create parallel threads of execution in an Erlang program and to allow these threads to communicate with each other. In Erlang, each thread of execution is called a process.<br/>
 The term "process" is usually used when the threads of execution share no data with each other and the term "thread" when they share data in some way. Threads of execution in Erlang share no data, that is why they are called processes.<br/>
