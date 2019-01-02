@@ -127,6 +127,9 @@ But how process pong find process ping on different Erlang system just by Ping_P
 There is one explanation as this: Erlang pids contain information about where the process executes. So if you know the pid of a process, the "!" operator can be used to send it a message disregarding if the process is on the same node or on a different node.
 So that means, the reason function start_ping/1 need argument Pong_Node, because process pong register name as pong, name pong does not include all information as pid itself? **
 
+<br/>
+
+
 ## Summary
 
 &ensp;&ensp;&ensp;&ensp; This study is mainly to learn the basics of distributed programming in Erlang. There are some questions in the study, which are solved by testing and finding information. But I still need to continue practicing to understand the mechanism of concurrency and distribution.
