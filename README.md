@@ -75,6 +75,8 @@ I want to experiment with distributed Erlang, but I only have one computer to wo
 $ erl -sname my_name
 ```
 
+**Modify Ping-Pong Example:**
+
 ```
 -module(tut13).
 
