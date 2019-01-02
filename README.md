@@ -44,13 +44,20 @@ Let’s look at these aspects one by one: <br/>
 >If there is a large amount of duplicate code in the code, consider whether to extract the duplicate code and package it into a common method or component.
 
 *   Code coverage
-> The ratio of test code that can run to code. The code has been unit tested? Is every method tested? What is the code coverage ratio? This is related to the functionality and stability of the code.
+> The ratio of test code that can run to code. <br/>
+The code has been unit tested? Is every method tested? <br/>
+What is the code coverage ratio? <br/>
+This is related to the functionality and stability of the code.
 
 *   Dependency analysis
->How about code dependencies? What is the coupling relationship? Is there a circular dependency? Does it meet the principle of high cohesion and low coupling?
+>How about code dependencies? <br/>
+What is the coupling relationship? <br/>
+Is there a circular dependency?<br/>
+Does it meet the principle of high cohesion and low coupling?
 
 *   Complexity analysis
-> If there are many layers of if else nested in the code, it will be hard to read. The more excellent the code, the easier it is to read. As my understanding, time complexity and space complexity will also have a big impact on the efficiency of the program.<br/>
+> If there are many layers of if else nested in the code, it will be hard to read. The more excellent the code, the easier it is to read. <br/>
+As my understanding, time complexity and space complexity will also have a big impact on the efficiency of the program.<br/>
 Optimize code and reduce time and space complexity is important for high quality code.
 
 ### How to write high quality code
