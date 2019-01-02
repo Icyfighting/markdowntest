@@ -182,6 +182,59 @@ Test: <br/>
 
 **Learning notes: I understand that all the output is received on Erlang node (pong@Icy). This is because the I/O system finds out where the process is spawned from and sends all output there.**
 
+<br/>
+This is a slight modification of the ping pong program where both processes are spawned from the same start/1 function, and the "ping" process can be spawned on a separate node. Notice the use of the link BIF. "Ping" calls exit(ping) when it finishes and this causes an exit signal to be sent to "pong", which also terminates.<br/>
+
+It is possible to modify the default behaviour of a process so that it does not get killed when it receives abnormal exit signals. Instead, all signals are turned into normal messages on the format {'EXIT',FromPID,Reason} and added to the end of the receiving process' message queue. This behaviour is set by:
+
+```
+process_flag(trap_exit, true)
+```
+There are several other process flags. Changing the default behaviour of a process in this way is usually not done in standard user programs, but is left to the supervisory programs in OTP. However, the ping pong program is modified to illustrate exit trapping.
+
+```
+-module(tut17).
+
+-export([start/1,  ping/2, pong/0]).
+
+ping(N, Pong_Pid) ->
+    link(Pong_Pid), 
+    ping1(N, Pong_Pid).
+
+ping1(0, _) ->
+    exit(ping);
+
+ping1(N, Pong_Pid) ->
+    Pong_Pid ! {ping, self()},
+    receive
+        pong ->
+            io:format("Ping received pong~n", [])
+    end,
+    ping1(N - 1, Pong_Pid).
+
+pong() ->
+    process_flag(trap_exit, true),      % modify the default behaviour of a process so that it does not get killed when it receives                                             %abnormal exit signals.
+    pong1().
+
+pong1() ->
+    receive
+        {ping, Ping_PID} ->
+            io:format("Pong received ping~n", []),
+            Ping_PID ! pong,
+            pong1();
+        {'EXIT', From, Reason} ->      % abnormal exit signals are turned into normal messages on the format {'EXIT',FromPID,Reason}                                          %and added to the end of the receiving process' message queue. 
+            io:format("pong exiting, got ~p~n", [{'EXIT', From, Reason}])
+    end.
+
+start(Ping_Node) ->
+    PongPID = spawn(tut17, pong, []),
+    spawn(Ping_Node, tut17, ping, [3, PongPID]).
+
+```
+
+Test: <br/>
+
+![](/img/erlang-8/ping-pong-4.png)
 
 
 
