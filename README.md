@@ -140,6 +140,68 @@ With the default behaviour of abnormal exit and link mechanism, we can connect a
 As it is often wanted to create a process and link to it at the same time, there is a special BIF, spawn_link that does the same as spawn, but also creates a link to the spawned process.
 
 
+**Ping-Pong Example**
+
+Take Ping-Pong example to use link to terminate process "pong": <br/>
+
+```
+-module(tut16).
+-export([start/1,  ping/2, pong/0]).
+
+ping(N, Pong_Pid) ->
+    link(Pong_Pid),
+    ping1(N, Pong_Pid).
+
+ping1(0, _) ->
+    exit(ping);
+
+ping1(N, Pong_Pid) ->
+    Pong_Pid ! {ping, self()},
+    receive
+        pong ->
+            io:format("Ping received pong~n", [])
+    end,
+    ping1(N - 1, Pong_Pid).
+
+pong() ->
+    receive
+        {ping, Ping_PID} ->
+            io:format("Pong received ping~n", []),
+            Ping_PID ! pong,
+            pong()
+    end.
+
+start(Ping_Node) ->
+    Pong_PID = spawn(tut16, pong, []),
+    spawn(Ping_Node, tut16, ping, [3, Pong_PID]).
+```
+
+Test: <br/>
+
+![](/img/erlang-8/ping-pong-3.png)
+
+**Learning notes: I understand that all the output is received on Erlang node (pong@Icy). This is because the I/O system finds out where the process is spawned from and sends all output there.**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 In the last blog [Erlang learning (5) - Concurrent Programming (1)](-programming-1/), in Ping-Pong example, we know processes which need to know each other's identities are started independently of each other. But as communication with a person, you would like use his name instead of his ID. Erlang thus provides a mechanism for processes to be given names so that these names can be used as identities instead of pids. This is done by using the register BIF:<br/>
