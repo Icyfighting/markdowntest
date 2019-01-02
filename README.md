@@ -241,9 +241,9 @@ Test: <br/>
 
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp; This study is mainly to learn the basics of distributed programming in Erlang. There are some questions in the study, which are solved by testing and finding information. But I still need to continue practicing to understand the mechanism of concurrency and distribution.
+&ensp;&ensp;&ensp;&ensp; This study is mainly to understand some of the implementation of the robustness of the Erlang program. But compared to the mechanism of exception handling such as Java, these Erlang exception handling mechanisms learned today should be just the beginning.
 
 
 ## Reference
 http://www.erlang.org <br/>
-http://erlang.org/doc/getting_started/conc_prog.html <br/>
+http://erlang.org/doc/getting_started/robustness.html <br/>
