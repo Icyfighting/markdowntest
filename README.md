@@ -130,7 +130,7 @@ The signal carries information about the pid it was sent from and the exit reaso
 The default behaviour of a process that receives a normal exit is to ignore the signal.
 
 *   abnormal exit:
->The default behaviour in the two other cases (that is, abnormal exit) above is to:<br/>
+>The default behaviour in the two other cases (that is, abnormal exit) above is to:
 *   Bypass all messages to the receiving process.
 *   Kill the receiving process.
 *   Propagate the same error signal to the links of the killed process.
