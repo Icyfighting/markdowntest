@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Erlang learning (5) - Concurrent Programming (1)"
-subtitle: "Process & Message Passing"
+title: "Erlang learning (6) - Concurrent Programming (2)"
+subtitle: "Register Process & Distributed Programming"
 author: "Bing Yan"
-header-img: "img/erlang-5/post-bg-java.jpg"
+header-img: "img/erlang-6/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
@@ -14,8 +14,8 @@ tags:
 
 ## Preface
 
-&ensp;&ensp;&ensp;&ensp;One of the main reasons for using Erlang instead of other functional languages is Erlang's ability to handle concurrency and distributed programming. By concurrency is meant programs that can handle several threads of execution at the same time.For example, modern operating systems allow you to use a word processor, a spreadsheet, a mail client, and a print job all running at the same time.<br/>
-&ensp;&ensp;&ensp;&ensp;Let's see how Erlang realize concurrency and distributed programming.
+&ensp;&ensp;&ensp;&ensp;Last time I have learned process and how to communicate between process - passing messages in Erlang concurrent programming.And practise a simple ping-pong example to achieve the sending and receiving of messages between two processes.<br/>
+&ensp;&ensp;&ensp;&ensp;The purpose of this study is to see what other knowledge points in Erlang concurrent programming can achieve more abundant functions.
 
 ## Text
 
