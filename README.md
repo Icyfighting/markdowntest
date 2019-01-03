@@ -30,6 +30,7 @@ The messenger example in [Erlang learning (7) - Concurrent Programming (3)](http
 *   mess_config.hrl:  Header file for configuration data.<br/>
 **Though in Java there is no header file, but the function of this header file is same as config.xml / .yml, realize soft coding.**
 <br/>
+
 ```
 %%%----FILE mess_config.hrl----
 
@@ -38,6 +39,7 @@ The messenger example in [Erlang learning (7) - Concurrent Programming (3)](http
 
 %%%----END FILE----
 ```
+
 *   mess_interface.hrl: Interface definitions between the client and the messenger.<br/>
 **Records are included in this .hrl file. After learning the record, I think function of this header file like Java entity definition.
 According to coding principle, when there are many arguments passing between functions, it should be packaged in a structure. In Java, we use entity class, in Erlang it seems can use record. Of course, there are other data types can hold information, such as tuple. The comparison between them is in next part.**
