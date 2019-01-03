@@ -3,7 +3,7 @@ layout: post
 title: "Erlang learning (9) - Larger Example Devided into Files"
 subtitle: "Records and Marcros"
 author: "Bing Yan"
-header-img: "img/erlang-9/post-bg-java.jpg"
+header-img: "img/erlang-6/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
