@@ -242,6 +242,50 @@ server_transfer(From, Name, To, Message, User_List) ->
 %%%----END FILE---
 ```
 
+### Knowledge Point
+
+#### Header Files
+
+Files have extension .hrl. These are header files that are included in the .erl files by:  <br/>
+
+```
+-include("File_Name").
+```
+In the case above the file is fetched from the same directory as all the other files in the messenger example.<br/>
+.hrl files can contain any valid Erlang code but are most often used for record and macro definitions.<br/>
+
+#### Records
+
+**Records vs Tuples**
+
+The main advantage of using records rather than tuples is that fields in a record are accessed by name, whereas fields in a tuple are accessed by position.
+For example, to extract data from a variable P that contains such a tuple, you can write the following code and then use pattern matching to extract the relevant fields:
+
+```
+Name = element(1, P),
+Address = element(2, P),
+...
+```
+Such code is difficult to read and understand, and errors occur if the numbering of the elements in the tuple is wrong. If the data representation of the fields is changed, by re-ordering, adding, or removing fields, all references to the person tuple must be checked and possibly modified.
+Records allow references to the fields by name, instead of by position. In the following example, a record instead of a tuple is used to store the data:
+
+```
+-record(person, {name, phone, address}).
+```
+This enables references to the fields of the record by name. For example, if P is a variable whose value is a person record, the following code access the name and address fields of the records:
+
+```
+Name = P#person.name,
+Address = P#person.address,
+...
+```
+
+#### Macros
+
+
+
+
+
 **Compile and Use:**
 
 To use this program:
