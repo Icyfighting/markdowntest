@@ -307,9 +307,7 @@ As the address field was omitted, its default value is used.
 
 **If consider define a record as define a Java class, create a record is more like new a instance of class. Speaking of instance, it seems I need learn memory management of Erlang. <br/>
 Since by learning Java and Python, I find same memory management principle, but they still have differnt points. And Erlang must have special memory management mechanism to support high concurrency and strict time requirements in telecommunication system.<br/>
-When I search information about Erlang memory management, I found resource blog with [speech of Lukas Larsson](https://www.cnblogs.com/zhengsyao/p/erts_allocators_speech_by_lukas_larsson.html), one of Erlang core developers.
-
-**
+When I search information about Erlang memory management, I found resource blog with [speech of Lukas Larsson](https://www.cnblogs.com/zhengsyao/p/erts_allocators_speech_by_lukas_larsson.html), one of Erlang core developers.**
 
 **Access a Record Field**
 
@@ -323,6 +321,7 @@ The following example shows how to access a record field: <br/>
 ```
 
 **Update a Record**
+
 The following example shows how to update a record: <br/>
 
 ```
@@ -333,6 +332,7 @@ The following example shows how to update a record: <br/>
 ```
 
 **Nested Records**
+
 The value of a field in a record can be an instance of a record. Retrieval of nested data can be done stepwise, or in a single step, as shown in the following example:<br/>
 demo() evaluates to "Robert".<br/>
 
