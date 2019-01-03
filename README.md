@@ -1,14 +1,13 @@
 ---
 layout: post
 title: "Erlang learning (9) - Larger Example Devided into Files"
-subtitle: "Records and Marcros"
+subtitle: "Records & Marcros"
 author: "Bing Yan"
-header-img: "img/erlang-6/post-bg-java.jpg"
+header-img: "img/erlang-9/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
   - Erlang
-  - Basic Knowledge
   - Learning
 ---
 
@@ -348,8 +347,8 @@ demo() ->
 
 #### Macros
 
-As I said above, I think Erlang Macros is configuration file in Java. This can realize soft coding. But not only this.<br/>
-Searching information said there are different kinds of Macros and ways to use:<br/>
+**As I said above, I think Erlang Macros is configuration file in Java. This can realize soft coding. But not only this.<br/>
+Searching information said there are different kinds of Macros and ways to use:** <br/>
 *   Define a macor:<br/>
 ```
 -define(Const, Replacement).
