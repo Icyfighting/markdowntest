@@ -282,64 +282,117 @@ Address = P#person.address,
 ...
 ```
 
+**Have to say, all programming language have some things in common. For the reason of record instead of tuple here, Python use keyword arguments and Java Mybatis prefers arguments name than position. They all realize easy read and understand, avoid error caused by wrong arguments passing.**
+
+
+**Define a Record**
+
+Define a person record. Three fields are included, name, phone, and address. The default values for name and phone is "" and [], respectively. The default value for address is the atom undefined, since no default value is supplied for this field: <br/>
+
+```
+-record(person, {name = "", phone = [], address}).
+```
+
+**To easier understand, I consider this record definition as Java bean, though by now I did not find similar get/set method. But I can access a record field and update a record, that means this record must provide some method like get/set.**
+
+**Create a Record**
+
+A new person record is created as follows:<br/>
+
+```
+> #person{phone=[0,8,2,3,4,3,1,2], name="Robert"}.
+#person{name = "Robert",phone = [0,8,2,3,4,3,1,2],address = undefined}
+```
+As the address field was omitted, its default value is used.
+
+**If consider define a record as define a Java class, create a record is more like new a instance of class. Speaking of instance, it seems I need learn memory management of Erlang. <br/>
+Since by learning Java and Python, I find same memory management principle, but they still have differnt points. And Erlang must have special memory management mechanism to support high concurrency and strict time requirements in telecommunication system.<br/>
+When I search information about Erlang memory management, I found resource blog with [speech of Lukas Larsson](https://www.cnblogs.com/zhengsyao/p/erts_allocators_speech_by_lukas_larsson.html), one of Erlang core developers.
+
+**
+
+**Access a Record Field**
+
+The following example shows how to access a record field: <br/>
+
+```
+> P = #person{name = "Joe", phone = [0,8,2,3,4,3,1,2]}.
+#person{name = "Joe",phone = [0,8,2,3,4,3,1,2],address = undefined}
+> P#person.name.
+"Joe"
+```
+
+**Update a Record**
+The following example shows how to update a record: <br/>
+
+```
+> P1 = #person{name="Joe", phone=[1,2,3], address="A street"}.
+#person{name = "Joe",phone = [1,2,3],address = "A street"}
+> P2 = P1#person{name="Robert"}.
+#person{name = "Robert",phone = [1,2,3],address = "A street"}
+```
+
+**Nested Records**
+The value of a field in a record can be an instance of a record. Retrieval of nested data can be done stepwise, or in a single step, as shown in the following example:<br/>
+demo() evaluates to "Robert".<br/>
+
+```
+-record(name, {first = "Robert", last = "Ericsson"}).
+-record(person, {name = #name{}, phone}).
+
+demo() ->
+  P = #person{name= #name{first="Robert",last="Virding"}, phone=123},
+  First = (P#person.name)#name.first.
+```
+
+
 #### Macros
 
+As I said above, I think Erlang Macros is configuration file in Java. This can realize soft coding. But not only this.<br/>
+Searching information said there are different kinds of Macros and ways to use:<br/>
+*   Define a macor:<br/>
+```
+-define(Const, Replacement).
+-define(Func(Var1,...,VarN), Replacement).
+```
+A macro definition can be placed anywhere among the attributes and function declarations of a module, but the definition must come before any usage of the macro.<br/>
 
-
-
-
-**Compile and Use:**
-
-To use this program:
-*   Configure the server_node() function with Erlang system of server, I use messenger@Icy.
-*   Copy the compiled code (messenger.beam) to the directory on each computer where you start Erlang.
+*   Use a macor:<br/>
 
 ```
+?Const
+?Func(Arg1,...,ArgN)
+```
+
+**Standard Macross**
 
 ```
-Using this program, nodes are started on four different Erlang nodes.  
-Four Erlang nodes are started up: messenger@Icy, c1@Icy, c2@Icy, c3@Icy. <br/>
+spawn(?MODULE, server, [])
+```
+This is a standard macro (that is, defined by the system, not by the user). ?MODULE is always replaced by the name of the current module (that is, the -module definition near the start of the file). There are more advanced ways of using macros with, for example, parameters.
 
-**Test steps:**
+**Customize Macros**
 
-1. First the server at messenger@Icy is started up:
-2. Peter logs on at c1@Icy; James logs on at c2@Icy; Fred logs on at c3@Icy:
-3. Peter sends Fred a message; Fred receives the message and sends a message to Peter and logs off.
-4. James now tries to send a message to Fred, But this fails as Fred has already logged off.
+The file mess_config.hrl contains the definition: <br/>
 
-**Test results:**
+```
+-define(server_node, messenger@super).
+```
+This file is included in mess_server.erl:<br/>
 
-![](/img/erlang-7/messenger.png)
-
-![](/img/erlang-7/c1.png)
-
-![](/img/erlang-7/c2.png)
-
-![](/img/erlang-7/c3.png)
-
-
-**Knowledge points:**
-
-*   There are two versions of the server_transfer function: one with four arguments (server_transfer/4) and one with five (server_transfer/5). These are regarded by Erlang as two separate functions. <br/>
-**Learning notes:as my understanding, this situation as method overload in Java. But I am not sure if Erlang have overload concept?
-But anyway, in earlier Erlang practice examples, different match conditions in the same function name and same number arguments are in different clause of same function.**
-
-*   Notice how to write the server function so that it calls itself, through server(User_List), and thus creates a loop. The Erlang compiler is "clever" and optimizes the code so that this really is a sort of loop and not a proper function call. But this only works if there is no code after the call. Otherwise, the compiler expects the call to return and make a proper function call. This would result in the process getting bigger and bigger for every loop. <br/>
-**Learning notes: the server function call itself, and this should be a recursive call. If it's a recursive call, that means this function has to have a boundary conditions. Without boundary conditions, the recursive call will cause memory problem. But in this function, there is no other code after recursive call, and Erlang compiler can know it's a loop, not proper function call. It's good, but question is besides this way to realize loop, is there more 'official' way for loop?**
-
-*   lists Module: in example, some functions of module list are used. Such as lists:keymember(Key,Position,Lists), lists:keydelete, lists:keysearch. Know the arguments and return type can help decide write the matching condition of clause.
-
-*   exit/1: An Erlang process (conceptually) runs until it does a receive and there is no message which it wants to receive in the message queue. "conceptually" is used here because the Erlang system shares the CPU time between the active processes in the system.<br/>A process terminates when there is nothing more for it to do, that is, the last function it calls simply returns and does not call another function. Another way for a process to terminate is for it to call exit/1. The argument to exit/1 has a special meaning, which is discussed later. In this example, exit(normal) is done, which has the same effect as a process running out of functions to call.
-
-*   whereis/1: The BIF whereis(RegisteredName) checks if a registered process of name RegisteredName exists. If it exists, the pid of that process is returned. If it does not exist, the atom undefined is returned.
+```
+-include("mess_config.hrl").
+```
+Every occurrence of ?server_node in mess_server.erl is now replaced by messenger@super.
 
 
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp; This study is mainly to read and practise this larger example. <br/>
-&ensp;&ensp;&ensp;&ensp; During reading this example, I start to have more feelings about the Erlang introduction: 'The application runtime written by Erlang usually consists of thousands of lightweight processes and communicates with each other through messaging.'
+&ensp;&ensp;&ensp;&ensp; This study is mainly to follow Chapter Getting Started with Erlang in User's Guide.<br/>
+&ensp;&ensp;&ensp;&ensp; Each simple example involve several knowledge points, but for details, we have to search in manual or web.<br/>
+&ensp;&ensp;&ensp;&ensp; During learning Erlang, I always try to think about the same and different points with Java and Python. And this way make it earier to understand and remember.
 
 
 ## Reference
 http://www.erlang.org <br/>
-http://erlang.org/doc/getting_started/conc_prog.html <br/>
+http://erlang.org/doc/getting_started/record_macros.html <br/>
