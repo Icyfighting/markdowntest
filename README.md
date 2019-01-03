@@ -83,13 +83,10 @@ The Print and Println functions also support the use of variables such as: fmt.P
 >When identifiers (including constants, variables, types, function names, structure fields, etc.) start with an uppercase letter, such as: Group1, objects that use this form of identifier can be used by the code of the external package (client The terminal needs to import the package first. This is called export (like public in an object-oriented language); if the identifier starts with a lowercase letter, it is invisible to the outside of the package, but they are visible inside the package. And available (like protected in an object-oriented language).
 
 
-
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp; This study is mainly to follow Chapter Getting Started with Erlang in User's Guide.<br/>
-&ensp;&ensp;&ensp;&ensp; Each simple example involve several knowledge points, but for details, we have to search in manual or web.<br/>
-&ensp;&ensp;&ensp;&ensp; During learning Erlang, I always try to think about the same and different points with Java and Python. And this way make it earier to understand and remember.
-
+&ensp;&ensp;&ensp;&ensp; According to information I collected by now, Golang is easier to learn than Erlang for Python/C/Ruby programmers. Although Golang has enough depth, but engineers can reuse many of the existing knowledge. <br/>
+&ensp;&ensp;&ensp;&ensp; Next step, I will try to learn Golang by practising examples, then I can have deeper feeling about Erlang and Golang.
 
 ## Reference
 https://golang.org/ <br/>
