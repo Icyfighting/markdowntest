@@ -132,106 +132,67 @@ In Erlang, string is a shorthand for list.<br/>
 Two adjacent string literals are concatenated into one. This is done in the compilation, thus, does not incur any runtime overhead.<br/>
 
 ```
+8> list_to_binary("hello").
+<<"hello">>
+9> "hello""world".
+"helloworld"
+```
 
+### Boolean
+
+There is no Boolean data type in Erlang. Instead the atoms true and false are used to denote Boolean values.
+
+```
+10> true or false.
+true
+11> true and false.
+false
+12> 1>2.
+false
 ```
 
 
+### Type Conversion
 
-
-**Example-1**
-
-```
--module(tut5).
--export([score/3]).
--define(is_score(V), (is_integer(V) andalso V >= 0 andalso V =< 100)).
-
-score(Java, Python, Erlang) when ?is_score(Java), ?is_score(Python), ?is_score(Erlang) ->
-	#{java => Java, python => Python, erlang => Erlang}.
-```
-
-**Test**
-
-![](/img/erlang-3/map-1.png)
-
-**Example-2**
-
-Guides provides an example shows how to calculate alpha blending using maps to reference color and alpha channels.<br/>
-I follow the steps, code and test it, to practise the => operator, := operator and function definition.<br/>
+There are a number of BIFs for type conversions: <br/>
+I consider list as string in these BIFs.<br/>
 
 ```
--module(color).
-
--export([new/4,blend/2]).
--define(is_channel(V), (is_float(V) andalso V >= 0.0 andalso V =< 1.0)).
-
-new(R,G,B,A) when ?is_channel(R), ?is_channel(G),
-				  ?is_channel(B), ?is_channel(A) ->
-	#{red => R, green => G, blue => B, alpha => A}.
-
-blend(Src, Dst) ->
-	blend(Src, Dst, alpha(Src,Dst)).
-
-blend(Src, Dst, Alpha) when Alpha > 0.0 ->
-	Dst#{
-		 red	:=  red(Src, Dst) / Alpha,
-		 green	:=	green(Src, Dst) / Alpha,
-		 blue	:=	blue(Src, Dst) / Alpha,
-		 alpha	:=	Alpha
-		};
-
-blend(_,Dst,_) ->
-	Dst#{
-		 red	:= 0.0,
-		 green 	:= 0.0,
-		 blue	:= 0.0,
-		 alpha	:= 0.0
-		}.
-
-alpha(#{alpha := SA}, #{alpha := DA}) ->
-    SA + DA*(1.0 - SA).
-
-red(#{red := SV, alpha := SA}, #{red := DV, alpha := DA}) ->
-    SV*SA + DV*DA*(1.0 - SA).
-green(#{green := SV, alpha := SA}, #{green := DV, alpha := DA}) ->
-    SV*SA + DV*DA*(1.0 - SA).
-blue(#{blue := SV, alpha := SA}, #{blue := DV, alpha := DA}) ->
-    SV*SA + DV*DA*(1.0 - SA).
+13> atom_to_list(erlang).
+"erlang"
+14> list_to_atom("python").
+python
+15> binary_to_list(<<"Java">>).
+"Java"
+16> binary_to_list(<<104,101,108,108,111>>).
+"hello"
+17> list_to_binary("hello").
+<<"hello">>
+18> float_to_list(1.0).
+"1.00000000000000000000e+00"
+19> list_to_float("1.0e+00").
+1.0
+20> integer_to_list(100).
+"100"
+21> list_to_integer("99").
+99
+22> tuple_to_list({a,b,c}).
+[a,b,c]
+23> list_to_tuple([1,2,3]).
+{1,2,3}
+24> integer_to_binary(88).
+<<"88">>
+26> binary_to_integer(<<"104">>).
+104
 ```
 
-**Test**
-
-![](/img/erlang-3/map-2.png)
-
-### Data Type Decide Method
-
-According to list of data type decide method, we can also basically know all types in Erlang.<br/>
-
-```
-is_atom/1           
-is_binary/1        
-is_bitstring/1      
-is_boolean/1        
-is_builtin/3       
-is_float/1          
-is_function/1       is_function/2      
-is_integer/1        
-is_list/1           
-is_number/1        
-is_pid/1            
-is_port/1           
-is_record/2         is_record/3         
-is_reference/1      
-is_tuple/1
-```
 
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp; From these simple examples, we practise some data type of Erlang.<br/>
-&ensp;&ensp;&ensp;&ensp; Besides these types, we also learn the simple function definition.<br/>
-&ensp;&ensp;&ensp;&ensp; Next time, I will learn more data types and other knowledge following the Guides.<br/>
+&ensp;&ensp;&ensp;&ensp; From these simple examples, we practise some data types and type conversion of Erlang.<br/>
+&ensp;&ensp;&ensp;&ensp; During study, I found some misunderstanding of description in manual, the better way is coding and running examples.<br/>
 
 
 ## Reference
 http://www.erlang.org <br/>
-http://erlang.org/doc/getting_started/seq_prog.html#atoms <br/>
-https://www.cnblogs.com/studynote/p/3218958.html 
+http://erlang.org/doc/reference_manual/data_types.html<br/>
