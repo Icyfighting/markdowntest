@@ -101,7 +101,10 @@ A tuple is a compound data type with a fixed number of terms.<br/>
 Each term Term in the tuple is called an element. The number of elements is said to be the size of the tuple.<br/>
 **Learning notes: I learn Tuple already, but this time I found there are difference of Tuple between Erlang and Python. <br/>
 ~~Tuple elements in Erlang can be modified, but the number of elements is fixed.~~(Test proves this understanding is wrong.)<br/>
-Tuple elements in Python cannot be modified, of course the number of elements is fixed too.** 
+Tuple elements in Python cannot be modified, of course the number of elements is fixed too. <br/>
+The declaration of erlang:setelement/3: <br/>
+setelement(Index, Tuple1, Value) -> Tuple2 <br/>
+It return the copy of Tuple1, not Tuple1 itself. So I think it's more like use Tuple1 to generate Tuple2, but Tuple1 can not be modified.**
 
 ```
 tup1 = (12, 34.56)
@@ -109,25 +112,31 @@ tup1[0] = 100  # Illegal operation in Python.
 ```
 
 ```
-1> P = { icy, 18, {Mar, 28}}.
-* 1: variable 'Mar' is unbound
 2> P = { icy, 18, {mar, 28}}.
 {icy,18,{mar,28}}
-3> setelement(2,P,19).
+3> setelement(2,P,19).     
 {icy,19,{mar,28}}
-4> element(2,P).
+4> element(2,P).    % element is not modified by setelement/3.
 18
-5> P2 = setelement(2,P,19).
+5> P2 = setelement(2,P,19).    % usage of setelement/3
 {icy,19,{mar,28}}
 6> element(2,P2).
 19
 ```
 
-### Map
+
+### String
  
-Maps are a set of key to value associations. These associations are encapsulated with "#{" and "}". <br/>
-Only the => operator is allowed when creating a new map. <br/>
-The syntax for updating an existing key with a new value is with the := operator. <br/>
+String is normal data type in Java and Python. But string is not a data type in Erlang.<br/>
+In Erlang, string is a shorthand for list.<br/>
+Two adjacent string literals are concatenated into one. This is done in the compilation, thus, does not incur any runtime overhead.<br/>
+
+```
+
+```
+
+
+
 
 **Example-1**
 
