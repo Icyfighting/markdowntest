@@ -1,93 +1,234 @@
 ---
 layout: post
-title: "Golang says Hello World"
-subtitle: "Install & Example "
+title: "Erlang learning (10) - Data Types (2)"
+subtitle: "Types & Type Conversions"
 author: "Bing Yan"
-header-img: "img/golang-1/post-bg-java.jpg"
+header-img: "img/erlang-10/post-bg-java.jpg"
 header-mask: 0.2
 catalog: true
 tags:
-  - Golang
+  - Erlang
+  - Data Type
   - Learning
 ---
 
-
 ## Preface
 
-&ensp;&ensp;&ensp;&ensp; After trying Erlang for a while, I want to see what Golang looks like, because both languages are usually used to write system-based applications.<br/>
-&ensp;&ensp;&ensp;&ensp; I learn and use Java and Python. But we know, they are both solving the problem of the business layer, belonging to the application language, to solve the business logic. <br/>
-&ensp;&ensp;&ensp;&ensp; But there is another area that is the system domain, the partial network layer and the underlying operations.Consider language for system domain, C's development efficiency is too low, Java is more appropriate, it is too bloated, and lacks the gene for system programming. So Erlang and Golang are used.
-
+&ensp;&ensp;&ensp;&ensp;After learning the basic knowledge and examples of Erlang according to Getting Started in the manual in blog [Erlang learning (3) - Data Types (1)](https://icyfighting.github.io/2018/12/20/erlang-data-type/), let's learn other knowledge points in various aspects.<br/>
+&ensp;&ensp;&ensp;&ensp;This study mainly supplements the data structure and the conversion between the data types.<br/>
 
 ## Text
 
-### What's Golang
+### Erlang Data Types Features
 
-Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.<br/>
-And I like this logo. How can I say no to this little cute...<br/>
+*   Erlang does not define the type of a variable, it can be assigned to any type of value, and all types of values in Erlang are collectively referred to as a Term. <br/>
+This makes the compiler not find a mismatch of numeric types at compile time, only errors are found at runtime, the advantage is that unlike C++, you can blind the system by forcing a type conversion, causing memory leaks. <br/>
+However, Erlang now has a set of types, function definition mechanism, can use the dialyzer to find the mismatch in the code.<br/>
 
-![](/img/golang-1/logo.png)
+*   Variables in Erlang can only be assigned once, and the second assignment will be interpreted by the compiler as a comparison. If the value is the same, the value will be returned. If it is different, an exception will be thrown. <br/>
 
-The Go language is designed to be a system programming language for large central servers with web servers, storage clusters or similar applications.<br/>
+In the examples of **[Getting started with Erlang User's Guide](http://erlang.org/doc/getting_started/users_guide.html)**, new variable names are used, instead of reusing the old ones: First, TheRest, E1, E2, R, A, B, and C. The reason for this is that a variable can only be given a value once in its context (scope). 
 
-For the field of high-performance distributed systems, the Go language is undoubtedly more efficient than most other languages. It provides massive parallel support, which is great for game server development.<br/>
+*   Variables must start with a capital letter. Examples of variables are Number, ShoeSize, and Age, otherwise they will not be interpreted by the compiler as variables, and the variables starting with uppercase letters and underscores will behave differently.<br/>
+More details of variable are included in manual **[Variables](http://erlang.org/doc/reference_manual/expressions.html#variables)**.
 
-### Golang Feature
+### Atom
 
-*   Simple, Fast and Safe
-*   Parallel, Interesting, Open source
-*   Memory management, Array security, Fast compilation
+Atom is data type in Erlang. Atoms start with a small letter, for example, charles, centimeter, and inch. <br/>
+Atoms are simply names, nothing else. <br/>
+They are not like variables, which can have a value.
 
-### Golang Installation
-
-So easy, download a binary release suitable for your system in [Golang official](https://golang.org/dl/), install it follow [Getting Started](https://golang.org/doc/install).
-
-After installation, write a 'Hello world' and execute it.
-
-![](/img/golang-1/hello.png)
-
-
-### Golang Program Structure
-
-In Hello world example, we can find parts of Golang Structure:<br/>
+**Example**
 
 ```
-package main
+-module(tut2).
+-export([convert/2]).
 
-import "fmt"
+convert(M, inch) ->
+	M / 2.54;
 
-func main() {
-   /* This is my first example of Golang */
-   fmt.Println("Hello, World!")
-}
+convert(N, centimeter) ->
+	N * 2.54.
 ```
 
-*   Package statement
->The first line of code 'package main' defines the package name. You must indicate in the first line of the source file that the file belongs to the first line, such as: 'package main'. Package main represents a program that can be executed independently, and each Go application contains a package called main.
+**Test**
 
-*   Import package
->The next line 'import "fmt" ' tells the Go compiler that this program needs to use the fmt package (function, or other elements), and the fmt package implements a function that formats IO (input/output).
+![](/img/erlang-3/atom-1.png)
 
-*   Function
->The next line 'func main()' is the function that the program starts executing. The main function is required for every executable. It is generally the first function to be executed after startup (if there is an init() function, it will be executed first).
+<br/>
+Let us see what happens if something other than centimeter or inch is entered in the convert function:<br/>
 
-*   Comments
->The next line /*...*/ is a comment and will be ignored during program execution. Single-line comments are the most common form of comments, and you can use single-line comments starting with // anywhere. Multi-line comments, also called block comments, have started with /* and end with */ and cannot be nested. Multi-line comments are generally used for package descriptions or coded blocks of code.
 
-*   Statement & expression
->The next line fmt.Println(...) can output the string to the console and automatically add the newline character \n at the end.
-Use fmt.Print("hello, world\n") to get the same result.
-The Print and Println functions also support the use of variables such as: fmt.Println(arr). If not specified, they will output the variable arr to the console in the default print format.
+![](/img/erlang-3/atom-2.png)
+<br/>
+The two parts of the convert function are called its clauses. <br/>
+As shown, meter is not part of either of the clauses. The Erlang system cannot match either of the clauses so an error message function_clause is returned. 
 
-*   Variable
->When identifiers (including constants, variables, types, function names, structure fields, etc.) start with an uppercase letter, such as: Group1, objects that use this form of identifier can be used by the code of the external package (client The terminal needs to import the package first. This is called export (like public in an object-oriented language); if the identifier starts with a lowercase letter, it is invisible to the outside of the package, but they are visible inside the package. And available (like protected in an object-oriented language).
+### Tuple
 
+**Example**
+
+```
+-module(tut3).
+-export([convert_length/1]).
+
+convert_length({centimeter, X}) ->
+	{inch, X / 2.54};
+convert_length({inch, Y}) ->
+	{centimeter, Y * 2.54}.
+```
+
+**Test**
+
+![](/img/erlang-3/tuple-1.png)
+
+<br/>
+
+Tuples can have more than two parts, in fact as many parts as you want, and contain any valid Erlang term. <br/>
+Tuples have a fixed number of items in them. Each item in a tuple is called an element. 
+
+### List
+
+Lists in Erlang are surrounded by square brackets, "[" and "]". For example, a list of the scores can be: <br/>
+
+```
+[{java,90},{python,85},{erlang,95}]
+```
+A useful way of looking at parts of lists, is by using "|". This is best explained by an example using the shell: <br/>
+
+```
+1> [E1,E2 | Rest] = [97,98,99,100,101].
+"abcde"
+2> E1.
+97
+3> E2.
+98
+4> Rest.
+"cde"
+```
+<br/>
+Erlang does not have a string data type. Instead, strings can be represented by lists of Unicode characters. The Erlang shell is "clever" and guesses what list you mean and outputs it in what it thinks is the most appropriate form. See above example.<br/>
+
+**Example**
+
+We can realize how to find the length of a list. <br/>
+
+```
+-module(tut4).
+-export([list_length/1]).
+
+list_length([]) ->
+	0;
+list_length([First | Rest]) ->
+	1 + list_length(Rest).
+```
+
+**Test**
+
+![](/img/erlang-3/list-1.png)
+
+<br/>
+
+### Map
+ 
+Maps are a set of key to value associations. These associations are encapsulated with "#{" and "}". <br/>
+Only the => operator is allowed when creating a new map. <br/>
+The syntax for updating an existing key with a new value is with the := operator. <br/>
+
+**Example-1**
+
+```
+-module(tut5).
+-export([score/3]).
+-define(is_score(V), (is_integer(V) andalso V >= 0 andalso V =< 100)).
+
+score(Java, Python, Erlang) when ?is_score(Java), ?is_score(Python), ?is_score(Erlang) ->
+	#{java => Java, python => Python, erlang => Erlang}.
+```
+
+**Test**
+
+![](/img/erlang-3/map-1.png)
+
+**Example-2**
+
+Guides provides an example shows how to calculate alpha blending using maps to reference color and alpha channels.<br/>
+I follow the steps, code and test it, to practise the => operator, := operator and function definition.<br/>
+
+```
+-module(color).
+
+-export([new/4,blend/2]).
+-define(is_channel(V), (is_float(V) andalso V >= 0.0 andalso V =< 1.0)).
+
+new(R,G,B,A) when ?is_channel(R), ?is_channel(G),
+				  ?is_channel(B), ?is_channel(A) ->
+	#{red => R, green => G, blue => B, alpha => A}.
+
+blend(Src, Dst) ->
+	blend(Src, Dst, alpha(Src,Dst)).
+
+blend(Src, Dst, Alpha) when Alpha > 0.0 ->
+	Dst#{
+		 red	:=  red(Src, Dst) / Alpha,
+		 green	:=	green(Src, Dst) / Alpha,
+		 blue	:=	blue(Src, Dst) / Alpha,
+		 alpha	:=	Alpha
+		};
+
+blend(_,Dst,_) ->
+	Dst#{
+		 red	:= 0.0,
+		 green 	:= 0.0,
+		 blue	:= 0.0,
+		 alpha	:= 0.0
+		}.
+
+alpha(#{alpha := SA}, #{alpha := DA}) ->
+    SA + DA*(1.0 - SA).
+
+red(#{red := SV, alpha := SA}, #{red := DV, alpha := DA}) ->
+    SV*SA + DV*DA*(1.0 - SA).
+green(#{green := SV, alpha := SA}, #{green := DV, alpha := DA}) ->
+    SV*SA + DV*DA*(1.0 - SA).
+blue(#{blue := SV, alpha := SA}, #{blue := DV, alpha := DA}) ->
+    SV*SA + DV*DA*(1.0 - SA).
+```
+
+**Test**
+
+![](/img/erlang-3/map-2.png)
+
+### Data Type Decide Method
+
+According to list of data type decide method, we can also basically know all types in Erlang.<br/>
+
+```
+is_atom/1           
+is_binary/1        
+is_bitstring/1      
+is_boolean/1        
+is_builtin/3       
+is_float/1          
+is_function/1       is_function/2      
+is_integer/1        
+is_list/1           
+is_number/1        
+is_pid/1            
+is_port/1           
+is_record/2         is_record/3         
+is_reference/1      
+is_tuple/1
+```
 
 ## Summary
 
-&ensp;&ensp;&ensp;&ensp; According to information I collected by now, Golang is easier to learn than Erlang for Python/C/Ruby programmers. Although Golang has enough depth, but engineers can reuse many of the existing knowledge. <br/>
-&ensp;&ensp;&ensp;&ensp; Next step, I will try to learn Golang by practising examples, then I can have deeper feeling about Erlang and Golang.
+&ensp;&ensp;&ensp;&ensp; From these simple examples, we practise some data type of Erlang.<br/>
+&ensp;&ensp;&ensp;&ensp; Besides these types, we also learn the simple function definition.<br/>
+&ensp;&ensp;&ensp;&ensp; Next time, I will learn more data types and other knowledge following the Guides.<br/>
+
 
 ## Reference
-https://golang.org/ <br/>
-http://www.runoob.com/go/go-tutorial.html <br/>
+http://www.erlang.org <br/>
+http://erlang.org/doc/getting_started/seq_prog.html#atoms <br/>
+https://www.cnblogs.com/studynote/p/3218958.html 
