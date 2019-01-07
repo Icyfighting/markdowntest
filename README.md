@@ -19,115 +19,109 @@ tags:
 
 ## Text
 
-### Erlang Data Types Features
 
-*   Erlang does not define the type of a variable, it can be assigned to any type of value, and all types of values in Erlang are collectively referred to as a Term. <br/>
-This makes the compiler not find a mismatch of numeric types at compile time, only errors are found at runtime, the advantage is that unlike C++, you can blind the system by forcing a type conversion, causing memory leaks. <br/>
-However, Erlang now has a set of types, function definition mechanism, can use the dialyzer to find the mismatch in the code.<br/>
+### Number
 
-*   Variables in Erlang can only be assigned once, and the second assignment will be interpreted by the compiler as a comparison. If the value is the same, the value will be returned. If it is different, an exception will be thrown. <br/>
+There are 4 kinds of Number type in Erlang: <br/>
 
-In the examples of **[Getting started with Erlang User's Guide](http://erlang.org/doc/getting_started/users_guide.html)**, new variable names are used, instead of reusing the old ones: First, TheRest, E1, E2, R, A, B, and C. The reason for this is that a variable can only be given a value once in its context (scope). 
+*   integer:
+*   float:
+*   $char (Erlang-specific):
+>ASCII value or unicode code-point of the character char.
+*   base#value (Erlang-specific):
+>Integer with the base base, that must be an integer in the range 2..36.
 
-*   Variables must start with a capital letter. Examples of variables are Number, ShoeSize, and Age, otherwise they will not be interpreted by the compiler as variables, and the variables starting with uppercase letters and underscores will behave differently.<br/>
-More details of variable are included in manual **[Variables](http://erlang.org/doc/reference_manual/expressions.html#variables)**.
+**Example**
+
+```
+1> 30.
+30
+2> 3.2e2.
+320.0
+3> $a.
+97
+4> $\r.
+13
+5> 2#110.
+6
+6> 16#ff.
+255
+```
 
 ### Atom
 
-Atom is data type in Erlang. Atoms start with a small letter, for example, charles, centimeter, and inch. <br/>
-Atoms are simply names, nothing else. <br/>
-They are not like variables, which can have a value.
+Atom is learned in last study about data type of Erlang, but it needs some additional information. <br/>
+An atom is a literal, a constant with name. <br/>
+An atom is to be enclosed in single quotes (') if it does not begin with a lower-case letter or if it contains other characters than alphanumeric characters, underscore (_), or @.<br/>
+**Learning notes: I already know atom is a literal which begin with a lower-case letter. But this time I know, it can contains _ or @.<br/>
+And if atom contains other conditions, need enclosed in single quotes.<br/>
+Besides, double quotes are used to enclose String, which is not a data type of Erlang but can be used.**
 
 **Example**
 
 ```
--module(tut2).
--export([convert/2]).
-
-convert(M, inch) ->
-	M / 2.54;
-
-convert(N, centimeter) ->
-	N * 2.54.
+7> office_addr.
+office_addr
+8> 'office addr'.
+'office addr'
+9> 'Monday'.
+'Monday'
 ```
 
+### Pid
+
+A process identifier, pid, identifies a process. <br/>
+The following BIFs, which are used to create processes, return values of this data type:<br/>
+*   spawn/1,2,3,4
+*   spawn_link/1,2,3,4
+*   spawn_opt/4
+**Learning notes: I used BIF spawn in earlier study blogs, but I did not realize pid is a data type of Erlang, I thought the return of these BIFs are kind of String.**
+
+
+```
+-module(tut18).
+-export([loop/0]).
+
+loop() ->
+    receive
+        who_are_you ->
+            io:format("I am ~p~n", [self()]),
+            loop()
+    end.
+```
 **Test**
 
-![](/img/erlang-3/atom-1.png)
+![](/img/erlang-10/pid-1.png)
 
 <br/>
-Let us see what happens if something other than centimeter or inch is entered in the convert function:<br/>
-
-
-![](/img/erlang-3/atom-2.png)
-<br/>
-The two parts of the convert function are called its clauses. <br/>
-As shown, meter is not part of either of the clauses. The Erlang system cannot match either of the clauses so an error message function_clause is returned. 
 
 ### Tuple
 
-**Example**
+A tuple is a compound data type with a fixed number of terms.<br/>
+Each term Term in the tuple is called an element. The number of elements is said to be the size of the tuple.<br/>
+**Learning notes: I learn Tuple already, but this time I found there are difference of Tuple between Erlang and Python. <br/>
+~~Tuple elements in Erlang can be modified, but the number of elements is fixed.~~(Test proves this understanding is wrong.)<br/>
+Tuple elements in Python cannot be modified, of course the number of elements is fixed too.** 
 
 ```
--module(tut3).
--export([convert_length/1]).
-
-convert_length({centimeter, X}) ->
-	{inch, X / 2.54};
-convert_length({inch, Y}) ->
-	{centimeter, Y * 2.54}.
+tup1 = (12, 34.56)
+tup1[0] = 100  # Illegal operation in Python.
 ```
 
-**Test**
-
-![](/img/erlang-3/tuple-1.png)
-
-<br/>
-
-Tuples can have more than two parts, in fact as many parts as you want, and contain any valid Erlang term. <br/>
-Tuples have a fixed number of items in them. Each item in a tuple is called an element. 
-
-### List
-
-Lists in Erlang are surrounded by square brackets, "[" and "]". For example, a list of the scores can be: <br/>
-
 ```
-[{java,90},{python,85},{erlang,95}]
+1> P = { icy, 18, {Mar, 28}}.
+* 1: variable 'Mar' is unbound
+2> P = { icy, 18, {mar, 28}}.
+{icy,18,{mar,28}}
+3> setelement(2,P,19).
+{icy,19,{mar,28}}
+4> element(2,P).
+18
+5> P2 = setelement(2,P,19).
+{icy,19,{mar,28}}
+6> element(2,P2).
+19
 ```
-A useful way of looking at parts of lists, is by using "|". This is best explained by an example using the shell: <br/>
-
-```
-1> [E1,E2 | Rest] = [97,98,99,100,101].
-"abcde"
-2> E1.
-97
-3> E2.
-98
-4> Rest.
-"cde"
-```
-<br/>
-Erlang does not have a string data type. Instead, strings can be represented by lists of Unicode characters. The Erlang shell is "clever" and guesses what list you mean and outputs it in what it thinks is the most appropriate form. See above example.<br/>
-
-**Example**
-
-We can realize how to find the length of a list. <br/>
-
-```
--module(tut4).
--export([list_length/1]).
-
-list_length([]) ->
-	0;
-list_length([First | Rest]) ->
-	1 + list_length(Rest).
-```
-
-**Test**
-
-![](/img/erlang-3/list-1.png)
-
-<br/>
 
 ### Map
  
