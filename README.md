@@ -48,12 +48,12 @@ If such a clause is found, the corresponding clause body is evaluated. That is, 
 
 To better understand the function evaluation, we need firstly review the pattern matching.<br/>
 >Variables are bound to values through the pattern matching mechanism. Pattern matching occurs when evaluating a function call, case- receive- try- expressions and match operator (=) expressions.<br/>
-In a pattern matching, a left-hand side pattern is matched against a right-hand side term. If the matching succeeds, any unbound variables in the pattern become bound. If the matching fails, a run-time error occurs.
+In a pattern matching, a left-hand side pattern is matched against a right-hand side term. If the matching succeeds, any unbound variables in the pattern become bound. If the matching fails, a run-time error occurs.<br/>
 
 **Learning notes: pattern matching is the most interesting point when I met in start chapter.<br/>
 It use one expression to realize conditional matching and variables values bounding.<br/>
-Pattern matching makes Erlang function declaration more simple.
-**
+Pattern matching makes Erlang function declaration more simple.**
+
 
 **Example**
 
@@ -110,7 +110,7 @@ fact(N,A) ->
 
 ![](/img/erlang-11/tail.png)
 
-Erlang is functional language, and also the stack language, if we want to maintain the high concurrency of the language, we must replace the traditional recursion with tail recursion.
+Erlang is functional language, and also the stack language, if we want to maintain the high concurrency of the language, we must replace the traditional recursion with tail recursion.<br/>
 
 **Learning notes: there is another chapter Efficiency Guide -Myth: Tail-Recursive Functions are Much Faster Than Recursive Functions.<br/>
 The reason why tail recursion is better recommended than ordinary recursion is that tail recursion does not need to save a lot of intermediate function stacks. Every time recursion, the corresponding result is calculated. The function call appears at the end of the caller function. Because it is the tail, there is no such thing. It is necessary to save any local variables.<br/>
