@@ -116,7 +116,7 @@ Erlang is functional language, and also the stack language, if we want to mainta
 The reason why tail recursion is better recommended than ordinary recursion is that tail recursion does not need to save a lot of intermediate function stacks. Every time recursion, the corresponding result is calculated. The function call appears at the end of the caller function. Because it is the tail, there is no such thing. It is necessary to save any local variables.<br/>
 In Java learning, we know that the function that can realized by recursion almost can realzied by loop. Choosing recursion or loop is based on pressure on the stack. <br/>
 Just when I think that tail recursion can totally replace body recursion, a different discussion is given in article [Erlang's Tail Recursion is Not a Silver Bullet](https://ferd.ca/erlang-s-tail-recursion-is-not-a-silver-bullet.html). <br/>
-By now I still cannot tell which opinion is better. **
+By now I still cannot tell which opinion is better.**
 
 
 ## Summary
